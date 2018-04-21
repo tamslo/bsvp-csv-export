@@ -1,0 +1,8 @@
+{
+  "produkttyp": "Kühlschrank",
+  "attribute": {
+    "Verwendungszweck": "verwendungszweck",
+    "Hersteller": "hersteller",
+    "Höhe": "hoehe"
+  }
+}

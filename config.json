@@ -1,0 +1,7 @@
+{
+  "separator": ";",
+  "encoding": "utf-8",
+  "bsvp_data_directory": "../",
+  "output_directory": "export/",
+  "archive_directory": "export/backup/"
+}
