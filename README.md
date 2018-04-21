@@ -19,9 +19,9 @@ Die erstellten CSV Dateien werden im in der `config.json` angegebenen Ordner ges
 
 Wenn eine PROD Datei nicht bearbeitet werden konnte, steht in der Ausgabe, dass sie übersprungen wurde. Gründe dafür sind:
 
-* (901) Der PROD Ornder und die PROD Datei haben unterschiedliche Namen
-* (902) Die PROD Datei enthält keine TECHDATA
-* (903) Die TECHDATA enthält keinen Produkttyp
+* Der PROD Ornder und die PROD Datei haben unterschiedliche Namen (PROD_UNTERSCHIEDLICH)
+* Die PROD Datei enthält keine TECHDATA (KEIN_TECHDATA)
+* Die TECHDATA enthält keinen Produkttyp (KEIN_PRODUKTTYP)
 
 _TODO Automatische Ausführung mit Windows Aufgabenplanung_
 
@@ -44,7 +44,3 @@ _Hier können häufig auftretende Fehler und ihre Lösung beschrieben werden_
 ## Kontakt
 
 Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamaraslosarek@gmail.com.
-
-## TODOs
-
-* Definierte Error Codes mit Erklärung anstatt "Übersprungen"

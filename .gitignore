@@ -1,5 +1,6 @@
 # Project-specific files and directories
 export/
+data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

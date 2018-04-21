@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: latin-1 -*-
 import os, sys, html
 
 TECH_DATA_PREFIX = "§+§TECHDATA="
@@ -8,41 +8,41 @@ INNER_SEPARATOR = "::"
 
 def parse_product(product_path):
     if not os.path.exists(product_path):
-        error_code = 901
+        error_code = "PROD_UNTERSCHIEDLICH"
         return None, error_code
 
-    bsvp_file = open(product_path, encoding="utf-8")
-    product_data = ""
-    for line in bsvp_file.readlines():
-        product_data += line
+    with open(product_path, "r",  encoding="latin-1") as bsvp_file:
+        product_data = ""
+        for line in bsvp_file.readlines():
+            product_data += line
 
-    tech_data_start = product_data.find(TECH_DATA_PREFIX)
-    if tech_data_start == -1:
-        error_code = 902
-        return None, error_code
+        tech_data_start = product_data.find(TECH_DATA_PREFIX)
+        if tech_data_start == -1:
+            error_code = "KEIN_TECHDATA"
+            return None, error_code
 
-    # TECHDATA extrahieren
-    product_data = product_data[tech_data_start  + len(TECH_DATA_PREFIX):]
-    tech_data_end = product_data.find(TECH_DATA_POSTFIX)
-    product_data = product_data[:tech_data_end]
+        # TECHDATA extrahieren
+        product_data = product_data[tech_data_start  + len(TECH_DATA_PREFIX):]
+        tech_data_end = product_data.find(TECH_DATA_POSTFIX)
+        product_data = product_data[:tech_data_end]
 
-    # Felder auslesen
-    fields = {}
-    raw_fields = list(filter(lambda field: field != "", product_data.split(FIELD_SEPARATOR)))
-    for field in raw_fields:
-        parts = field.split(INNER_SEPARATOR);
+        # Felder auslesen
+        fields = {}
+        raw_fields = list(filter(lambda field: field != "", product_data.split(FIELD_SEPARATOR)))
+        for field in raw_fields:
+            parts = field.split(INNER_SEPARATOR);
 
-        # ASSUMPTION TEST
-        if len(parts) != 3 and len(parts) != 4:
-            print("[WARNING]: Wrong assumption of parts of field made", end="\n")
-            print(raw_fields)
+            # ASSUMPTION TEST
+            if len(parts) != 3 and len(parts) != 4:
+                print("[WARNING]: Wrong assumption of parts of field made", end="\n")
+                print(raw_fields)
 
-        field_name = html.unescape(parts[1])
-        field_value = html.unescape(parts[2]) if len(parts) == 4 else None
-        fields[field_name] = field_value
+            field_name = html.unescape(parts[1])
+            field_value = html.unescape(parts[2]) if len(parts) == 4 else None
+            fields[field_name] = field_value
 
-    if not "Produkttyp" in fields:
-        error_code = 903
-        return None, error_code
+        if not "Produkttyp" in fields:
+            error_code = "KEIN_PRODUKTTYP"
+            return None, error_code
 
-    return fields, None
+        return fields, None

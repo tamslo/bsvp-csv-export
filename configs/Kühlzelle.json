@@ -1,14 +1,14 @@
 {
-  "produkttyp": "Kühlschrank",
+  "produkttyp": "Kühlzelle",
   "attribute": {
     "Verwendungszweck": "verwendungszweck",
     "Temperaturbereich von °C": "temperaturbereich_von_grad_celsius",
     "Temperaturbereich bis °C": "temperaturbereich_bis_grad_celsius",
+    "max. Umgebungstemperatur in °C": "max_umgebungstemperatur",
     "Außen Breite in mm": "breite_aussen",
     "Außen Höhe in mm": "hoehe_aussen",
     "Außen Tiefe in mm": "tiefe_aussen",
     "Lieferant": "lieferant",
-    "Roste / Ablageflächen höhenverstellbar":
-      "roste_ablageflaechen_hoehenverstellbar"
+    "Gewährleistung": "gewaehrleistung"
   }
 }

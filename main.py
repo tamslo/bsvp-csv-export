@@ -24,42 +24,53 @@ exporter.prepare_export()
 
 # BSVP Dateien parsen und in CSV Dateien schreiben
 
-def print_manufacturer(manufacturer_directory):
-    manufacturer = manufacturer_directory.split(MANUFACTURER_ENDING)[0]
-    print("Hersteller: " + manufacturer)
-
-def print_product(product_directory, end="\r", prefix="Produkt"):
-    product = product_directory.split(PRODUCT_ENDING)[0]
+def print_inline(text):
     # Overwrite the previous line
     print("                                           ", end="\r")
-    print("{}: {}".format(prefix, product), end=end)
+    print(text, end="\r")
 
+total_skips = []
 with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
     config = json.load(config_file)
     bsvp_data_directory = config["bsvp_data_directory"]
     for manufacturer_directory in os.listdir(bsvp_data_directory):
         if manufacturer_directory.endswith(MANUFACTURER_ENDING):
-            print_manufacturer(manufacturer_directory)
             manufacturer_path = bsvp_data_directory + manufacturer_directory
+            manufacturer = manufacturer_directory.split(MANUFACTURER_ENDING)[0]
             project_directories = os.listdir(manufacturer_path)
+            products = 0
+            skips = []
             for index, product_directory in enumerate(project_directories):
                 if product_directory.endswith(PRODUCT_ENDING):
-                    print_product(product_directory)
                     product_path = "/".join([
                         manufacturer_path,
                         product_directory,
                         product_directory
                     ])
                     fields, error_code = parse_product(product_path)
+                    products += 1
+                    product = product_directory.split(PRODUCT_ENDING)[0]
+                    print_inline("{} ({})".format(manufacturer, products))
                     if fields != None:
                         exporter.write_to_csv(fields)
                     else:
-                        prefix = "Übersprungen ({})".format(error_code)
-                        print_product(product_directory, end="\n", prefix=prefix)
+                        skips.append("{} - {} ({})".format(manufacturer, product, error_code))
+            print_inline(
+                "{} ({} gesamt, {} übersprungen)"
+                .format(manufacturer, products, len(skips))
+            )
+            print("")
+            total_skips += skips
+
+with open("skip.log", "w", encoding="utf-8") as skip_file:
+    for skip in total_skips:
+        skip_file.write(skip + "\n")
 
 # Benötigte Zeit berechnen
 end_time = time.time()
-# TODO Zeit nach Stunden, Minuten und Sekunden aufschlüsseln
-runtime_in_seconds = end_time - start_time
+runtime = end_time - start_time
 
-print("Export abgeschlossen in {} Sekunden".format(runtime_in_seconds))
+print(
+    "Export abgeschlossen in {} Sekunden)"
+    .format(round(runtime))
+)

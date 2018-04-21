@@ -1,5 +1,5 @@
 {
-  "produkttyp": "Kühlschrank",
+  "produkttyp": "Kühltruhe",
   "attribute": {
     "Verwendungszweck": "verwendungszweck",
     "Temperaturbereich von °C": "temperaturbereich_von_grad_celsius",
@@ -8,7 +8,8 @@
     "Außen Höhe in mm": "hoehe_aussen",
     "Außen Tiefe in mm": "tiefe_aussen",
     "Lieferant": "lieferant",
-    "Roste / Ablageflächen höhenverstellbar":
-      "roste_ablageflaechen_hoehenverstellbar"
+    "Anschlusswert in Watt": "anschlusswert",
+    "Energieverbrauch in kWh / 24h": "energieverbrauch_tag",
+    "Energieverbrauch 365 Tage": "energieverbrauch_jahr"
   }
 }
