@@ -5,10 +5,7 @@ Python-basierter BSVP Export von CSV Dateien.
 ## TODOs
 
 * Artikelnummer vernünftig exportieren
-
-* Encoding richtig hinbekommen
 * BSVP Dateien korrekt parsen
-* Beides durch Angucken von Daten, die nicht gefunden werden und Skips
 
 ## Installation
 
