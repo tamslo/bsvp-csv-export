@@ -1,15 +1,18 @@
 {
   "produkttyp": "Kühltruhe",
-  "attribute": {
-    "Verwendungszweck": "verwendungszweck",
-    "Temperaturbereich von °C": "temperaturbereich_von_grad_celsius",
-    "Temperaturbereich bis °C": "temperaturbereich_bis_grad_celsius",
-    "Außen Breite in mm": "breite_aussen",
-    "Außen Höhe in mm": "hoehe_aussen",
-    "Außen Tiefe in mm": "tiefe_aussen",
-    "Lieferant": "lieferant",
-    "Anschlusswert in Watt": "anschlusswert",
-    "Energieverbrauch in kWh / 24h": "energieverbrauch_tag",
-    "Energieverbrauch 365 Tage": "energieverbrauch_jahr"
+  "felder": {
+    "ARTNR": "artikelnummer",
+    "TECHDATA": {
+      "0000246": "verwendungszweck",
+      "0000226": "temperaturbereich_von_grad_celsius",
+      "0000225": "temperaturbereich_bis_grad_celsius",
+      "0000058": "breite_aussen",
+      "0000059": "hoehe_aussen",
+      "0000060": "tiefe_aussen",
+      "0000152": "lieferant",
+      "0000015": "anschlusswert",
+      "0000089": "energieverbrauch_tag",
+      "0000264": "energieverbrauch_jahr"
+    }
   }
 }
