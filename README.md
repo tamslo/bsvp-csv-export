@@ -2,6 +2,14 @@
 
 Python-basierter BSVP Export von CSV Dateien.
 
+## TODOs
+
+* Artikelnummer vernünftig exportieren
+
+* Encoding richtig hinbekommen
+* BSVP Dateien korrekt parsen
+* Beides durch Angucken von Daten, die nicht gefunden werden und Skips
+
 ## Installation
 
 Es wird Python 3 benötigt, das auf der [offiziellen Python Website](https://www.python.org/downloads/) heruntergeladen werden kann. Um Python aus der Kommandozeile ausführen zu können, muss das Installationsverzeichnis von Python zur `PATH` Variable hinzugefügt werden.

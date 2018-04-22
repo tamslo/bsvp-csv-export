@@ -1,6 +1,6 @@
 {
   "separator": ";",
-  "encoding": "utf16",
+  "encoding": "latin-1",
   "bsvp_data_directory": "data/",
   "output_directory": "export/",
   "archive_directory": "export/backup/"

@@ -51,7 +51,7 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                     products += 1
                     product = product_directory.split(PRODUCT_ENDING)[0]
                     print_inline("{} ({})".format(manufacturer, products))
-                    if fields != None:
+                    if error_code == None:
                         exporter.write_to_csv(fields)
                     else:
                         skips.append("{} - {} ({})".format(manufacturer, product, error_code))

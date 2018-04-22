@@ -23,25 +23,25 @@ def parse_product(product_path):
 
         # TECHDATA extrahieren
         product_data = product_data[tech_data_start  + len(TECH_DATA_PREFIX):]
-        tech_data_end = product_data.find(TECH_DATA_POSTFIX)
+        tech_data_end = product_data.find(DATA_POSTFIX)
         product_data = product_data[:tech_data_end]
 
         # Felder auslesen
         fields = {}
         raw_fields = list(filter(lambda field: field != "", product_data.split(FIELD_SEPARATOR)))
         for field in raw_fields:
-            parts = field.split(INNER_SEPARATOR);
-
-            # ASSUMPTION TEST
-            if len(parts) != 3 and len(parts) != 4:
-                print("[WARNING]: Wrong assumption of parts of field made", end="\n")
-                print(raw_fields)
-
+            # TODO hier muss noch viel in die Daten geguckt werden
+            parts = field.split(INNER_SEPARATOR)
+            if len(parts) < 2:
+                continue
             field_name = html.unescape(parts[1])
-            field_value = html.unescape(parts[2]) if len(parts) == 4 else None
+            if len(parts) == 4:
+                field_value = html.unescape(parts[2])
+            else:
+                field_value = None
             fields[field_name] = field_value
 
-        if not "Produkttyp" in fields:
+        if not "Produkttyp" in fields or fields["Produkttyp"] == None:
             error_code = "KEIN_PRODUKTTYP"
             return None, error_code
 
