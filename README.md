@@ -6,6 +6,8 @@ Python-basierter BSVP Export von CSV Dateien.
 
 Es wird Python 3 benötigt, das auf der [offiziellen Python Website](https://www.python.org/downloads/) heruntergeladen werden kann. Um Python aus der Kommandozeile ausführen zu können, muss das Installationsverzeichnis von Python zur `PATH` Variable hinzugefügt werden.
 
+Außerdem müssen die beispielhaft gegebenen Konfigurationsdateien angepasst werden. Die `config.json.example` muss in `config.json` umbenannt und der Inhalt den Anforderungen angepasst werden. Für jede Export-Konfiguration muss eine Konfigutation in `configs/` angelegt werden wie in `Kühlschrank.json.example` gezeigt. Mehr Informationen zu Konfigurationen stehen unten unter [Konfiguration](#konfiguration).
+
 ## Ausführung
 
 Für die manuelle Ausführung muss zunächst die Kommandozeile gestartet werden, indem man zum Beispiel `WINDOWS + R` drückt, `cmd` eingibt und bestätigt. Dann muss in das Verzeichnis gewechselt werden, in dem die Python Datein liegen, wo das Skript `main.py` ausgeführt werden kann.
@@ -17,12 +19,12 @@ python main.py
 
 Die erstellten CSV Dateien werden im in der `config.json` angegebenen Ordner gespeichert, der angelegt wird, wenn er noch nicht vorhanden ist. Der jeweils letzte Export wird in den angegebenen Archiv-Ordner verschoben.
 
-Wenn eine PROD Datei nicht bearbeitet werden konnte, steht in der `skip.log`, dass sie übersprungen wurde. Gründe dafür sind:
+Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in der `skip.log`, dass sie übersprungen wurde. Gründe dafür sind:
 
-* Der PROD Ornder und die PROD Datei haben unterschiedliche Namen (`PROD_UNTERSCHIEDLICH`)
-* Die PROP Datei enthält keine Artikelnummer (`KEINE_ARTNR`)
-* Die PROD Datei enthält keine TECHDATA (`KEIN_TECHDATA`)
-* Die TECHDATA enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
+* Der `.prod` Ordner und die `.prod` Datei haben unterschiedliche Namen (`PROD_UNTERSCHIEDLICH`)
+* Die `.prod` Datei enthält keine Artikelnummer (`KEINE_ARTNR`)
+* Die `.prod` Datei enthält kein `TECHDATA` Feld (`KEIN_TECHDATA`)
+* Das `TECHDATA` Feld enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
 
 _TODO Automatische Ausführung mit Windows Aufgabenplanung_
 
