@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import time, json, os
-from validator import validate_setup, validate_fields
-from exporter import Exporter
-from bsvp_parser import parse_product
-from logger import Logger
+from modules.validator import validate_setup, validate_fields
+from modules.exporter import Exporter
+from modules.bsvp_parser import parse_product
+from modules.logger import Logger
 
 # Definition von Konstanten wie Verzeichnissen und Dateiendungen
 GENERAL_CONFIG_FILE = "config.json"
