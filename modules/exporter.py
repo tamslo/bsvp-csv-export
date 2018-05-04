@@ -39,7 +39,7 @@ class Exporter:
         # Header
         for config in list(self.configs.values()):
             csv_path = self.csv_path(config)
-            with open(csv_path, "w", encoding=self.csv_encoding) as csv_file:
+            with open(csv_path, "w", encoding=self.csv_encoding, newline="") as csv_file:
                 csv_writer = csv.writer(
                     csv_file,
                     delimiter=self.csv_separator,
@@ -60,7 +60,7 @@ class Exporter:
         if product_type in self.configs:
             config = self.configs[product_type]
             csv_path = self.csv_path(config)
-            with open(csv_path, "a", encoding=self.csv_encoding) as csv_file:
+            with open(csv_path, "a", encoding=self.csv_encoding, newline="") as csv_file:
                 csv_writer = csv.writer(csv_file, delimiter=self.csv_separator)
                 product_information = extract_product_information(config, fields)
                 csv_writer.writerow(product_information)
