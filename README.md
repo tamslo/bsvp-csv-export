@@ -6,7 +6,7 @@ Python-basierter BSVP Export von CSV Dateien.
 
 Es wird Python 3 benötigt, das auf der [offiziellen Python Website](https://www.python.org/downloads/) heruntergeladen werden kann. Um Python aus der Kommandozeile ausführen zu können, muss das Installationsverzeichnis von Python zur `PATH` Variable hinzugefügt werden.
 
-Außerdem müssen die beispielhaft gegebenen Konfigurationsdateien angepasst werden. Die `config.json.example` muss in `config.json` umbenannt und der Inhalt den Anforderungen angepasst werden. Für jede Export-Konfiguration muss eine Konfigutation in `configs/` angelegt werden wie in `Kühlschrank.json.example` gezeigt. Mehr Informationen zu Konfigurationen stehen unten unter [Konfiguration](#konfiguration).
+Außerdem müssen die beispielhaft gegebenen Konfigurationsdateien angepasst werden. Die `config.json.example` muss in `config.json` umbenannt und der Inhalt den Anforderungen angepasst werden. Für jede Export-Konfiguration muss eine Konfigutation in `configs/` angelegt werden, das Format ist unter [Konfiguration](#konfiguration) gezeigt.
 
 ## Ausführung
 
@@ -36,7 +36,22 @@ In `config.json` werde allgemeine Einstellungen spezifiziert. Bei der Angabe von
 
 Die JSON Dateien für die Export-Konfigurationen liegen in `configs`. Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, die erstellt wird (Bsp. `Kühlschränke.json` wird zu `Kühlschränke.csv`). Es werden der Produkttyp und Felder angegeben, die exportiert werden sollen.
 
-Der Produkttyp muss so angegeben werden, wie er in den BSVP-Produkt-Dateien steht, allerdings ohne HTML kodierte Zeichen (Bsp. `PUM::Produkttyp::K&uuml;hlregal`, in der Konfiguration steht `"Kühlregal"`).
+Das Format sieht wie folgt aus:
+
+```json
+{
+  "produkttyp": "Kühlschrank",
+  "felder": {
+    "ARTNR": "artikelnummer",
+    "TECHDATA": {
+      "0000226": "temperaturbereich_von_grad_celsius",
+      "0000017": "anzahl_regalboeden"
+    }
+  }
+}
+```
+
+Der Produkttyp muss so angegeben werden, wie er in den BSVP-Produkt-Dateien steht, allerdings ohne HTML kodierte Zeichen (Bsp. `PUM::Produkttyp::K&uuml;hlschrank`, in der Konfiguration steht `"Kühlschrank"`).
 
 Die Felder werden als Key-Value-Paar angegeben, wobei der Key das Feld so wie es in den BSVP-Produkt-Dateien steht ist (Bsp. `"ARTNR"`). Der Value ist entweder der Name des Feldes wie er in der CSV Datei angegeben werden soll (Bsp. `"artikelnummer"`) oder weitere Key-Value-Paare, die zu exportierende Attribute spezifizieren, die im Feld enthalten sind (Bsp. innerhalb von `TECHDATA`). Hierbei wird als Key die numerische ID für das Attribut-Feld angegeben (Bsp. `"0000017"` für Anzahl Regalböden). Der Value ist der Name, der als Feld-Bezeichner in der CSV Datei steht (Bsp. `"anzahl_regalboeden"`).
 

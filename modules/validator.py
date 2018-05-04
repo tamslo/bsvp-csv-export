@@ -18,18 +18,16 @@ def validate_required_fields(config, required_fields):
                 .format(file_path, required_field)
             )
 
-def validate_setup(general_config_file, export_configs_directory):
+def validate_setup(general_config_file):
     if not os.path.exists(general_config_file):
         sys.exit(
             "[FEHLER] Die generelle Konfiguration fehlt, es gibt keine Datei {}"
             .format(general_config_file)
         )
 
-    if not os.path.exists(export_configs_directory):
-        sys.exit(
-            "[FEHLER] Die Export-Konfigurationen fehlen, es gibt keinen Ordner {}"
-            .format(export_configs_directory)
-        )
+    config_file = open(general_config_file, "r", encoding="utf-8")
+    config = json.load(config_file)
+    export_configs_directory = config["configs_directory"]
 
     required_fields = [
         "separator",
@@ -44,30 +42,33 @@ def validate_setup(general_config_file, export_configs_directory):
         "archive_directory"
     ]
 
-    with open(general_config_file, "r", encoding="utf-8") as config_file:
-        config = json.load(config_file)
-        validate_required_fields(config, required_fields)
-        for directory_field in directory_fields:
-            if not config[directory_field].endswith("/"):
-                sys.exit(
-                    "[FEHLER] Das Verzeichnis {} in {} muss mit '/' enden"
-                    .format(directory_field, general_config_file)
-                )
+
+    if not os.path.exists(export_configs_directory):
+        sys.exit(
+            "[FEHLER] Die Export-Konfigurationen fehlen, es gibt keinen Ordner {}"
+            .format(export_configs_directory)
+        )
+
+    validate_required_fields(config, required_fields)
+    for directory_field in directory_fields:
+        if not config[directory_field].endswith("/"):
+            sys.exit(
+                "[FEHLER] Das Verzeichnis {} in {} muss mit '/' enden"
+                .format(directory_field, general_config_file)
+            )
 
     # Validierung des angegebenen Encodings
-    with open(general_config_file, "r", encoding="utf-8") as config_file:
-        config = json.load(config_file)
-        test_path = "test.csv"
-        try:
-            test_file = open(test_path, "w", encoding=config["encoding"])
-            test_file.close()
-            os.remove(test_path)
-        except:
-            os.remove(test_path)
-            sys.exit(
-                "[FEHLER] Die Export-Konfiguration in {} enthält invalides Encoding {}"
-                .format(export_config_path, encoding)
-            )
+    test_path = "test.csv"
+    try:
+        test_file = open(test_path, "w", encoding=config["encoding"])
+        test_file.close()
+        os.remove(test_path)
+    except:
+        os.remove(test_path)
+        sys.exit(
+            "[FEHLER] Die Export-Konfiguration in {} enthält invalides Encoding {}"
+            .format(export_config_path, encoding)
+        )
 
     for export_config in os.listdir(export_configs_directory):
         required_fields = ["produkttyp" ,"felder"]
@@ -79,3 +80,5 @@ def validate_setup(general_config_file, export_configs_directory):
                 sys.exit("[FEHLER] {} enthält keine ARTNR").format(export_config_path)
             if not "TECHDATA" in config["felder"]:
                 sys.exit("[FEHLER] {} enthält keine TECHDATA").format(export_config_path)
+
+    config_file.close()

@@ -3,7 +3,7 @@ import os, shutil, json, csv
 from collections import OrderedDict
 
 class Exporter:
-    def __init__(self, general_config_file, export_configs_directory):
+    def __init__(self, general_config_file):
         with open(general_config_file, "r", encoding="utf-8") as config_file:
             general_config = json.load(config_file)
             self.csv_separator = general_config["separator"]
@@ -11,7 +11,7 @@ class Exporter:
             self.csv_line_ending = general_config["line_ending"]
             self.output_directory = general_config["output_directory"]
             self.archive_directory = general_config["archive_directory"]
-            self.configs = build_configs(export_configs_directory)
+            self.configs = build_configs(general_config["configs_directory"])
 
     def csv_path(self, config):
         return self.output_directory + config["file_name"]

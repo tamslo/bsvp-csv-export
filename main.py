@@ -7,16 +7,15 @@ from modules.logger import Logger
 
 # Definition von Konstanten wie Verzeichnissen und Dateiendungen
 GENERAL_CONFIG_FILE = "config.json"
-EXPORT_CONFIGS_DIRECTORY = "configs/"
 MANUFACTURER_ENDING = ".lugg"
 PRODUCT_ENDING = ".prod"
 PRODUCT_TYPE_ID = "0000191"
 
 logger = Logger(GENERAL_CONFIG_FILE, MANUFACTURER_ENDING, PRODUCT_ENDING)
-exporter = Exporter(GENERAL_CONFIG_FILE, EXPORT_CONFIGS_DIRECTORY)
+exporter = Exporter(GENERAL_CONFIG_FILE)
 
 logger.print_start_time()
-validate_setup(GENERAL_CONFIG_FILE, EXPORT_CONFIGS_DIRECTORY)
+validate_setup(GENERAL_CONFIG_FILE)
 exporter.prepare_export()
 
 # BSVP Dateien parsen und in CSV Dateien schreiben

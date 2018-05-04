@@ -1,7 +1,5 @@
 # Project-specific files and directories
-export/
-data/
-*.json
+config.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
