@@ -8,6 +8,7 @@ class Exporter:
             general_config = json.load(config_file)
             self.csv_separator = general_config["separator"]
             self.csv_encoding = general_config["encoding"]
+            self.csv_line_ending = general_config["line_ending"]
             self.output_directory = general_config["output_directory"]
             self.archive_directory = general_config["archive_directory"]
             self.configs = build_configs(export_configs_directory)
@@ -39,7 +40,11 @@ class Exporter:
         for config in list(self.configs.values()):
             csv_path = self.csv_path(config)
             with open(csv_path, "w", encoding=self.csv_encoding) as csv_file:
-                csv_writer = csv.writer(csv_file, delimiter=self.csv_separator)
+                csv_writer = csv.writer(
+                    csv_file,
+                    delimiter=self.csv_separator,
+                    lineterminator=self.csv_line_ending
+                )
                 header_fields = []
                 fields = config["fields"]
                 for field in list(fields.keys()):

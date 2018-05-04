@@ -2,15 +2,6 @@
 
 Python-basierter BSVP Export von CSV Dateien.
 
-## TODOs
-
-* BSVP Dateien korrekt parsen
-
-* Paare von Werten (Temperaturbereich)
-* Übersetzung von Werten
-* Editierung von Werten
-* README ergänzen
-
 ## Installation
 
 Es wird Python 3 benötigt, das auf der [offiziellen Python Website](https://www.python.org/downloads/) heruntergeladen werden kann. Um Python aus der Kommandozeile ausführen zu können, muss das Installationsverzeichnis von Python zur `PATH` Variable hinzugefügt werden.

@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 import os, sys, html, re
 
-ARTNR_PREFIX = "§+§ARTNR="
-TECH_DATA_PREFIX = "§+§TECHDATA="
 DATA_SEPARTOR = "§+§"
 ATTRIBUTE_SEPARATOR = "§-§"
-INNER_SEPARATOR = "::"
 
 def parse_product(product_path):
     if not os.path.exists(product_path):
