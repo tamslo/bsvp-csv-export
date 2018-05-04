@@ -1,16 +1,20 @@
-import os, time
+import os, time, json
 
 class Logger:
-    def __init__(self, skip_log_file, manufacturer_ending, product_ending):
-        self.start_time = time.localtime()
-        skip_log = open(skip_log_file, "w", encoding="utf-8")
-        skip_log.close()
-        self.skip_log = open(skip_log_file, "a", encoding="utf-8")
-        self.manufacturer_ending = manufacturer_ending
-        self.product_ending = product_ending
-        self.manufacturer = None
-        self.products = 0
-        self.skips = 0
+    def __init__(self, general_config_file, manufacturer_ending, product_ending):
+        with open(general_config_file, "r", encoding="utf-8") as config_file:
+            general_config = json.load(config_file)
+            log_file = general_config["log_file"]
+            self.start_time = time.localtime()
+            # Create log file or overwrite old one
+            log = open(log_file, "w", encoding="utf-8")
+            log.close()
+            self.log = open(log_file, "a", encoding="utf-8")
+            self.manufacturer_ending = manufacturer_ending
+            self.product_ending = product_ending
+            self.manufacturer = None
+            self.products = 0
+            self.skips = 0
 
     def print_start_time(self):
         print(
@@ -56,7 +60,7 @@ class Logger:
 
     def log_skip(self, product_directory, error_code):
         self.skips += 1
-        self.skip_log.write("{} - {} ({})\n".format(
+        self.log.write("{} - {} ({})\n".format(
             self.manufacturer,
             self.product_name(product_directory),
             error_code

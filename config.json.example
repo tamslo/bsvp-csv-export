@@ -4,5 +4,6 @@
   "encoding": "utf-8",
   "bsvp_data_directory": "../data/",
   "output_directory": "../export/",
-  "archive_directory": "../export/backup/"
+  "archive_directory": "../export/backup/",
+  "log_file": "../exporter.log"
 }
