@@ -95,8 +95,9 @@ def build_config(export_config_name, export_configs_directory):
 def build_configs(export_configs_directory):
     configs = {}
     for export_config_name in os.listdir(export_configs_directory):
-        product_type, config = build_config(export_config_name, export_configs_directory)
-        configs[product_type] = config
+        if export_config_name.endswith(".json"):
+            product_type, config = build_config(export_config_name, export_configs_directory)
+            configs[product_type] = config
     return configs
 
 def is_csv(file):
