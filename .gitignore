@@ -1,5 +1,8 @@
 # Project-specific files and directories
 config.json
+configs/
+data/
+export/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -10,16 +10,15 @@ Außerdem müssen die beispielhaft gegebenen Konfigurationsdateien angepasst wer
 
 ## Ausführung
 
-Für die manuelle Ausführung muss zunächst die Kommandozeile gestartet werden, indem man zum Beispiel `WINDOWS + R` drückt, `cmd` eingibt und bestätigt. Dann muss in das Verzeichnis gewechselt werden, in dem die Python Datein liegen, wo das Skript `main.py` ausgeführt werden kann.
+Für die manuelle Ausführung muss zunächst die Kommandozeile gestartet werden, indem man zum Beispiel `WINDOWS + R` drückt, `cmd` eingibt und bestätigt. Dann muss in das `root` Verzeichnis gewechselt werden, in dem die Python Datein liegen, wo das Skript `main.py` ausgeführt werden kann.
 
 ```
-cd  <Pfad zum Ordner, in dem die main.py liegt>
-python main.py
+cd pfad/zum/root/verzeichnis && python main.py
 ```
 
 Die erstellten CSV Dateien werden im in der `config.json` angegebenen Ordner gespeichert, der angelegt wird, wenn er noch nicht vorhanden ist. Der jeweils letzte Export wird in den angegebenen Archiv-Ordner verschoben.
 
-Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in der `skip.log`, dass sie übersprungen wurde. Gründe dafür sind:
+Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in der konfigurierten Log-Datei, dass sie übersprungen wurde. Gründe dafür sind:
 
 * Der `.prod` Ordner und die `.prod` Datei haben unterschiedliche Namen (`PROD_UNTERSCHIEDLICH`)
 * Die `.prod` Datei enthält keine Artikelnummer (`KEINE_ARTNR`)
@@ -27,6 +26,10 @@ Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in der `skip.log`,
 * Das `TECHDATA` Feld enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
 
 _TODO Automatische Ausführung mit Windows Aufgabenplanung_
+
+## Updates
+
+Die neuste Version wird als ZIP-Archiv zur Verfügung gestellt. Zum Updaten den im Archiv enthaltenen Code in das `root` Verzeichnis kopieren. Dabei wird nur der Code überschrieben und keine Konfiguration, Daten oder Dateien, die vom Exporter erstellt werden.
 
 ## Konfiguration
 
