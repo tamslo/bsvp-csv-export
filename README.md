@@ -57,7 +57,23 @@ Die Felder werden als Key-Value-Paar angegeben, wobei der Key das Feld so wie es
 
 ## Fehlerbehebung
 
-_Hier können häufig auftretende Fehler und ihre Lösung beschrieben werden_
+Hier sind Lösungen zu häufigen Fehlern aufgeführt, geordnet nach den Fehlerarten, die in der Kommandozeile ausgegeben werden.
+
+### PermissionError
+
+```
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process
+```
+
+Es könnte sein, dass eine CSV Datei, die überschrieben werden soll noch in einem anderen Programm wie Excel geöffnet ist, bitte schließen und den Exporter erneut starten.
+
+### JSONDecodeError
+
+```
+json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 19 column 5 (char 566)
+```
+
+Eine der JSON Konfigurationen enthält ein Komma in der letzten Zeile, das bitte entfernen.
 
 ## Kontakt
 
