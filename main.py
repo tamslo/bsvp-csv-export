@@ -2,7 +2,7 @@
 import time, json, os
 from modules.validator import validate_setup, validate_fields
 from modules.exporter import Exporter
-from modules.bsvp_parser import parse_product
+from modules.parser import parse_product
 from modules.logger import Logger
 
 # Definition von Konstanten wie Verzeichnissen und Dateiendungen

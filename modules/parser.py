@@ -10,17 +10,17 @@ def parse_product(product_path):
         return None, error_code
 
     bsvp_file = open(product_path, "r",  encoding="utf-8", errors="ignore")
-    product_data = ""
     lines = bsvp_file.readlines()
     bsvp_file.close()
 
+    product_data = ""
     for line in lines:
         product_data += line
 
     fields = {}
 
     for field in product_data.split(DATA_SEPARTOR):
-        field_parts = field.split("=")
+        field_parts = field.split("=", 1)
         if len(field_parts) == 1:
             continue
 
@@ -40,13 +40,16 @@ def parse_product(product_path):
                     continue
                 try:
                     attribute_value = attribute[0].split("::")[2]
-                    if attribute_value == " ":
+                    if attribute_value.strip() == "":
                         continue
                 except IndexError:
                     continue
-                attributes[attribute_id] = html.unescape(attribute_value)
+                attributes[attribute_id] = format_value(attribute_value)
             fields[field_name] = attributes
         else:
-            fields[field_name] = html.unescape(field_value)
+            fields[field_name] = format_value(field_value)
 
     return fields
+
+def format_value(value):
+    return html.unescape(value).strip()
