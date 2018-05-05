@@ -33,9 +33,7 @@ Die neuste Version wird als ZIP-Archiv zur Verfügung gestellt. Zum Updaten den 
 
 ## Konfiguration
 
-Die Kofigurations-Dateien sind im JSON Format hinterlegt. Beim JSON Format empfiehlt es sich, mit einem Editor zu arbeiten, der auf Syntax-Fehler aufmerksam macht.
-
-In `config.json` werde allgemeine Einstellungen spezifiziert. Bei der Angabe von Verzeichnissen ist darauf zu achten, dass sie mit einem `/` enden.
+Die Kofigurations-Dateien sind im JSON Format hinterlegt. In `config.json` werde allgemeine Einstellungen spezifiziert. Bei der Angabe von Verzeichnissen ist darauf zu achten, dass sie mit einem `/` enden.
 
 Die JSON Dateien für die Export-Konfigurationen liegen in `configs`. Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, die erstellt wird (Bsp. `Kühlschränke.json` wird zu `Kühlschränke.csv`). Es werden der Produkttyp und Felder angegeben, die exportiert werden sollen.
 
@@ -50,6 +48,12 @@ Das Format sieht wie folgt aus:
       "0000226": "temperaturbereich_von_grad_celsius",
       "0000017": "anzahl_regalboeden"
     }
+  },
+  "kombinationen": {
+    "temperaturbereich": {
+      "separator": "|",
+      "felder": ["0000226", "0000225"]
+    }
   }
 }
 ```
@@ -57,6 +61,8 @@ Das Format sieht wie folgt aus:
 Der Produkttyp muss so angegeben werden, wie er in den BSVP-Produkt-Dateien steht, allerdings ohne HTML kodierte Zeichen (Bsp. `PUM::Produkttyp::K&uuml;hlschrank`, in der Konfiguration steht `"Kühlschrank"`).
 
 Die Felder werden als Key-Value-Paar angegeben, wobei der Key das Feld so wie es in den BSVP-Produkt-Dateien steht ist (Bsp. `"ARTNR"`). Der Value ist entweder der Name des Feldes wie er in der CSV Datei angegeben werden soll (Bsp. `"artikelnummer"`) oder weitere Key-Value-Paare, die zu exportierende Attribute spezifizieren, die im Feld enthalten sind (Bsp. innerhalb von `TECHDATA`). Hierbei wird als Key die numerische ID für das Attribut-Feld angegeben (Bsp. `"0000017"` für Anzahl Regalböden). Der Value ist der Name, der als Feld-Bezeichner in der CSV Datei steht (Bsp. `"anzahl_regalboeden"`).
+
+Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. Der Bezeichner einer Kombination entspricht der Bezeichung der Spalte in der CSV-Datei. Als Wert sind ein Separator, das Feld (i.d.R. `TECHDATA`) und Attribut-IDs angegeben. Die Attribut-IDs werden dabei in einer Liste (eckige Klammern) angegeben.
 
 ## Fehlerbehebung
 
@@ -71,6 +77,8 @@ PermissionError: [WinError 32] The process cannot access the file because it is 
 Es könnte sein, dass eine CSV Datei, die überschrieben werden soll noch in einem anderen Programm wie Excel geöffnet ist, bitte schließen und den Exporter erneut starten.
 
 ### JSONDecodeError
+
+Beim JSON Format empfiehlt es sich allgemein, mit einem Editor zu arbeiten, der auf Syntax-Fehler aufmerksam macht. Alternativ können JSON Dateien auch online validiert werden (z.B. unter https://jsonlint.com/).
 
 ```
 json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 19 column 5 (char 566)

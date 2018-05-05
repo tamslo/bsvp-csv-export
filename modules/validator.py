@@ -80,5 +80,27 @@ def validate_setup(general_config_file):
                 sys.exit("[FEHLER] {} enthält keine ARTNR").format(export_config_path)
             if not "TECHDATA" in config["felder"]:
                 sys.exit("[FEHLER] {} enthält keine TECHDATA").format(export_config_path)
+            if "kombinationen" in config:
+                for name, combination in config["kombinationen"].items():
+                    if not "separator" in combination:
+                        sys.exit(
+                            "[FEHLER] Kombination {} in {} enthält kein Feld separator"
+                            .format(name, export_config_path)
+                        )
+                    if not "feld" in combination:
+                        sys.exit(
+                            "[FEHLER] Kombination {} in {} enthält kein Feld feld"
+                            .format(name, export_config_path)
+                        )
+                    if not "felder" in combination:
+                        sys.exit(
+                            "[FEHLER] Kombination {} in {} enthält kein Feld felder"
+                            .format(name, export_config_path)
+                        )
+                    if not isinstance(combination["felder"], list):
+                        sys.exit(
+                            "[FEHLER] Das Feld felder in Kombination {} in {} enthält keine Liste"
+                            .format(name, export_config_path)
+                        )
 
     config_file.close()

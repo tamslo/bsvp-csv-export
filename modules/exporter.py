@@ -53,6 +53,7 @@ class Exporter:
                         header_fields.append(field_value)
                     else:
                         header_fields += list(field_value.values())
+                header_fields += list(config["combinations"].keys())
                 csv_writer.writerow(header_fields)
 
     def write_to_csv(self, fields, product_type_id):
@@ -70,13 +71,31 @@ def get_field(fields, field_name):
 
 def extract_product_information(config, fields):
     product_information = []
-    for field_name in list(config["fields"].keys()):
+
+    # Spezifizierte Felder in product_information schreiben
+    for field_name in config["fields"]:
         field_value = config["fields"][field_name]
+        # Wenn der field_value ein einfaches Feld ist (z.B ARTNR), dann ist der Wert ein
+        # String und kann direkt in die product_information geschrieben werden. Ansonsten
+        # wird über die Attribute iteriert (z.B in TECHDATA).
         if isinstance(field_value, str):
             product_information.append(get_field(fields, field_name))
         else:
             for attribute_name in list(field_value.keys()):
                 product_information.append(get_field(fields[field_name], attribute_name))
+
+    # Spezifizierte Kominationen bilden und in product_information schreiben
+    for name, combination in config["combinations"].items():
+        field_name = combination["feld"]
+        fields = list(map(
+            lambda attribute_name: get_field(fields[field_name], attribute_name) or "",
+            combination["felder"]
+        ))
+        if all(field == "" for field in fields):
+            product_information.append(None)
+        else:
+            product_information.append(combination["separator"].join(fields))
+
     return product_information
 
 def build_config(export_config_name, export_configs_directory):
@@ -86,9 +105,11 @@ def build_config(export_config_name, export_configs_directory):
         output_file_name = export_config_name.split(".json")[0] + ".csv"
         product_type = export_config["produkttyp"]
         fields = export_config["felder"]
+        combinations = export_config["kombinationen"] if "kombinationen" in export_config else {}
         config = {
             "file_name": output_file_name,
-            "fields": fields
+            "fields": fields,
+            "combinations": combinations
         }
         return product_type, config
 
