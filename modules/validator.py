@@ -2,12 +2,14 @@
 import sys, os, json
 
 def validate_fields(fields, product_type_id):
-    if not "TECHDATA" in fields:
-        return "KEIN_TECHDATA"
-    if not product_type_id in fields["TECHDATA"]:
-        return "KEIN_PRODUKTTYP"
     if not "ARTNR" in fields:
         return "KEINE_ARTNR"
+    if not "TECHDATA" in fields:
+        return "KEIN_TECHDATA"
+    if not fields["TECHDATA"]:
+        return "TECHDATA_LEER"
+    if not product_type_id in fields["TECHDATA"]:
+        return "KEIN_PRODUKTTYP"
     return None
 
 def validate_required_fields(config, required_fields):

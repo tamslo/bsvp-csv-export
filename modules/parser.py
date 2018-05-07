@@ -5,10 +5,6 @@ DATA_SEPARTOR = "§+§"
 ATTRIBUTE_SEPARATOR = "§-§"
 
 def parse_product(product_path):
-    if not os.path.exists(product_path):
-        error_code = "PROD_UNTERSCHIEDLICH"
-        return None, error_code
-
     bsvp_file = open(product_path, "r",  encoding="utf-8", errors="ignore")
     lines = bsvp_file.readlines()
     bsvp_file.close()

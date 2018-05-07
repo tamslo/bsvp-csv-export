@@ -24,6 +24,7 @@ Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in der konfigurier
 * Die `.prod` Datei enthält keine Artikelnummer (`KEINE_ARTNR`)
 * Die `.prod` Datei enthält kein `TECHDATA` Feld (`KEIN_TECHDATA`)
 * Das `TECHDATA` Feld enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
+* Die Attribute in `TECHDATA` konnten nicht extrahiert werden, wahrscheinlich weil die numerischen Attribute fehlen (`TECHDATA_LEER`)
 
 _TODO Automatische Ausführung mit Windows Aufgabenplanung_
 
