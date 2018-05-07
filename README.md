@@ -26,7 +26,9 @@ Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in der konfigurier
 * Das `TECHDATA` Feld enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
 * Die Attribute in `TECHDATA` konnten nicht extrahiert werden, wahrscheinlich weil die numerischen Attribute fehlen (`TECHDATA_LEER`)
 
-_TODO Automatische Ausführung mit Windows Aufgabenplanung_
+## Automatische Ausführung mit Windows Aufgabenplaner
+
+Um die Ausführung zu automatisieren, muss wie gewohnt eine Aufgabe im Windows Aufgabenplaner erstellt werden. Als zu startendes Programm `C:\Windows\SysWOW64\cmd.exe` angeben, als Argument `/c "python main.py"` und als Ordner, in dem der Befehl ausgeführt werden soll, den `pfad/zum/root/verzeichnis` angeben.
 
 ## Updates
 
