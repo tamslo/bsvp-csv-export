@@ -40,12 +40,9 @@ def parse_product(product_path):
                         continue
                 except IndexError:
                     continue
-                attributes[attribute_id] = format_value(attribute_value)
+                attributes[attribute_id] = attribute_value
             fields[field_name] = attributes
         else:
-            fields[field_name] = format_value(field_value)
+            fields[field_name] = field_value
 
     return fields
-
-def format_value(value):
-    return html.unescape(value).strip()

@@ -48,8 +48,8 @@ Das Format sieht wie folgt aus:
   "felder": {
     "ARTNR": "artikelnummer",
     "TECHDATA": {
-      "0000226": "temperaturbereich_von_grad_celsius",
-      "0000017": "anzahl_regalboeden"
+      "0000017": "anzahl_regalboeden",
+      "0000089": "energieverbrauch"
     }
   },
   "kombinationen": {
@@ -57,6 +57,9 @@ Das Format sieht wie folgt aus:
       "separator": "|",
       "felder": ["0000226", "0000225"]
     }
+  },
+  "formatierungen": {
+    "punkt_zu_komma": ["0000089"]
   }
 }
 ```
@@ -65,7 +68,18 @@ Der Produkttyp muss so angegeben werden, wie er in den BSVP-Produkt-Dateien steh
 
 Die Felder werden als Key-Value-Paar angegeben, wobei der Key das Feld so wie es in den BSVP-Produkt-Dateien steht ist (Bsp. `"ARTNR"`). Der Value ist entweder der Name des Feldes wie er in der CSV Datei angegeben werden soll (Bsp. `"artikelnummer"`) oder weitere Key-Value-Paare, die zu exportierende Attribute spezifizieren, die im Feld enthalten sind (Bsp. innerhalb von `TECHDATA`). Hierbei wird als Key die numerische ID für das Attribut-Feld angegeben (Bsp. `"0000017"` für Anzahl Regalböden). Der Value ist der Name, der als Feld-Bezeichner in der CSV Datei steht (Bsp. `"anzahl_regalboeden"`).
 
+### Kombinationen von Werten
+
 Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. Der Bezeichner einer Kombination entspricht der Bezeichung der Spalte in der CSV-Datei. Als Wert sind ein Separator, das Feld (i.d.R. `TECHDATA`) und Attribut-IDs angegeben. Die Attribut-IDs werden dabei in einer Liste (eckige Klammern) angegeben.
+
+### Formatierung von Werten
+
+Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Dabei gibt es folgende vordefinierte Regeln:
+
+* `"wahrheitswert_englisch"`: "Ja" und "Nein" werden zu "yes" und "no" geändert
+* `"vorhanden_zu_integriert"`: der Wert "vorhanden" wird du "integriert" geändert
+* `"punkt_zu_komma"`: der Punkt (in einer Kommazahl) wird zu einem Komma geändert
+  Zu einer Regel kann eine Liste von Attribut-IDs angegeben werden, auf die diese dann angewendet wird.
 
 ## Fehlerbehebung
 

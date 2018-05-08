@@ -1,7 +1,7 @@
 {
   "separator": ";",
   "line_ending": "\n",
-  "encoding": "utf-8",
+  "encoding": "latin-1",
   "configs_directory": "configs/",
   "bsvp_data_directory": "data/",
   "output_directory": "export/",

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os, shutil, json, csv
 from collections import OrderedDict
+from formatter import format_value
 
 class Exporter:
     def __init__(self, general_config_file):
@@ -66,8 +67,11 @@ class Exporter:
                 product_information = extract_product_information(config, fields)
                 csv_writer.writerow(product_information)
 
-def get_field(fields, field_name):
-    return fields[field_name] if field_name in fields else None
+def get_field(config, fields, field_name):
+    if field_name in fields:
+        return format_value(config["format_options"], field_name, fields[field_name])
+    else:
+        return None
 
 def extract_product_information(config, fields):
     product_information = []
@@ -79,16 +83,18 @@ def extract_product_information(config, fields):
         # String und kann direkt in die product_information geschrieben werden. Ansonsten
         # wird über die Attribute iteriert (z.B in TECHDATA).
         if isinstance(field_value, str):
-            product_information.append(get_field(fields, field_name))
+            product_information.append(get_field(config, fields, field_name))
         else:
             for attribute_name in list(field_value.keys()):
-                product_information.append(get_field(fields[field_name], attribute_name))
+                product_information.append(
+                    get_field(config, fields[field_name], attribute_name)
+                )
 
     # Spezifizierte Kominationen bilden und in product_information schreiben
     for name, combination in config["combinations"].items():
         field_name = combination["feld"]
         fields = list(map(
-            lambda attribute_name: get_field(fields[field_name], attribute_name) or "",
+            lambda attribute_name: get_field(config, fields[field_name], attribute_name) or "",
             combination["felder"]
         ))
         if all(field == "" for field in fields):
@@ -106,10 +112,12 @@ def build_config(export_config_name, export_configs_directory):
         product_type = export_config["produkttyp"]
         fields = export_config["felder"]
         combinations = export_config["kombinationen"] if "kombinationen" in export_config else {}
+        format_options = export_config["formatierungen"] if "formatierungen" in export_config else {}
         config = {
             "file_name": output_file_name,
             "fields": fields,
-            "combinations": combinations
+            "combinations": combinations,
+            "format_options": format_options
         }
         return product_type, config
 
