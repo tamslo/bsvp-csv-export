@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import time, json, os
-from modules.validator import validate_setup, validate_fields
-from modules.exporter import Exporter
-from modules.parser import parse_product
 from modules.logger import Logger
+from modules.validator import validate_setup, validate_fields
+from modules.parser import parse_product
+from modules.exporter import Exporter
+from modules.formatter import Formatter
 
 # Definition von Konstanten wie Verzeichnissen und Dateiendungen
 GENERAL_CONFIG_FILE = "config.json"
@@ -12,13 +13,11 @@ PRODUCT_ENDING = ".prod"
 PRODUCT_TYPE_ID = "0000191"
 
 logger = Logger(GENERAL_CONFIG_FILE, MANUFACTURER_ENDING, PRODUCT_ENDING)
-exporter = Exporter(GENERAL_CONFIG_FILE)
-
 logger.print_start_time()
-validate_setup(GENERAL_CONFIG_FILE)
-exporter.prepare_export()
 
-# BSVP Dateien parsen und in CSV Dateien schreiben
+validate_setup(GENERAL_CONFIG_FILE)
+exporter = Exporter(GENERAL_CONFIG_FILE)
+formatter = Formatter(GENERAL_CONFIG_FILE)
 
 with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
     config = json.load(config_file)
@@ -39,7 +38,8 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                         fields = parse_product(product_path)
                         error_code = validate_fields(fields, PRODUCT_TYPE_ID)
                         if error_code == None:
-                            exporter.write_to_csv(fields, PRODUCT_TYPE_ID)
+                            formatted_fields = formatter.format(fields, PRODUCT_TYPE_ID)
+                            exporter.write_to_csv(formatted_fields, PRODUCT_TYPE_ID)
                         else:
                             logger.log_skip(product_directory, error_code)
                     else:

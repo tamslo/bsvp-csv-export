@@ -38,7 +38,7 @@ Die neuste Version wird als ZIP-Archiv zur Verfügung gestellt. Zum Updaten den 
 
 Die Kofigurations-Dateien sind im JSON Format hinterlegt. In `config.json` werde allgemeine Einstellungen spezifiziert. Bei der Angabe von Verzeichnissen ist darauf zu achten, dass sie mit einem `/` enden.
 
-Die JSON Dateien für die Export-Konfigurationen liegen in `configs`. Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, die erstellt wird (Bsp. `Kühlschränke.json` wird zu `Kühlschränke.csv`). Es werden der Produkttyp und Felder angegeben, die exportiert werden sollen.
+Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config.json` angegeben. Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, die erstellt wird (Bsp. `Kühlschränke.json` wird zu `Kühlschränke.csv`). Es werden der Produkttyp und Felder angegeben, die exportiert werden sollen.
 
 Das Format sieht wie folgt aus:
 
@@ -79,7 +79,8 @@ Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Dabei gi
 * `"wahrheitswert_englisch"`: "Ja" und "Nein" werden zu "yes" und "no" geändert
 * `"vorhanden_zu_integriert"`: der Wert "vorhanden" wird du "integriert" geändert
 * `"punkt_zu_komma"`: der Punkt (in einer Kommazahl) wird zu einem Komma geändert
-  Zu einer Regel kann eine Liste von Attribut-IDs angegeben werden, auf die diese dann angewendet wird.
+
+Zu einer Regel kann eine Liste von Attribut-IDs angegeben werden, auf die diese dann angewendet wird. Für jede Attribut-ID kann nur eine Regel angewendet werden.
 
 ## Fehlerbehebung
 

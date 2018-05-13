@@ -104,5 +104,22 @@ def validate_setup(general_config_file):
                             "[FEHLER] Das Feld felder in Kombination {} in {} enthält keine Liste"
                             .format(name, export_config_path)
                         )
+            if "formatierungen" in config:
+                format_rules = [
+                    "wahrheitswert_englisch",
+                    "vorhanden_zu_integriert",
+                    "punkt_zu_komma"
+                ]
+                for format_rule in config["formatierungen"]:
+                    if not format_rule in format_rules:
+                        sys.exit(
+                            "[FEHLER] Ungültige Formatierungsregel {} in {}"
+                            .format(format_rule, export_config_path)
+                        )
+                    if not isinstance(config["formatierungen"][format_rule], list):
+                        sys.exit(
+                            "[FEHLER] Die Formatierungsregel {} in {} enthält keine Liste"
+                            .format(format_rule, export_config_path)
+                        )
 
     config_file.close()

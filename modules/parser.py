@@ -21,7 +21,7 @@ def parse_product(product_path):
             continue
 
         field_name = field_parts[0]
-        field_value = field_parts[1]
+        field_value = html.unescape(field_parts[1]).strip()
         field_attributes = field_value.split(ATTRIBUTE_SEPARATOR)
 
         if len(field_attributes) > 1:
@@ -35,7 +35,7 @@ def parse_product(product_path):
                 except AttributeError:
                     continue
                 try:
-                    attribute_value = attribute[0].split("::")[2]
+                    attribute_value = html.unescape(attribute[0].split("::")[2]).strip()
                     if attribute_value.strip() == "":
                         continue
                 except IndexError:
