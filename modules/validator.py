@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys, os, json
+from modules.formatter import format_rules
 
 def validate_fields(fields, product_type_id):
     if not "ARTNR" in fields:
@@ -105,13 +106,9 @@ def validate_setup(general_config_file):
                             .format(name, export_config_path)
                         )
             if "formatierungen" in config:
-                format_rules = [
-                    "wahrheitswert_englisch",
-                    "vorhanden_zu_integriert",
-                    "punkt_zu_komma"
-                ]
+                rules = format_rules()
                 for format_rule in config["formatierungen"]:
-                    if not format_rule in format_rules:
+                    if not format_rule in rules:
                         sys.exit(
                             "[FEHLER] Ungültige Formatierungsregel {} in {}"
                             .format(format_rule, export_config_path)

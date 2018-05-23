@@ -115,9 +115,13 @@ Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. De
 
 Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Dabei gibt es folgende vordefinierte Regeln:
 
-* `"wahrheitswert_englisch"`: "Ja" und "Nein" werden zu "yes" und "no" geändert
+* `"wahrheitswert_englisch"`: "ja" und "nein" werden zu "yes" und "no" geändert
 * `"vorhanden_zu_integriert"`: der Wert "vorhanden" wird du "integriert" geändert
 * `"punkt_zu_komma"`: der Punkt (in einer Kommazahl) wird zu einem Komma geändert
+* `"stille_kühlung_zu_statische_kühlung"`: "stille Kühlung" wird zu "statische Kühlung" geändert
+* `"ja_zu_steckfertig"`: "ja" wird zu "steckerfertig" geändert
+* `"230_volt"`: "220 - 240 Volt" wird zu "230 Volt" geändert
+* `"bereich_von_null"`: zu einem Wert wird "0|" hinzugefügt
 
 Zu einer Regel kann eine Liste von Attribut-IDs angegeben werden, auf die diese dann angewendet wird. Für jede Attribut-ID kann nur eine Regel angewendet werden.
 
