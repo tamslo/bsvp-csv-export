@@ -18,6 +18,7 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 4.  [Fehlerbehebung](#fehlerbehebung)
 
 <a name="installation" />
+
 ## Installation
 
 1.  Python 3 installieren
@@ -30,6 +31,7 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 6.  Die `config.json.example` in `config.json` umbenennen und ggf. anpassen
 
 <a name="automatische-ausführung" />
+
 ### Automatische Ausführung
 
 1.  Aufgabe im Windows Aufgabenplaner erstellen
@@ -39,12 +41,14 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
     * Starten in: `EXPORTER_VERZEICHNIS` (absoluten Pfad angeben, z.B. `C:\BSVP-Server\CSV Exporter`)
 
 <a name="updates" />
+
 ### Updates
 
 1.  Neue Version aus dem Trello herunterladen
 2.  Inhalt in EXPORTER_VERZEICHNIS verschieben und vorhandene Dateien ersetzen, es wird nur der Code überschrieben, Konfigurationen und andere Daten bleiben so wie sie sind
 
 <a name="ausführung" />
+
 ## Ausführung
 
 1.  Kommandozeile starten (z.B. `WINDOWS + R` drücken, `cmd` eingeben und bestätigen)
@@ -62,6 +66,7 @@ Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in der konfigurier
 * Die Attribute in `TECHDATA` konnten nicht extrahiert werden, wahrscheinlich weil die numerischen Attribute fehlen (`TECHDATA_LEER`)
 
 <a name="konfigurationen" />
+
 ## Konfigurationen
 
 Die Kofigurations-Dateien sind im JSON Format hinterlegt. Es empfiehlt sich, mit einem Editor mit JSON-Erweiterung zu arbeiten, der auf Fehler aufmerksam machen kann (z.B. Notepad++) oder die JSON-Dateien mit einem Online-Validierer (z.B. [JSONLint](https://jsonlint.com/)) zu überprüfen.
@@ -71,6 +76,7 @@ Die Kofigurations-Dateien sind im JSON Format hinterlegt. Es empfiehlt sich, mit
 In `config.json` werde allgemeine Einstellungen spezifiziert. Bei der Angabe von Verzeichnissen darauf achten, dass sie mit einem `/` enden.
 
 <a name="export-konfigurationen" />
+
 ### Export-Konfigurationen
 
 Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config.json` angegeben. Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, die erstellt wird (Bsp. `Kühlschränke.json` wird zu `Kühlschränke.csv`). Es werden der Produkttyp und Felder angegeben, die exportiert werden sollen. Das Format sieht wie folgt aus:
@@ -116,6 +122,7 @@ Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Dabei gi
 Zu einer Regel kann eine Liste von Attribut-IDs angegeben werden, auf die diese dann angewendet wird. Für jede Attribut-ID kann nur eine Regel angewendet werden.
 
 <a name="fehlerbehebung" />
+
 ## Fehlerbehebung
 
 Hier sind Lösungen zu häufigen Fehlern aufgeführt, geordnet nach den Fehlerarten, die in der Kommandozeile ausgegeben werden.
