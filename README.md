@@ -27,7 +27,7 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 2.  Aktuelle Version des Exporters aus dem Trello herunterladen
 3.  Exporter in gewünschtes Verzeichnis verschieben (von jetzt an `EXPORTER_VERZEICHNIS` genannt)
 4.  Verzeichnis für Export-Konfigurationen anlegen
-5.  Konfigurationen aus dem Trello herunterladen oder neu anlegen (siehe Kapitel [Konfigurationen](#Konfigurationen))
+5.  Konfigurationen aus dem Trello herunterladen oder neu anlegen
 6.  Die `config.json.example` in `config.json` umbenennen und ggf. anpassen
 
 <a name="automatische-ausführung" />
