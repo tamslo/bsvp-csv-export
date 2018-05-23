@@ -1,20 +1,55 @@
-# Konfigurator CSV Export
+# BSVP CSV Exporter
 
-Python-basierter BSVP Export von CSV Dateien.
+Python-basierter Exporter für die Umwandlung von BSVP zu CSV Dateien.
 
+Trello: https://trello.com/b/ug9q2Eif/bsvp
+
+Diese README sieht komisch aus? Dann öffne sie mit einem Editor mit Markdown-Erweiterung (z.B. Notepad++) oder mit einem Online-Viewer (z.B. [Github](https://jbt.github.io/markdown-editor/)).
+
+Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamaraslosarek@gmail.com.
+
+1.  [Installation](#installation)
+    * [Updates](#updates)
+    * [Automatische Ausführung](#automatische-ausführung)
+2.  [Ausführung](#ausführung)
+3.  [Konfigurationen](#konfigurationen)
+    * [Allgemeine Einstellungen](#allgemeine-einstellungen)
+    * [Export-Konfigurationen](#export-konfigurationen)
+4.  [Fehlerbehebung](#fehlerbehebung)
+
+<a name="installation" />
 ## Installation
 
-Es wird Python 3 benötigt, das auf der [offiziellen Python Website](https://www.python.org/downloads/) heruntergeladen werden kann. Um Python aus der Kommandozeile ausführen zu können, muss das Installationsverzeichnis von Python zur `PATH` Variable hinzugefügt werden.
+1.  Python 3 installieren
+    * Mit [offiziellem Installer](https://www.python.org/downloads/)
+    * Installationsverzeichnis zur `PATH` Umgebungsvariable hinzufügen
+2.  Aktuelle Version des Exporters aus dem Trello herunterladen
+3.  Exporter in gewünschtes Verzeichnis verschieben (von jetzt an `EXPORTER_VERZEICHNIS` genannt)
+4.  Verzeichnis für Export-Konfigurationen anlegen
+5.  Konfigurationen aus dem Trello herunterladen oder neu anlegen (siehe Kapitel [Konfigurationen](#Konfigurationen))
+6.  Die `config.json.example` in `config.json` umbenennen und ggf. anpassen
 
-Außerdem müssen die beispielhaft gegebenen Konfigurationsdateien angepasst werden. Die `config.json.example` muss in `config.json` umbenannt und der Inhalt den Anforderungen angepasst werden. Für jede Export-Konfiguration muss eine Konfigutation in `configs/` angelegt werden, das Format ist unter [Konfiguration](#konfiguration) gezeigt.
+<a name="automatische-ausführung" />
+### Automatische Ausführung
 
+1.  Aufgabe im Windows Aufgabenplaner erstellen
+2.  Aktion hinzufügen
+    * Programm/Skript: `C:\Windows\SysWOW64\cmd.exe`
+    * Argumente hinzufügen: `/c "python main.py"`
+    * Starten in: `EXPORTER_VERZEICHNIS` (absoluten Pfad angeben, z.B. `C:\BSVP-Server\CSV Exporter`)
+
+<a name="updates" />
+### Updates
+
+1.  Neue Version aus dem Trello herunterladen
+2.  Inhalt in EXPORTER_VERZEICHNIS verschieben und vorhandene Dateien ersetzen, es wird nur der Code überschrieben, Konfigurationen und andere Daten bleiben so wie sie sind
+
+<a name="ausführung" />
 ## Ausführung
 
-Für die manuelle Ausführung muss zunächst die Kommandozeile gestartet werden, indem man zum Beispiel `WINDOWS + R` drückt, `cmd` eingibt und bestätigt. Dann muss in das `root` Verzeichnis gewechselt werden, in dem die Python Datein liegen, wo das Skript `main.py` ausgeführt werden kann.
-
-```
-cd pfad/zum/root/verzeichnis && python main.py
-```
+1.  Kommandozeile starten (z.B. `WINDOWS + R` drücken, `cmd` eingeben und bestätigen)
+2.  In das EXPORTER_VERZEICHNIS wechseln mit `cd EXPORTER_VERZEICHNIS`
+3.  Exporter ausführen mit `python main.py`
 
 Die erstellten CSV Dateien werden im in der `config.json` angegebenen Ordner gespeichert, der angelegt wird, wenn er noch nicht vorhanden ist. Der jeweils letzte Export wird in den angegebenen Archiv-Ordner verschoben.
 
@@ -26,21 +61,19 @@ Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in der konfigurier
 * Das `TECHDATA` Feld enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
 * Die Attribute in `TECHDATA` konnten nicht extrahiert werden, wahrscheinlich weil die numerischen Attribute fehlen (`TECHDATA_LEER`)
 
-## Automatische Ausführung mit Windows Aufgabenplaner
+<a name="konfigurationen" />
+## Konfigurationen
 
-Um die Ausführung zu automatisieren, muss wie gewohnt eine Aufgabe im Windows Aufgabenplaner erstellt werden. Als zu startendes Programm `C:\Windows\SysWOW64\cmd.exe` angeben, als Argument `/c "python main.py"` und als Ordner, in dem der Befehl ausgeführt werden soll, den `pfad/zum/root/verzeichnis` angeben.
+Die Kofigurations-Dateien sind im JSON Format hinterlegt. Es empfiehlt sich, mit einem Editor mit JSON-Erweiterung zu arbeiten, der auf Fehler aufmerksam machen kann (z.B. Notepad++) oder die JSON-Dateien mit einem Online-Validierer (z.B. [JSONLint](https://jsonlint.com/)) zu überprüfen.
 
-## Updates
+### Allgemeine Einstellungen<a name="allgemeine-einstellungen" />
 
-Die neuste Version wird als ZIP-Archiv zur Verfügung gestellt. Zum Updaten den im Archiv enthaltenen Code in das `root` Verzeichnis kopieren. Dabei wird nur der Code überschrieben und keine Konfiguration, Daten oder Dateien, die vom Exporter erstellt werden.
+In `config.json` werde allgemeine Einstellungen spezifiziert. Bei der Angabe von Verzeichnissen darauf achten, dass sie mit einem `/` enden.
 
-## Konfiguration
+<a name="export-konfigurationen" />
+### Export-Konfigurationen
 
-Die Kofigurations-Dateien sind im JSON Format hinterlegt. In `config.json` werde allgemeine Einstellungen spezifiziert. Bei der Angabe von Verzeichnissen ist darauf zu achten, dass sie mit einem `/` enden.
-
-Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config.json` angegeben. Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, die erstellt wird (Bsp. `Kühlschränke.json` wird zu `Kühlschränke.csv`). Es werden der Produkttyp und Felder angegeben, die exportiert werden sollen.
-
-Das Format sieht wie folgt aus:
+Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config.json` angegeben. Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, die erstellt wird (Bsp. `Kühlschränke.json` wird zu `Kühlschränke.csv`). Es werden der Produkttyp und Felder angegeben, die exportiert werden sollen. Das Format sieht wie folgt aus:
 
 ```json
 {
@@ -68,11 +101,11 @@ Der Produkttyp muss so angegeben werden, wie er in den BSVP-Produkt-Dateien steh
 
 Die Felder werden als Key-Value-Paar angegeben, wobei der Key das Feld so wie es in den BSVP-Produkt-Dateien steht ist (Bsp. `"ARTNR"`). Der Value ist entweder der Name des Feldes wie er in der CSV Datei angegeben werden soll (Bsp. `"artikelnummer"`) oder weitere Key-Value-Paare, die zu exportierende Attribute spezifizieren, die im Feld enthalten sind (Bsp. innerhalb von `TECHDATA`). Hierbei wird als Key die numerische ID für das Attribut-Feld angegeben (Bsp. `"0000017"` für Anzahl Regalböden). Der Value ist der Name, der als Feld-Bezeichner in der CSV Datei steht (Bsp. `"anzahl_regalboeden"`).
 
-### Kombinationen von Werten
+#### Kombinationen von Werten
 
 Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. Der Bezeichner einer Kombination entspricht der Bezeichung der Spalte in der CSV-Datei. Als Wert sind ein Separator, das Feld (i.d.R. `TECHDATA`) und Attribut-IDs angegeben. Die Attribut-IDs werden dabei in einer Liste (eckige Klammern) angegeben.
 
-### Formatierung von Werten
+#### Formatierung von Werten
 
 Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Dabei gibt es folgende vordefinierte Regeln:
 
@@ -82,6 +115,7 @@ Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Dabei gi
 
 Zu einer Regel kann eine Liste von Attribut-IDs angegeben werden, auf die diese dann angewendet wird. Für jede Attribut-ID kann nur eine Regel angewendet werden.
 
+<a name="fehlerbehebung" />
 ## Fehlerbehebung
 
 Hier sind Lösungen zu häufigen Fehlern aufgeführt, geordnet nach den Fehlerarten, die in der Kommandozeile ausgegeben werden.
@@ -103,7 +137,3 @@ json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes:
 ```
 
 Eine der JSON Konfigurationen enthält ein Komma in der letzten Zeile, das bitte entfernen.
-
-## Kontakt
-
-Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamaraslosarek@gmail.com.
