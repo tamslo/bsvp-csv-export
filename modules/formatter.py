@@ -26,7 +26,6 @@ def format_pluggable(value):
     return replace(value, "ja", "steckerfertig")
 
 def format_voltage(value):
-    print(replace(value, "220 - 240 Volt", "230 Volt"))
     return replace(value, "220 - 240 Volt", "230 Volt")
 
 def range_from_zero(value):
