@@ -87,10 +87,8 @@ Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config
   "produkttyp": "Kühlschrank",
   "felder": {
     "ARTNR": "artikelnummer",
-    "TECHDATA": {
-      "0000017": "anzahl_regalboeden",
-      "0000089": "energieverbrauch"
-    }
+    "0000017": "anzahl_regalboeden",
+    "0000089": "energieverbrauch"
   },
   "kombinationen": {
     "temperaturbereich": {
@@ -99,39 +97,39 @@ Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config
     }
   },
   "formatierungen": {
-    "punkt_zu_komma": ["0000089"]
-  },
-  "ersetzungen": [
-    {
-      "vorher": "ja",
-      "nachher": "yes",
-      "felder": ["0000241", "0000261", "0000003", "0000091"]
-    },
-    {
-      "vorher": "nein",
-      "nachher": "no",
-      "felder": ["0000241", "0000261", "0000003", "0000091"]
-    },
-    {
-      "vorher": "220 - 240 Volt",
-      "nachher": "230 Volt",
-      "felder": ["0000215"]
-    }
-  ]
+    "punkt_zu_komma": ["0000089"],
+    "ersetzungen": [
+      {
+        "vorher": "ja",
+        "nachher": "yes",
+        "felder": ["0000241", "0000261", "0000003", "0000091"]
+      },
+      {
+        "vorher": "nein",
+        "nachher": "no",
+        "felder": ["0000241", "0000261", "0000003", "0000091"]
+      },
+      {
+        "vorher": "220 - 240 Volt",
+        "nachher": "230 Volt",
+        "felder": ["0000215"]
+      }
+    ]
+  }
 }
 ```
 
 Der Produkttyp muss so angegeben werden, wie er in den BSVP-Produkt-Dateien steht, allerdings ohne HTML kodierte Zeichen (Bsp. `PUM::Produkttyp::K&uuml;hlschrank`, in der Konfiguration steht `"Kühlschrank"`).
 
-Die Felder werden als Key-Value-Paar angegeben, wobei der Key das Feld so wie es in den BSVP-Produkt-Dateien steht ist (Bsp. `"ARTNR"`). Der Value ist entweder der Name des Feldes wie er in der CSV Datei angegeben werden soll (Bsp. `"artikelnummer"`) oder weitere Key-Value-Paare, die zu exportierende Attribute spezifizieren, die im Feld enthalten sind (Bsp. innerhalb von `TECHDATA`). Hierbei wird als Key die numerische ID für das Attribut-Feld angegeben (Bsp. `"0000017"` für Anzahl Regalböden). Der Value ist der Name, der als Feld-Bezeichner in der CSV Datei steht (Bsp. `"anzahl_regalboeden"`).
+Die Felder werden als Key-Value-Paar angegeben, wobei der Key das Feld so wie es in den BSVP-Produkt-Dateien steht ist (Bsp. `"ARTNR"`) bzw. als numerische ID für das Attribut-Feld (Bsp. `"0000017"` für Anzahl Regalböden). Der Value ist der Name des Feldes wie er in der CSV Datei angegeben werden soll (Bsp. `"artikelnummer"` oder `"anzahl_regalboeden"`).
 
 #### Kombinationen von Werten
 
-Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. Der Bezeichner einer Kombination entspricht der Bezeichung der Spalte in der CSV-Datei. Als Wert sind ein Separator, das Feld (i.d.R. `TECHDATA`) und Attribut-IDs angegeben. Die Attribut-IDs werden dabei in einer Liste (eckige Klammern) angegeben.
+Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. Der Bezeichner einer Kombination entspricht der Bezeichung der Spalte in der CSV-Datei. Als Wert werden ein Separator (Bsp. `"|"`) und Feldnamen bzw. Attribut-IDs in einer Liste (eckige Klammern) angegeben.
 
 #### Formatierung von Werten
 
-Einfache Ersetzungen von Werten (Bsp. `"230 - 240 Volt"` soll immer zu `"230 Volt"` geändert werden) können im Feld `"ersetzungen"` angegeben werden. Kompliziertere Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Dabei gibt es folgende vordefinierte Regeln:
+Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Einfache Ersetzungen von Werten (Bsp. `"230 - 240 Volt"` soll immer zu `"230 Volt"` geändert werden) können im untergeordneten Feld `"ersetzungen"` angegeben werden. Für komliziertere Formatierungen gibt es folgende vordefinierte Regeln:
 
 * `"punkt_zu_komma"`: der Punkt (in einer Kommazahl) wird zu einem Komma geändert
 * `"bereich_von_null"`: zu einem Wert wird "0|" hinzugefügt

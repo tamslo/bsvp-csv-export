@@ -73,7 +73,7 @@ class Exporter:
                 csv_writer.writerow(header_fields)
 
     def write_to_csv(self, fields, product_type_id):
-        product_type = fields["TECHDATA"][product_type_id]
+        product_type = fields[product_type_id]
         delivery_status = fields["DELSTAT"]
         active_delivery_statuses = ["0", "1", "2", "3", "4"]
         if product_type in self.configs and delivery_status in active_delivery_statuses:
@@ -95,22 +95,12 @@ def extract_product_information(config, fields):
     # Spezifizierte Felder in product_information schreiben
     for field_name in config["felder"]:
         field_value = config["felder"][field_name]
-        # Wenn der field_value ein einfaches Feld ist (z.B ARTNR), dann ist der Wert ein
-        # String und kann direkt in die product_information geschrieben werden. Ansonsten
-        # wird über die Attribute iteriert (z.B in TECHDATA).
-        if isinstance(field_value, str):
-            product_information.append(get_field(config, fields, field_name))
-        else:
-            for attribute_name in list(field_value.keys()):
-                product_information.append(
-                    get_field(config, fields[field_name], attribute_name)
-                )
+        product_information.append(get_field(config, fields, field_name))
 
     # Spezifizierte Kominationen bilden und in product_information schreiben
     for name, combination in config["kombinationen"].items():
-        field_name = combination["feld"]
         fields = list(map(
-            lambda attribute_name: get_field(config, fields[field_name], attribute_name) or "",
+            lambda field_name: get_field(config, fields, field_name) or "",
             combination["felder"]
         ))
         if all(field == "" for field in fields):

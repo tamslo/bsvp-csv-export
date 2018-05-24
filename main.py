@@ -19,6 +19,17 @@ validate_setup(GENERAL_CONFIG_FILE)
 exporter = Exporter(GENERAL_CONFIG_FILE)
 formatter = Formatter(GENERAL_CONFIG_FILE)
 
+# Entpackt verschachtelte Felder wie TECHDATA
+def flatten_fields(fields):
+    flattened_fields = {}
+    for field_name, field_value in fields.items():
+        if isinstance(field_value, str):
+            flattened_fields[field_name] = field_value
+        else:
+            for attribute_name, attribute_value in field_value.items():
+                flattened_fields[attribute_name] = attribute_value
+    return flattened_fields
+
 with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
     config = json.load(config_file)
     bsvp_data_directory = config["bsvp_data_directory"]
@@ -38,7 +49,8 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                         fields = parse_product(product_path)
                         error_code = validate_fields(fields, PRODUCT_TYPE_ID)
                         if error_code == None:
-                            formatted_fields = formatter.format(fields, PRODUCT_TYPE_ID)
+                            flattened_fields = flatten_fields(fields)
+                            formatted_fields = formatter.format(flattened_fields, PRODUCT_TYPE_ID)
                             exporter.write_to_csv(formatted_fields, PRODUCT_TYPE_ID)
                         else:
                             logger.log_skip(product_directory, error_code)

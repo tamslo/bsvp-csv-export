@@ -31,11 +31,6 @@ def validate_combinations(config, export_config_path):
                     "[FEHLER] Kombination {} in {} enthält kein Feld 'separator'"
                     .format(name, export_config_path)
                 )
-            if not "feld" in combination:
-                sys.exit(
-                    "[FEHLER] Kombination {} in {} enthält kein Feld 'feld'"
-                    .format(name, export_config_path)
-                )
             if not "felder" in combination:
                 sys.exit(
                     "[FEHLER] Kombination {} in {} enthält kein Feld 'felder'"
@@ -61,41 +56,39 @@ def validate_formatters(config, export_config_path):
                     "[FEHLER] Die Formatierungsregel {} in {} enthält keine Liste"
                     .format(format_rule, export_config_path)
                 )
-    if "ersetzungen" in config:
-        if not isinstance(config["ersetzungen"], list):
-            sys.exit(
-                "[FEHLER] Ersetzungen in {} sind keine Liste"
-                .format(export_config_path)
-            )
-        for index, replacement in enumerate(config["ersetzungen"]):
-            if not "vorher" in replacement:
+        if "ersetzungen" in config["formatierungen"]:
+            if not isinstance(config["formatierungen"]["ersetzungen"], list):
                 sys.exit(
-                    "[FEHLER] Die {}. Ersetzung in {} enthält kein Feld 'vorher'"
-                    .format(index + 1, export_config_path)
+                    "[FEHLER] Ersetzungen in {} sind keine Liste"
+                    .format(export_config_path)
                 )
-            if not "nachher" in replacement:
-                sys.exit(
-                    "[FEHLER] Die {}. Ersetzung in {} enthält kein Feld 'nachher'"
-                    .format(index + 1, export_config_path)
-                )
-            if not "felder" in replacement:
-                sys.exit(
-                    "[FEHLER] Die {}. Ersetzung in {} enthält kein Feld 'felder'"
-                    .format(index + 1, export_config_path)
-                )
-            if not isinstance(replacement["felder"], list):
-                sys.exit(
-                    "[FEHLER] Das Feld 'felder' in der {}. Ersetzung in {} ist keine Liste"
-                    .format(index + 1, export_config_path)
-                )
+            for index, replacement in enumerate(config["formatierungen"]["ersetzungen"]):
+                if not "vorher" in replacement:
+                    sys.exit(
+                        "[FEHLER] Die {}. Ersetzung in {} enthält kein Feld 'vorher'"
+                        .format(index + 1, export_config_path)
+                    )
+                if not "nachher" in replacement:
+                    sys.exit(
+                        "[FEHLER] Die {}. Ersetzung in {} enthält kein Feld 'nachher'"
+                        .format(index + 1, export_config_path)
+                    )
+                if not "felder" in replacement:
+                    sys.exit(
+                        "[FEHLER] Die {}. Ersetzung in {} enthält kein Feld 'felder'"
+                        .format(index + 1, export_config_path)
+                    )
+                if not isinstance(replacement["felder"], list):
+                    sys.exit(
+                        "[FEHLER] Das Feld 'felder' in der {}. Ersetzung in {} ist keine Liste"
+                        .format(index + 1, export_config_path)
+                    )
 
 def validate_export_config(config, export_config_path):
     required_fields = ["produkttyp" ,"felder"]
     validate_required_fields(config, required_fields)
     if not "ARTNR" in config["felder"]:
-        sys.exit("[FEHLER] {} enthält keine ARTNR").format(export_config_path)
-    if not "TECHDATA" in config["felder"]:
-        sys.exit("[FEHLER] {} enthält keine TECHDATA").format(export_config_path)
+        sys.exit("[FEHLER] {} enthält keine ARTNR".format(export_config_path))
     validate_combinations(config, export_config_path)
     validate_formatters(config, export_config_path)
 

@@ -14,7 +14,8 @@ def range_from_zero(value):
 
 formatters = {
     "punkt_zu_komma": format_decimal_separator,
-    "bereich_von_null": range_from_zero
+    "bereich_von_null": range_from_zero,
+    "ersetzungen": None
 }
 
 def format_rules():
@@ -42,41 +43,32 @@ class Formatter:
             format_options = {}
             if "formatierungen" in config:
                 for option in config["formatierungen"]:
-                    for field in config["formatierungen"][option]:
-                        option = { "type": option }
-                        add_format_option(format_options, field, option)
-            if "ersetzungen" in config:
-                for ersetzung in config["ersetzungen"]:
-                    for field in ersetzung["felder"]:
-                        option = {
-                            "type": "replacement",
-                            "before": ersetzung["vorher"],
-                            "afterwards": ersetzung["nachher"]
-                        }
-                        add_format_option(format_options, field, option)
+                    if option == "ersetzungen":
+                        for ersetzung in config["formatierungen"][option]:
+                            for field in ersetzung["felder"]:
+                                option = {
+                                    "type": "ersetzung",
+                                    "before": ersetzung["vorher"],
+                                    "afterwards": ersetzung["nachher"]
+                                }
+                                add_format_option(format_options, field, option)
+                    else:
+                        for field in config["formatierungen"][option]:
+                            option = { "type": option }
+                            add_format_option(format_options, field, option)
             return config["produkttyp"], format_options
 
     def format(self, fields, product_type_id):
-        product_type = fields["TECHDATA"][product_type_id]
+        product_type = fields[product_type_id]
         if product_type in self.format_options:
             formatted_fields = {}
             format_options = self.format_options[product_type]
-            for field_name in fields:
-                field_value = fields[field_name]
-                if isinstance(field_value, str):
-                    formatted_fields[field_name] = format_value(
-                        field_name,
-                        field_value,
-                        format_options
-                    )
-                else:
-                    formatted_fields[field_name] = {}
-                    for attribute_name, attribute_value in field_value.items():
-                        formatted_fields[field_name][attribute_name] = format_value(
-                            attribute_name,
-                            attribute_value,
-                            format_options
-                        )
+            for field_name, field_value in fields.items():
+                formatted_fields[field_name] = format_value(
+                    field_name,
+                    field_value,
+                    format_options
+                )
             return formatted_fields
         else:
             return fields
@@ -90,7 +82,7 @@ def add_format_option(format_options, field, option):
 def format_value(field, value, format_options):
     if field in format_options:
         for format_option in format_options[field]:
-            if format_option["type"] == "replacement":
+            if format_option["type"] == "ersetzung":
                 if value.lower() == format_option["before"].lower():
                     value = format_option["afterwards"]
             else:
