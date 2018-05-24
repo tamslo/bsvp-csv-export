@@ -5,6 +5,8 @@ from modules.formatter import format_rules
 def validate_fields(fields, product_type_id):
     if not "ARTNR" in fields:
         return "KEINE_ARTNR"
+    if not "DELSTAT" in fields:
+        return "KEIN_DELSTAT"
     if not "TECHDATA" in fields:
         return "KEIN_TECHDATA"
     if not fields["TECHDATA"]:

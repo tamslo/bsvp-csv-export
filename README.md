@@ -61,6 +61,7 @@ Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in der konfigurier
 
 * Der `.prod` Ordner und die `.prod` Datei haben unterschiedliche Namen (`PROD_UNTERSCHIEDLICH`)
 * Die `.prod` Datei enthält keine Artikelnummer (`KEINE_ARTNR`)
+* Die `.prod` Datei enthält keinen Lieferstatus (`KEIN_DELSTAT`)
 * Die `.prod` Datei enthält kein `TECHDATA` Feld (`KEIN_TECHDATA`)
 * Das `TECHDATA` Feld enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
 * Die Attribute in `TECHDATA` konnten nicht extrahiert werden, wahrscheinlich weil die numerischen Attribute fehlen (`TECHDATA_LEER`)

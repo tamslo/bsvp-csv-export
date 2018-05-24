@@ -74,7 +74,9 @@ class Exporter:
 
     def write_to_csv(self, fields, product_type_id):
         product_type = fields["TECHDATA"][product_type_id]
-        if product_type in self.configs:
+        delivery_status = fields["DELSTAT"]
+        active_delivery_statuses = ["0", "1", "2", "3", "4"]
+        if product_type in self.configs and delivery_status in active_delivery_statuses:
             config = self.configs[product_type]
             with open(config["pfad"], "a", encoding=self.csv_encoding, newline="") as file:
                 csv_writer = csv.writer(file, delimiter=self.csv_separator)
