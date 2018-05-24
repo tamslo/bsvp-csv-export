@@ -2,31 +2,8 @@
 import os, json
 from collections import OrderedDict
 
-def replace(value, prior, afterwards):
-    if value.lower() == prior.lower():
-        return afterwards
-    else:
-        return value
-
-def format_boolean(value):
-    value = replace(value, "ja", "yes")
-    value = replace(value, "nein", "no")
-    return value
-
-def format_integrated(value):
-    return replace(value, "vorhanden", "integriert")
-
 def format_decimal_separator(value):
     return value.replace('.',',')
-
-def format_cooling(value):
-    return replace(value, "stille Kühlung", "statische Kühlung")
-
-def format_pluggable(value):
-    return replace(value, "ja", "steckerfertig")
-
-def format_voltage(value):
-    return replace(value, "220 - 240 Volt", "230 Volt")
 
 def range_from_zero(value):
     try:
@@ -36,13 +13,8 @@ def range_from_zero(value):
     return "0|" + value
 
 formatters = {
-    "wahrheitswert_englisch": format_boolean,
-    "vorhanden_zu_integriert": format_integrated,
     "punkt_zu_komma": format_decimal_separator,
-    "stille_kühlung_zu_statische_kühlung": format_cooling,
-    "ja_zu_steckfertig": format_pluggable,
-    "bereich_von_null": range_from_zero,
-    "230_volt": format_voltage
+    "bereich_von_null": range_from_zero
 }
 
 def format_rules():
@@ -71,7 +43,17 @@ class Formatter:
             if "formatierungen" in config:
                 for option in config["formatierungen"]:
                     for field in config["formatierungen"][option]:
-                        format_options[field] = option
+                        option = { "type": option }
+                        add_format_option(format_options, field, option)
+            if "ersetzungen" in config:
+                for ersetzung in config["ersetzungen"]:
+                    for field in ersetzung["felder"]:
+                        option = {
+                            "type": "replacement",
+                            "before": ersetzung["vorher"],
+                            "afterwards": ersetzung["nachher"]
+                        }
+                        add_format_option(format_options, field, option)
             return config["produkttyp"], format_options
 
     def format(self, fields, product_type_id):
@@ -99,8 +81,18 @@ class Formatter:
         else:
             return fields
 
-def format_value(name, value, format_options):
-    if name in format_options:
-        return formatters[format_options[name]](value)
+def add_format_option(format_options, field, option):
+    if field in format_options:
+        format_options[field].append(option)
     else:
-        return value
+        format_options[field] = [option]
+
+def format_value(field, value, format_options):
+    if field in format_options:
+        for format_option in format_options[field]:
+            if format_option["type"] == "replacement":
+                if value.lower() == format_option["before"].lower():
+                    value = format_option["afterwards"]
+            else:
+                value = formatters[format_option["type"]](value)
+    return value

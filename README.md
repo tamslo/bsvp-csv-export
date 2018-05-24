@@ -100,7 +100,24 @@ Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config
   },
   "formatierungen": {
     "punkt_zu_komma": ["0000089"]
-  }
+  },
+  "ersetzungen": [
+    {
+      "vorher": "ja",
+      "nachher": "yes",
+      "felder": ["0000241", "0000261", "0000003", "0000091"]
+    },
+    {
+      "vorher": "nein",
+      "nachher": "no",
+      "felder": ["0000241", "0000261", "0000003", "0000091"]
+    },
+    {
+      "vorher": "220 - 240 Volt",
+      "nachher": "230 Volt",
+      "felder": ["0000215"]
+    }
+  ]
 }
 ```
 
@@ -114,17 +131,12 @@ Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. De
 
 #### Formatierung von Werten
 
-Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Dabei gibt es folgende vordefinierte Regeln:
+Einfache Ersetzungen von Werten (Bsp. `"230 - 240 Volt"` soll immer zu `"230 Volt"` geändert werden) können im Feld `"ersetzungen"` angegeben werden. Kompliziertere Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Dabei gibt es folgende vordefinierte Regeln:
 
-* `"wahrheitswert_englisch"`: "ja" und "nein" werden zu "yes" und "no" geändert
-* `"vorhanden_zu_integriert"`: der Wert "vorhanden" wird du "integriert" geändert
 * `"punkt_zu_komma"`: der Punkt (in einer Kommazahl) wird zu einem Komma geändert
-* `"stille_kühlung_zu_statische_kühlung"`: "stille Kühlung" wird zu "statische Kühlung" geändert
-* `"ja_zu_steckfertig"`: "ja" wird zu "steckerfertig" geändert
-* `"230_volt"`: "220 - 240 Volt" wird zu "230 Volt" geändert
 * `"bereich_von_null"`: zu einem Wert wird "0|" hinzugefügt
 
-Zu einer Regel kann eine Liste von Attribut-IDs angegeben werden, auf die diese dann angewendet wird. Für jede Attribut-ID kann nur eine Regel angewendet werden.
+Zu einer Ersetzung bzw. Regel kann eine Liste von Attribut-IDs angegeben werden, auf die diese dann angewendet werden.
 
 <a name="fehlerbehebung" />
 
