@@ -85,7 +85,7 @@ Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config
 ```json
 {
   "produkttyp": "Kühlschrank",
-  "hersteller_export": ["Nordcap"],
+  "hersteller_export": ["Nordcap", "KBS"],
   "felder": {
     "ARTNR": "artikelnummer",
     "0000017": "anzahl_regalboeden",
