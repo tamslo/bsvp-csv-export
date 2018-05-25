@@ -21,6 +21,14 @@ def validate_list(config, field, file_path, insertion = ""):
 
 # Teile von der Setup-Validierung
 
+def validate_export_config(config, export_config_path):
+    required_fields = ["produkttyp" ,"felder"]
+    validate_required_fields(config, export_config_path, required_fields)
+    if "hersteller_export" in config:
+        validate_list(config, "hersteller_export", export_config_path)
+    validate_combinations(config, export_config_path)
+    validate_formatters(config, export_config_path)
+
 def validate_combinations(config, export_config_path):
     if "kombinationen" in config:
         for name, combination in config["kombinationen"].items():
@@ -127,10 +135,7 @@ def validate_setup(general_config_file):
         export_config_path = export_configs_directory + export_config
         with open(export_config_path, "r", encoding="utf-8") as config_file:
             config = json.load(config_file)
-            required_fields = ["produkttyp" ,"felder"]
-            validate_required_fields(config, export_config_path, required_fields)
-            validate_combinations(config, export_config_path)
-            validate_formatters(config, export_config_path)
+            validate_export_config(config, export_config_path)
 
     config_file.close()
 
