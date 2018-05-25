@@ -85,6 +85,7 @@ Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config
 ```json
 {
   "produkttyp": "Kühlschrank",
+  "hersteller_export": ["Nordcap"],
   "felder": {
     "ARTNR": "artikelnummer",
     "0000017": "anzahl_regalboeden",
@@ -122,6 +123,10 @@ Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config
 Der Produkttyp muss so angegeben werden, wie er in den BSVP-Produkt-Dateien steht, allerdings ohne HTML kodierte Zeichen (Bsp. `PUM::Produkttyp::K&uuml;hlschrank`, in der Konfiguration steht `"Kühlschrank"`).
 
 Die Felder werden als Key-Value-Paar angegeben, wobei der Key das Feld so wie es in den BSVP-Produkt-Dateien steht ist (Bsp. `"ARTNR"`) bzw. als numerische ID für das Attribut-Feld (Bsp. `"0000017"` für Anzahl Regalböden). Der Value ist der Name des Feldes wie er in der CSV Datei angegeben werden soll (Bsp. `"artikelnummer"` oder `"anzahl_regalboeden"`).
+
+#### Lieferanten CSVs
+
+Neben der globalen CSV-Datei können CSV-Dateien pro Lieferant erstellt werden. Dazu kann in dem Feld `"hersteller_export"` eine Liste von Lieferantennamen angegeben werden. Die resultierende CSV-Datei heißt dann `KONFIGURATION_HERSTELLER.csv`, also zum Beispiel `Kühlschrank_Nordcap.csv`.
 
 #### Kombinationen von Werten
 
