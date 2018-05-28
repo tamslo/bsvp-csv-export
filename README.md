@@ -101,19 +101,19 @@ Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config
     "punkt_zu_komma": ["0000089"],
     "ersetzungen": [
       {
-        "vorher": "ja",
+        "vorher": ["ja"],
         "nachher": "yes",
         "felder": ["0000241", "0000261", "0000003", "0000091"]
       },
       {
-        "vorher": "nein",
+        "vorher": ["nein"],
         "nachher": "no",
         "felder": ["0000241", "0000261", "0000003", "0000091"]
       },
       {
-        "vorher": "220 - 240 Volt",
-        "nachher": "230 Volt",
-        "felder": ["0000215"]
+        "vorher": ["CNS 1.4301", "CNS 1.4301 (AISI304)", "CNS 18/10"],
+        "nachher": "CNS",
+        "felder": ["0000158"]
       }
     ]
   }
@@ -134,7 +134,7 @@ Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. De
 
 #### Formatierung von Werten
 
-Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Einfache Ersetzungen von Werten (Bsp. `"230 - 240 Volt"` soll immer zu `"230 Volt"` geändert werden) können im untergeordneten Feld `"ersetzungen"` angegeben werden. Für komliziertere Formatierungen gibt es folgende vordefinierte Regeln:
+Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Einfache Ersetzungen von Werten (Bsp. die Werte `["CNS 1.4301", "CNS 1.4301 (AISI304)", "CNS 18/10"]` sollen immer zu `"CNS"` geändert werden) können im untergeordneten Feld `"ersetzungen"` angegeben werden. Für komliziertere Formatierungen gibt es folgende vordefinierte Regeln:
 
 * `"punkt_zu_komma"`: der Punkt (in einer Kommazahl) wird zu einem Komma geändert
 * `"bereich_von_null"`: zu einem Wert wird "0|" hinzugefügt

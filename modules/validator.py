@@ -74,9 +74,16 @@ def validate_formatters(config, export_config_path):
 
                 validate_list(
                     replacement,
+                    "vorher",
+                    export_config_path,
+                    "in der {}. Ersetzung in 'formatierungen' ".format(index + 1)
+                )
+
+                validate_list(
+                    replacement,
                     "felder",
                     export_config_path,
-                    "in der {}. Ersetzung 'formatierungen' ".format(index + 1)
+                    "in der {}. Ersetzung in 'formatierungen' ".format(index + 1)
                 )
 
 # Exportierungen

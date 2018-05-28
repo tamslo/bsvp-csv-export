@@ -83,7 +83,11 @@ def format_value(field, value, format_options):
     if field in format_options:
         for format_option in format_options[field]:
             if format_option["type"] == "ersetzung":
-                if value.lower() == format_option["before"].lower():
+                before_values = list(map(
+                    lambda value: value.lower(),
+                    format_option["before"]
+                ))
+                if value.lower() in before_values:
                     value = format_option["afterwards"]
             else:
                 value = formatters[format_option["type"]](value)
