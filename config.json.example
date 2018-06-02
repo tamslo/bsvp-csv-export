@@ -5,6 +5,5 @@
   "configs_directory": "configs/",
   "bsvp_data_directory": "../library/",
   "output_directory": "export/",
-  "archive_directory": "export/backup/",
   "log_file": "exporter.log"
 }

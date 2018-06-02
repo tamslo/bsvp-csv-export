@@ -2,6 +2,22 @@
 import sys, os, json
 from modules.formatter import format_rules
 
+# Erforderliche Felder
+
+general_config_fields = [
+    "separator",
+    "encoding",
+    "configs_directory",
+    "bsvp_data_directory",
+    "output_directory",
+    "log_file"
+]
+general_config_directories = [
+    "configs_directory",
+    "bsvp_data_directory",
+    "output_directory"
+]
+
 # Hilfsmethoden
 
 def validate_required_fields(config, file_path, required_fields, prefix = ""):
@@ -104,21 +120,8 @@ def validate_setup(general_config_file):
             .format(export_configs_directory)
         )
 
-    required_fields = [
-        "separator",
-        "encoding",
-        "bsvp_data_directory",
-        "output_directory",
-        "archive_directory"
-    ]
-    validate_required_fields(config, export_configs_directory, required_fields)
-
-    directory_fields = [
-        "bsvp_data_directory",
-        "output_directory",
-        "archive_directory"
-    ]
-    for directory_field in directory_fields:
+    validate_required_fields(config, export_configs_directory, general_config_fields)
+    for directory_field in general_config_directories:
         if not config[directory_field].endswith("/"):
             sys.exit(
                 "[FEHLER] Das Verzeichnis {} in {} muss mit '/' enden"

@@ -6,11 +6,12 @@ class Exporter:
     def __init__(self, general_config_file):
         with open(general_config_file, "r", encoding="utf-8") as config_file:
             general_config = json.load(config_file)
+            self.archive_name = "Archiv"
             self.csv_separator = general_config["separator"]
             self.csv_encoding = general_config["encoding"]
             self.csv_line_ending = general_config["line_ending"]
             self.output_directory = general_config["output_directory"]
-            self.archive_directory = general_config["archive_directory"]
+            self.archive_directory = general_config["output_directory"] + self.archive_name
             self.configs_directory = general_config["configs_directory"]
             self.configs = self.__transform_configs()
             self.__setup()
@@ -45,6 +46,13 @@ class Exporter:
                 export_config["kombinationen"] = {}
             return export_config["produkttyp"], export_config
 
+    def __archive_export(self):
+        for file in os.listdir(self.output_directory):
+            if file != self.archive_name:
+                current_path = "{}/{}".format(self.output_directory, file)
+                new_path = "{}/{}".format(self.archive_directory, file)
+                shutil.move(current_path, new_path)
+
     def __setup(self):
         # Erstelle das Verzeichnis in das exportiert werden soll, wenn noch
         # nicht vorhanden
@@ -55,14 +63,11 @@ class Exporter:
         # archiviert. Entweder gibt es schon einen Archiv-Ordner, der gelöscht
         # und neu angelegt wird, oder der Ornder wird erstellt. Dann werden die
         # vorhandenen Dateien in den Ordner kopiert.
-        if len([file for file in os.listdir(self.output_directory) if is_csv(file)]) != 0:
-            if not os.path.exists(self.archive_directory):
-                os.makedirs(self.archive_directory)
-                move_csv_files(self.output_directory, self.archive_directory)
-            else:
+        if len([file for file in os.listdir(self.output_directory) if file != self.archive_name]) != 0:
+            if os.path.exists(self.archive_directory):
                 shutil.rmtree(self.archive_directory)
-                os.makedirs(self.archive_directory)
-                move_csv_files(self.output_directory, self.archive_directory)
+            os.makedirs(self.archive_directory)
+            self.__archive_export()
 
         # Erstelle die CSV Dateien und schreibe die festgelegten Attribute als
         # Header
@@ -125,13 +130,3 @@ def extract_product_information(config, fields):
             product_information.append(combination["separator"].join(fields))
 
     return product_information
-
-def is_csv(file):
-    return file.endswith(".csv")
-
-def move_csv_files(origin, destination):
-    for file in os.listdir(origin):
-        if is_csv(file):
-            current_path = "{}/{}".format(origin, file)
-            new_path = "{}/{}".format(destination, file)
-            shutil.move(current_path, new_path)
