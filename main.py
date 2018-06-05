@@ -3,7 +3,8 @@ import time, json, os
 from modules.logger import Logger
 from modules.validator import validate_setup, validate_fields
 from modules.archiver import archive_exports
-from modules.parser import parse_product
+from modules.prod_parser import parse_product
+from modules.ilugg_parser import parse_manufacturer_information
 from modules.configurator.exporter import ConfiguratorExporter
 from modules.shop_exporter import ShopExporter
 
@@ -43,6 +44,12 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
         if manufacturer_directory.endswith(MANUFACTURER_ENDING):
             manufacturer_path = bsvp_directory + manufacturer_directory
             logger.set_manufacturer(manufacturer_directory)
+            manufacturer_information = parse_manufacturer_information(
+                manufacturer_path,
+                MANUFACTURER_INFO_ENDING
+            )
+            if not manufacturer_information:
+                logger.log_skip("ILUGG", "NICHT_AUSWERTBAR")
             for product_directory in os.listdir(manufacturer_path):
                 if product_directory.endswith(PRODUCT_ENDING):
                     logger.print_manufacturer_progress()
@@ -58,7 +65,11 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                             flattened_fields = flatten_fields(fields)
                             product_type = flattened_fields[PRODUCT_TYPE_ID]
                             configurator_exporter.write_to_csv(flattened_fields, product_type)
-                            shop_exporter.write_to_csv(flattened_fields, manufacturer_directory)
+                            shop_exporter.write_to_csv(
+                                flattened_fields,
+                                manufacturer_information,
+                                manufacturer_directory
+                            )
                         else:
                             logger.log_skip(product_directory, error_code)
                     else:

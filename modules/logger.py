@@ -58,7 +58,7 @@ class Logger:
 
     def log_skip(self, product_directory, error_code):
         self.skips += 1
-        self.log.write("{} - {} ({})\n".format(
+        self.log.write("{} {} {}\n".format(
             self.manufacturer,
             self.product_name(product_directory),
             error_code

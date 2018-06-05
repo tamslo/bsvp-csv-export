@@ -58,7 +58,7 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 
 Die erstellten CSV Dateien werden im in der `config.json` angegebenen Ordner gespeichert, der angelegt wird, wenn er noch nicht vorhanden ist. Der jeweils letzte Export wird in den angegebenen Archiv-Ordner verschoben.
 
-Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in der konfigurierten Log-Datei, dass sie übersprungen wurde. Gründe dafür sind:
+Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in `exporter.log`, dass sie übersprungen wurde. Gründe dafür sind:
 
 * Der `.prod` Ordner und die `.prod` Datei haben unterschiedliche Namen (`PROD_UNTERSCHIEDLICH`)
 * Die `.prod` Datei enthält keine Artikelnummer (`KEINE_ARTNR`)
@@ -66,6 +66,8 @@ Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in der konfigurier
 * Die `.prod` Datei enthält kein `TECHDATA` Feld (`KEIN_TECHDATA`)
 * Das `TECHDATA` Feld enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
 * Die Attribute in `TECHDATA` konnten nicht extrahiert werden, wahrscheinlich weil die numerischen Attribute fehlen (`TECHDATA_LEER`)
+
+Wenn eine `.ilugg` Datei nicht bearbeitet werden konnte, steht das ebenfalls in der Log-Datei.
 
 <a name="konfigurationen" />
 
@@ -85,7 +87,7 @@ Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config
 
 #### Shop
 
-Durch die `Shop.json` werden Felder angegeben, die in die CSV-Datei pro Hersteller geschrieben werden. Als Bezeichner eines Feldes wird der Name angegeben, wie er in der CSV erscheint, als Wert ein Objekt, das den Wert beschreibt:
+Durch die `Shop.json` werden Felder angegeben, die in die CSV Datei pro Hersteller geschrieben werden. Als Bezeichner eines Feldes wird der Name angegeben, wie er in der CSV erscheint, als Wert ein Objekt, das den Wert beschreibt:
 
 ```json
 {
@@ -149,11 +151,11 @@ Die Felder werden als Key-Value-Paar angegeben, wobei der Key das Feld so wie es
 
 ##### Lieferanten CSVs
 
-Neben der globalen CSV-Datei können CSV-Dateien pro Lieferant erstellt werden. Dazu kann in dem Feld `"hersteller_export"` eine Liste von Lieferantennamen angegeben werden. Die resultierende CSV-Datei heißt dann `KONFIGURATION_HERSTELLER.csv`, also zum Beispiel `Kühlschrank_Nordcap.csv`.
+Neben der globalen CSV Datei können CSV Dateien pro Lieferant erstellt werden. Dazu kann in dem Feld `"hersteller_export"` eine Liste von Lieferantennamen angegeben werden. Die resultierende CSV Datei heißt dann `KONFIGURATION_HERSTELLER.csv`, also zum Beispiel `Kühlschrank_Nordcap.csv`.
 
 ##### Kombinationen von Werten
 
-Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. Der Bezeichner einer Kombination entspricht der Bezeichung der Spalte in der CSV-Datei. Als Wert werden ein Separator (Bsp. `"|"`) und Feldnamen bzw. Attribut-IDs in einer Liste (eckige Klammern) angegeben.
+Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. Der Bezeichner einer Kombination entspricht der Bezeichung der Spalte in der CSV Datei. Als Wert werden ein Separator (Bsp. `"|"`) und Feldnamen bzw. Attribut-IDs in einer Liste (eckige Klammern) angegeben.
 
 ##### Formatierung von Werten
 

@@ -38,13 +38,13 @@ class ShopExporter:
                     header_fields = list(self.config.keys())
                     csv_writer.writerow(header_fields)
 
-    def write_to_csv(self, prod_fields, manufacturer_directory):
+    def write_to_csv(self, prod_fields, ilugg_fields, manufacturer_directory):
         csv_path = self.__csv_path(manufacturer_directory)
         with open(csv_path, "a", encoding=self.csv_encoding, newline="") as file:
             csv_writer = csv.writer(file, delimiter=self.csv_separator)
-            csv_writer.writerow(self.extract_information(prod_fields))
+            csv_writer.writerow(self.extract_information(prod_fields, ilugg_fields))
 
-    def extract_information(self, prod_fields):
+    def extract_information(self, prod_fields, ilugg_fields):
         row = []
 
         # Spezifizierte Felder in row schreiben
@@ -55,8 +55,13 @@ class ShopExporter:
                 value = None
                 if value_specification["prod"] in prod_fields:
                     value = prod_fields[value_specification["prod"]]
+            elif "ilugg" in value_specification:
+                value = None
+                if value_specification["ilugg"] in ilugg_fields:
+                    value = ilugg_fields[value_specification["ilugg"]]
             else:
                 # TODO implement other cases
+                print("OTHER CASE!")
                 value = None
             row.append(value)
 
