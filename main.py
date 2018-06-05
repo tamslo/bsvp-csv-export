@@ -9,13 +9,17 @@ from modules.formatter import Formatter
 # Definition von Konstanten wie Verzeichnissen und Dateiendungen
 GENERAL_CONFIG_FILE = "config.json"
 MANUFACTURER_ENDING = ".lugg"
+MANUFACTURER_INFO_ENDING = ".ilugg"
 PRODUCT_ENDING = ".prod"
 PRODUCT_TYPE_ID = "0000191"
+
+CONFIGURATOR_NAME = "Konfigurator"
+SHOP_NAME = "Shop"
 
 logger = Logger(MANUFACTURER_ENDING, PRODUCT_ENDING)
 logger.print_start_time()
 
-validate_setup(GENERAL_CONFIG_FILE)
+validate_setup(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, SHOP_NAME)
 exporter = Exporter(GENERAL_CONFIG_FILE)
 formatter = Formatter(GENERAL_CONFIG_FILE)
 

@@ -104,7 +104,7 @@ def validate_formatters(config, export_config_path):
 
 # Tatsächlich genutzte Funktionen
 
-def validate_setup(general_config_file):
+def validate_setup(general_config_file, configurator_name, shop_name):
     if not os.path.exists(general_config_file):
         sys.exit(
             "[FEHLER] Die generelle Konfiguration fehlt, es gibt keine Datei {}"
@@ -120,18 +120,18 @@ def validate_setup(general_config_file):
             .format(export_configs_directory)
         )
 
-    configurator_configs_directory = export_configs_directory + "Konfigurator/"
+    configurator_configs_directory = export_configs_directory + configurator_name + "/"
     if not os.path.isdir(configurator_configs_directory):
         sys.exit(
-            "[FEHLER] Es gibt keinen Ordner 'Konfigurator' in {}"
-            .format(export_configs_directory)
+            "[FEHLER] Es gibt keinen Ordner '{}' in {}"
+            .format(configurator_name, export_configs_directory)
         )
 
-    shop_configs_file = export_configs_directory + "Shop.json"
+    shop_configs_file = export_configs_directory + shop_name + ".json"
     if not os.path.exists(shop_configs_file):
         sys.exit(
-            "[FEHLER] Es gibt keine 'Shop.json' Datei in {}"
-            .format(export_configs_directory)
+            "[FEHLER] Es gibt keine '{}.json' Datei in {}"
+            .format(shop_name, export_configs_directory)
         )
 
     validate_required_fields(config, export_configs_directory, general_config_fields)
