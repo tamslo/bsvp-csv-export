@@ -46,6 +46,7 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 
 1.  Neue Version aus dem Trello herunterladen
 2.  Inhalt in EXPORTER_VERZEICHNIS verschieben und vorhandene Dateien ersetzen, es wird nur der Code überschrieben, Konfigurationen und andere Daten bleiben so wie sie sind
+3.  Vorhandene `config.json` ggf. an Änderungen in `config.json.example` anpassen
 
 <a name="ausführung" />
 

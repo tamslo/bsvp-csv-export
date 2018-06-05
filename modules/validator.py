@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys, os, json
-from modules.formatter import format_rules
+from modules.configurator.formatter import format_rules
 
 # Erforderliche Felder
 

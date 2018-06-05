@@ -2,9 +2,9 @@
 import time, json, os
 from modules.logger import Logger
 from modules.validator import validate_setup, validate_fields
+from modules.archiver import archive_exports
 from modules.parser import parse_product
-from modules.exporter import Exporter
-from modules.formatter import Formatter
+from modules.configurator.exporter import ConfiguratorExporter
 
 # Definition von Konstanten wie Verzeichnissen und Dateiendungen
 GENERAL_CONFIG_FILE = "config.json"
@@ -20,8 +20,8 @@ logger = Logger(MANUFACTURER_ENDING, PRODUCT_ENDING)
 logger.print_start_time()
 
 validate_setup(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, SHOP_NAME)
-exporter = Exporter(GENERAL_CONFIG_FILE)
-formatter = Formatter(GENERAL_CONFIG_FILE)
+archive_exports(GENERAL_CONFIG_FILE)
+configurator_exporter = ConfiguratorExporter(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME)
 
 # Entpackt verschachtelte Felder wie TECHDATA
 def flatten_fields(fields):
@@ -54,8 +54,8 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                         error_code = validate_fields(fields, PRODUCT_TYPE_ID)
                         if error_code == None:
                             flattened_fields = flatten_fields(fields)
-                            formatted_fields = formatter.format(flattened_fields, PRODUCT_TYPE_ID)
-                            exporter.write_to_csv(formatted_fields, PRODUCT_TYPE_ID)
+                            product_type = flattened_fields[PRODUCT_TYPE_ID]
+                            configurator_exporter.write_to_csv(flattened_fields, product_type)
                         else:
                             logger.log_skip(product_directory, error_code)
                     else:
