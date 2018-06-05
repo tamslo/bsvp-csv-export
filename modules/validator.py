@@ -127,7 +127,7 @@ def validate_setup(general_config_file):
             .format(export_configs_directory)
         )
 
-    shop_configs_file = export_configs_directory + "Konfigurator"
+    shop_configs_file = export_configs_directory + "Shop.json"
     if not os.path.exists(shop_configs_file):
         sys.exit(
             "[FEHLER] Es gibt keine 'Shop.json' Datei in {}"
@@ -161,7 +161,20 @@ def validate_setup(general_config_file):
             config = json.load(config_file)
             validate_export_config(config, export_config_path)
 
-    # TODO validate Shop.json
+    with open(shop_configs_file, "r", encoding="utf-8") as shop_config_file:
+        shop_config = json.load(shop_config_file)
+        for name, specification in shop_config.items():
+            if len(list(specification.keys())) != 1:
+                sys.exit(
+                    "[FEHLER] Zu viele Werte in {} für '{}'"
+                    .format(shop_configs_file, name)
+                )
+            key = list(specification.keys())[0]
+            if key != "wert" and key != "prod" and key != "ilugg":
+                sys.exit(
+                    "[FEHLER] Unbekannter Bezeichner '{}' für Wert von '{}' in {}"
+                    .format(key, name, shop_configs_file)
+                )
 
     config_file.close()
 

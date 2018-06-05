@@ -80,7 +80,29 @@ In `config.json` werde allgemeine Einstellungen spezifiziert. Bei der Angabe von
 
 ### Export-Konfigurationen
 
-Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config.json` angegeben. Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, die erstellt wird (Bsp. `Kühlschränke.json` wird zu `Kühlschränke.csv`). Es werden der Produkttyp und Felder angegeben, die exportiert werden sollen. Das Format sieht wie folgt aus:
+Der Speicherort der JSON Dateien für die Export-Konfigurationen wird in `config.json` angegeben. Es gibt muss eine Datei `Shop.json` für den allgemeinen BSVP Daten-Export nach Herstellern geben und einen Ordner `Konfigurator`, der die Konfigurationen für den Konfigurator-Export beinhaltet.
+
+#### Shop
+
+Durch die `Shop.json` werden Felder angegeben, die in die CSV-Datei pro Hersteller geschrieben werden. Als Bezeichner eines Feldes wird der Name angegeben, wie er in der CSV erscheint, als Wert ein Objekt, das den Wert beschreibt:
+
+```json
+{
+  "XTSOL": { "wert": "XTSOL" },
+  "action": { "prod": "ACTION" },
+  "p_dics": { "ilugg": "DICOUNT" }
+}
+```
+
+Für den Wert wird der Typ angegeben und der dazugehörige Wert:
+
+* `wert`: Es wird ein fester Wert eingetragen
+* `prod`: Es wird der Name des Feldes in der `.prod`-Datei angegeben
+* `ilugg`: Es wird der Name des Feldes in der `.ilugg`-Datei angegeben
+
+#### Konfigurator
+
+Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, die erstellt wird (Bsp. `Kühlschränke.json` wird zu `Kühlschränke.csv`). Es werden der Produkttyp und Felder angegeben, die exportiert werden sollen. Das Format sieht wie folgt aus:
 
 ```json
 {
@@ -124,15 +146,15 @@ Der Produkttyp muss so angegeben werden, wie er in den BSVP-Produkt-Dateien steh
 
 Die Felder werden als Key-Value-Paar angegeben, wobei der Key das Feld so wie es in den BSVP-Produkt-Dateien steht ist (Bsp. `"ARTNR"`) bzw. als numerische ID für das Attribut-Feld (Bsp. `"0000017"` für Anzahl Regalböden). Der Value ist der Name des Feldes wie er in der CSV Datei angegeben werden soll (Bsp. `"artikelnummer"` oder `"anzahl_regalboeden"`).
 
-#### Lieferanten CSVs
+##### Lieferanten CSVs
 
 Neben der globalen CSV-Datei können CSV-Dateien pro Lieferant erstellt werden. Dazu kann in dem Feld `"hersteller_export"` eine Liste von Lieferantennamen angegeben werden. Die resultierende CSV-Datei heißt dann `KONFIGURATION_HERSTELLER.csv`, also zum Beispiel `Kühlschrank_Nordcap.csv`.
 
-#### Kombinationen von Werten
+##### Kombinationen von Werten
 
 Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. Der Bezeichner einer Kombination entspricht der Bezeichung der Spalte in der CSV-Datei. Als Wert werden ein Separator (Bsp. `"|"`) und Feldnamen bzw. Attribut-IDs in einer Liste (eckige Klammern) angegeben.
 
-#### Formatierung von Werten
+##### Formatierung von Werten
 
 Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Einfache Ersetzungen von Werten (Bsp. die Werte `["CNS 1.4301", "CNS 1.4301 (AISI304)", "CNS 18/10"]` sollen immer zu `"CNS"` geändert werden) können im untergeordneten Feld `"ersetzungen"` angegeben werden. Für komliziertere Formatierungen gibt es folgende vordefinierte Regeln:
 
