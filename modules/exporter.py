@@ -7,12 +7,11 @@ class Exporter:
         with open(general_config_file, "r", encoding="utf-8") as config_file:
             general_config = json.load(config_file)
             self.archive_name = "Archiv"
-            self.csv_separator = general_config["separator"]
-            self.csv_encoding = general_config["encoding"]
-            self.csv_line_ending = general_config["line_ending"]
-            self.output_directory = general_config["output_directory"]
-            self.archive_directory = general_config["output_directory"] + self.archive_name
-            self.configs_directory = general_config["configs_directory"]
+            self.csv_separator = general_config["konfigurator-csv-separator"]
+            self.csv_encoding = general_config["csv-encoding"]
+            self.output_directory = general_config["export-ordner"]
+            self.archive_directory = self.output_directory + self.archive_name
+            self.configs_directory = general_config["configs-ordner"] + "Konfigurator/"
             self.configs = self.__transform_configs()
             self.__setup()
 
@@ -76,8 +75,7 @@ class Exporter:
                 with open(output["path"], "w", encoding=self.csv_encoding, newline="") as file:
                     csv_writer = csv.writer(
                         file,
-                        delimiter=self.csv_separator,
-                        lineterminator=self.csv_line_ending
+                        delimiter=self.csv_separator
                     )
                     header_fields = []
                     fields = config["felder"]

@@ -1,20 +1,18 @@
 import os, time, json
 
 class Logger:
-    def __init__(self, general_config_file, manufacturer_ending, product_ending):
-        with open(general_config_file, "r", encoding="utf-8") as config_file:
-            general_config = json.load(config_file)
-            log_file = general_config["log_file"]
-            self.start_time = time.localtime()
-            # Create log file or overwrite old one
-            log = open(log_file, "w", encoding="utf-8")
-            log.close()
-            self.log = open(log_file, "a", encoding="utf-8")
-            self.manufacturer_ending = manufacturer_ending
-            self.product_ending = product_ending
-            self.manufacturer = None
-            self.products = 0
-            self.skips = 0
+    def __init__(self, manufacturer_ending, product_ending):
+        log_file = "exporter.log"
+        self.start_time = time.localtime()
+        # Create log file or overwrite old one
+        log = open(log_file, "w", encoding="utf-8")
+        log.close()
+        self.log = open(log_file, "a", encoding="utf-8")
+        self.manufacturer_ending = manufacturer_ending
+        self.product_ending = product_ending
+        self.manufacturer = None
+        self.products = 0
+        self.skips = 0
 
     def print_start_time(self):
         print(

@@ -5,17 +5,17 @@ from modules.formatter import format_rules
 # Erforderliche Felder
 
 general_config_fields = [
-    "separator",
-    "encoding",
-    "configs_directory",
-    "bsvp_data_directory",
-    "output_directory",
-    "log_file"
+    "konfigurator-csv-separator",
+    "shop-csv-separator",
+    "csv-encoding",
+    "configs-ordner",
+    "bsvp-ordner",
+    "export-ordner"
 ]
 general_config_directories = [
-    "configs_directory",
-    "bsvp_data_directory",
-    "output_directory"
+    "configs-ordner",
+    "bsvp-ordner",
+    "export-ordner"
 ]
 
 # Hilfsmethoden
@@ -102,7 +102,7 @@ def validate_formatters(config, export_config_path):
                     "in der {}. Ersetzung in 'formatierungen' ".format(index + 1)
                 )
 
-# Exportierungen
+# Tatsächlich genutzte Funktionen
 
 def validate_setup(general_config_file):
     if not os.path.exists(general_config_file):
@@ -113,10 +113,24 @@ def validate_setup(general_config_file):
 
     config_file = open(general_config_file, "r", encoding="utf-8")
     config = json.load(config_file)
-    export_configs_directory = config["configs_directory"]
-    if not os.path.exists(export_configs_directory):
+    export_configs_directory = config["configs-ordner"]
+    if not os.path.isdir(export_configs_directory):
         sys.exit(
             "[FEHLER] Die Export-Konfigurationen fehlen, es gibt keinen Ordner {}"
+            .format(export_configs_directory)
+        )
+
+    configurator_configs_directory = export_configs_directory + "Konfigurator/"
+    if not os.path.isdir(configurator_configs_directory):
+        sys.exit(
+            "[FEHLER] Es gibt keinen Ordner 'Konfigurator' in {}"
+            .format(export_configs_directory)
+        )
+
+    shop_configs_file = export_configs_directory + "Konfigurator"
+    if not os.path.exists(shop_configs_file):
+        sys.exit(
+            "[FEHLER] Es gibt keine 'Shop.json' Datei in {}"
             .format(export_configs_directory)
         )
 
@@ -131,7 +145,7 @@ def validate_setup(general_config_file):
     # Validierung des angegebenen Encodings
     test_path = "test.csv"
     try:
-        test_file = open(test_path, "w", encoding=config["encoding"])
+        test_file = open(test_path, "w", encoding=config["csv-encoding"])
         test_file.close()
         os.remove(test_path)
     except:
@@ -141,11 +155,13 @@ def validate_setup(general_config_file):
             .format(export_config_path, encoding)
         )
 
-    for export_config in os.listdir(export_configs_directory):
-        export_config_path = export_configs_directory + export_config
+    for export_config in os.listdir(configurator_configs_directory):
+        export_config_path = configurator_configs_directory + export_config
         with open(export_config_path, "r", encoding="utf-8") as config_file:
             config = json.load(config_file)
             validate_export_config(config, export_config_path)
+
+    # TODO validate Shop.json
 
     config_file.close()
 

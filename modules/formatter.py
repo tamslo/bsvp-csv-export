@@ -25,7 +25,7 @@ class Formatter:
     def __init__(self, general_config_file):
         with open(general_config_file, "r", encoding="utf-8") as config_file:
             general_config = json.load(config_file)
-            self.configs_directory = general_config["configs_directory"]
+            self.configs_directory = general_config["configs-ordner"] + "Konfigurator/"
             self.format_options = self.__transform_configs()
 
     def __transform_configs(self):

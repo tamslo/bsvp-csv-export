@@ -1,9 +1,8 @@
 {
-  "separator": ";",
-  "line_ending": "\n",
-  "encoding": "latin-1",
-  "configs_directory": "configs/",
-  "bsvp_data_directory": "../library/",
-  "output_directory": "export/",
-  "log_file": "exporter.log"
+  "configs-ordner": "configs/",
+  "bsvp-ordner": "../library/",
+  "export-ordner": "export/",
+  "csv-encoding": "latin-1",
+  "konfigurator-csv-separator": ";",
+  "shop-csv-separator": "§"
 }

@@ -12,7 +12,7 @@ MANUFACTURER_ENDING = ".lugg"
 PRODUCT_ENDING = ".prod"
 PRODUCT_TYPE_ID = "0000191"
 
-logger = Logger(GENERAL_CONFIG_FILE, MANUFACTURER_ENDING, PRODUCT_ENDING)
+logger = Logger(MANUFACTURER_ENDING, PRODUCT_ENDING)
 logger.print_start_time()
 
 validate_setup(GENERAL_CONFIG_FILE)
@@ -32,10 +32,10 @@ def flatten_fields(fields):
 
 with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
     config = json.load(config_file)
-    bsvp_data_directory = config["bsvp_data_directory"]
-    for manufacturer_directory in os.listdir(bsvp_data_directory):
+    bsvp_directory = config["bsvp-ordner"]
+    for manufacturer_directory in os.listdir(bsvp_directory):
         if manufacturer_directory.endswith(MANUFACTURER_ENDING):
-            manufacturer_path = bsvp_data_directory + manufacturer_directory
+            manufacturer_path = bsvp_directory + manufacturer_directory
             logger.set_manufacturer(manufacturer_directory)
             for product_directory in os.listdir(manufacturer_path):
                 if product_directory.endswith(PRODUCT_ENDING):
