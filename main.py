@@ -5,6 +5,7 @@ from modules.validator import validate_setup, validate_fields
 from modules.archiver import archive_exports
 from modules.parser import parse_product
 from modules.configurator.exporter import ConfiguratorExporter
+from modules.shop_exporter import ShopExporter
 
 # Definition von Konstanten wie Verzeichnissen und Dateiendungen
 GENERAL_CONFIG_FILE = "config.json"
@@ -22,6 +23,7 @@ logger.print_start_time()
 validate_setup(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, SHOP_NAME)
 archive_exports(GENERAL_CONFIG_FILE)
 configurator_exporter = ConfiguratorExporter(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME)
+shop_exporter = ShopExporter(GENERAL_CONFIG_FILE, SHOP_NAME, MANUFACTURER_ENDING)
 
 # Entpackt verschachtelte Felder wie TECHDATA
 def flatten_fields(fields):
@@ -56,6 +58,7 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                             flattened_fields = flatten_fields(fields)
                             product_type = flattened_fields[PRODUCT_TYPE_ID]
                             configurator_exporter.write_to_csv(flattened_fields, product_type)
+                            shop_exporter.write_to_csv(flattened_fields, manufacturer_directory)
                         else:
                             logger.log_skip(product_directory, error_code)
                     else:

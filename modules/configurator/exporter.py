@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import os, shutil, json, csv
+import os, json, csv
 from modules.configurator.configs import transform_configs
 from modules.configurator.formatter import format_field
 
@@ -63,8 +63,7 @@ def extract_product_information(config, fields):
     product_information = []
 
     # Spezifizierte Felder in product_information schreiben
-    for field_name in config["felder"]:
-        field_value = config["felder"][field_name]
+    for field_name, field_value in config["felder"].items():
         product_information.append(get_field(config, fields, field_name))
 
     # Spezifizierte Kominationen bilden und in product_information schreiben
