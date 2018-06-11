@@ -25,21 +25,45 @@ class ShopExporter:
         if not os.path.exists(self.output_directory):
             os.makedirs(self.output_directory)
 
-        # Erstelle die CSV Dateien und schreibe die festgelegten Attribute als
-        # Header
-        for manufacturer_directory in os.listdir(self.bsvp_directory):
-            if manufacturer_directory.endswith(self.manufacturer_ending):
-                csv_path = self.__csv_path(manufacturer_directory)
-                with open(csv_path, "w", encoding=self.csv_encoding, newline="") as file:
-                    csv_writer = csv.writer(
-                        file,
-                        delimiter=self.csv_separator
-                    )
-                    header_fields = list(self.config.keys())
-                    csv_writer.writerow(header_fields)
+    def __header_fields(self, prod_fields, ilugg_fields):
+        header_fields = []
+        for field_name, value_specification in self.config.items():
+            if "iterierbar" in value_specification:
+                def make_header_field(specification, index):
+                    header_fields.append(field_name + str(index))
+                self.__iterate(value_specification, prod_fields, ilugg_fields, make_header_field)
+            else:
+                header_fields.append(field_name)
+
+        return header_fields
+
+    def __iterate(self, value_specification, prod_fields, ilugg_fields, callback):
+        specification = value_specification["iterierbar"]
+        max = int(self.__get_value(
+            specification["max"],
+            prod_fields,
+            ilugg_fields
+        ))
+        start = 0 if not "start" in specification else int(specification["start"])
+        while start < max:
+            callback(specification, start)
+            start += 1
+
+    def __create_csv(self, path, prod_fields, ilugg_fields):
+        with open(path, "w", encoding=self.csv_encoding, newline="") as file:
+            csv_writer = csv.writer(
+                file,
+                delimiter=self.csv_separator
+            )
+            header_fields = self.__header_fields(prod_fields, ilugg_fields)
+            csv_writer.writerow(header_fields)
 
     def write_to_csv(self, prod_fields, ilugg_fields, manufacturer_directory):
         csv_path = self.__csv_path(manufacturer_directory)
+
+        if not os.path.exists(csv_path):
+            self.__create_csv(csv_path, prod_fields, ilugg_fields)
+
         with open(csv_path, "a", encoding=self.csv_encoding, newline="") as file:
             csv_writer = csv.writer(file, delimiter=self.csv_separator)
             csv_writer.writerow(self.extract_information(prod_fields, ilugg_fields))
@@ -49,20 +73,31 @@ class ShopExporter:
 
         # Spezifizierte Felder in row schreiben
         for field_name, value_specification in self.config.items():
-            if "wert" in value_specification:
-                value = value_specification["wert"]
-            elif "prod" in value_specification:
-                value = None
-                if value_specification["prod"] in prod_fields:
-                    value = prod_fields[value_specification["prod"]]
-            elif "ilugg" in value_specification:
-                value = None
-                if value_specification["ilugg"] in ilugg_fields:
-                    value = ilugg_fields[value_specification["ilugg"]]
+            if "iterierbar" in value_specification:
+                def get_iterable_value(specification, index):
+                    value = None
+                    field_name = specification["praefix"] + str(index)
+                    if field_name in prod_fields:
+                        value = prod_fields[field_name]
+                    row.append(value)
+                self.__iterate(value_specification, prod_fields, ilugg_fields, get_iterable_value)
             else:
-                # TODO implement other cases
-                print("OTHER CASE!")
-                value = None
-            row.append(value)
+                value = self.__get_value(value_specification, prod_fields, ilugg_fields)
+                row.append(value)
 
         return row
+
+    def __get_value(self, specification, prod_fields, ilugg_fields):
+        if "wert" in specification:
+            value = specification["wert"]
+        elif "prod" in specification:
+            value = None
+            if specification["prod"] in prod_fields:
+                value = prod_fields[specification["prod"]]
+        elif "ilugg" in specification:
+            value = None
+            if specification["ilugg"] in ilugg_fields:
+                value = ilugg_fields[specification["ilugg"]]
+        else:
+            value = None
+        return value

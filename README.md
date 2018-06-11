@@ -93,7 +93,15 @@ Durch die `Shop.json` werden Felder angegeben, die in die CSV Datei pro Herstell
 {
   "XTSOL": { "wert": "XTSOL" },
   "action": { "prod": "ACTION" },
-  "p_dics": { "ilugg": "DICOUNT" }
+  "p_dics": { "ilugg": "DICOUNT" },
+  "p_cat.": { "iterierbar": { "praefix": "CAT", "max": { "wert": "5" } } },
+  "p_image.": {
+    "iterierbar": {
+      "praefix": "PIC.",
+      "max": { "ilugg": "PicCount" },
+      "start": "1"
+    }
+  }
 }
 ```
 
@@ -102,6 +110,7 @@ Für den Wert wird der Typ angegeben und der dazugehörige Wert:
 * `wert`: Es wird ein fester Wert eingetragen
 * `prod`: Es wird der Name des Feldes in der `.prod`-Datei angegeben
 * `ilugg`: Es wird der Name des Feldes in der `.ilugg`-Datei angegeben
+* `iterierbar`: Es müssen der Präfix des Feldes in der `.prod`-Datei und der Maximalwert angegeben werden; zusätzlich kann der `start` Index (standardmäßig `0`) angegeben werden
 
 #### Konfigurator
 
