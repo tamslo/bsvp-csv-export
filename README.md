@@ -101,7 +101,8 @@ Durch die `Shop.json` werden Felder angegeben, die in die CSV Datei pro Herstell
       "max": { "ilugg": "PicCount" },
       "start": "1"
     }
-  }
+  },
+  "p_desc": {}
 }
 ```
 
@@ -111,6 +112,8 @@ Für den Wert wird der Typ angegeben und der dazugehörige Wert:
 * `prod`: Es wird der Name des Feldes in der `.prod`-Datei angegeben
 * `ilugg`: Es wird der Name des Feldes in der `.ilugg`-Datei angegeben
 * `iterierbar`: Es müssen der Präfix des Feldes in der `.prod`-Datei und der Maximalwert angegeben werden; zusätzlich kann der `start` Index (standardmäßig `0`) angegeben werden
+
+Für Werte, die gesondert zusammengebaut werden müssen, wird ein leeres Objekt (`{}`) angegeben: `p_desc`, `p_movies.de` und `products_energy_efficiency_text`.
 
 #### Konfigurator
 

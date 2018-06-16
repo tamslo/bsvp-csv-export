@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, json, csv
+from .video import export_video
 
 class ShopExporter:
     def __init__(self, general_config_file, shop_name, manufacturer_ending):
@@ -80,9 +81,15 @@ class ShopExporter:
                     if field_name in prod_fields:
                         value = prod_fields[field_name]
                     row.append(value)
+
                 self.__iterate(value_specification, prod_fields, ilugg_fields, get_iterable_value)
+
             else:
-                value = self.__get_value(value_specification, prod_fields, ilugg_fields)
+                if field_name == "p_movies.de":
+                    value = export_video(prod_fields)
+                else:
+                    value = self.__get_value(value_specification, prod_fields, ilugg_fields)
+
                 row.append(value)
 
         return row

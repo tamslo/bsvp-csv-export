@@ -6,6 +6,7 @@ from .helpers import validate_required_fields
 shop_config_value_types = [ "iterierbar", "wert", "prod", "ilugg" ]
 iterable_max_value_types = shop_config_value_types[1:]
 shop_iterable_value_fields = [ "praefix", "max" ]
+without_specification = ["p_movies.de"]
 
 def value_type(specification):
     return list(specification.keys())[0]
@@ -30,10 +31,11 @@ def validate_shop_config(export_configs_directory, shop_name):
         shop_config = json.load(shop_config_file)
 
     for name, specification in shop_config.items():
+        if name in without_specification: continue
         if len(list(specification.keys())) != 1:
             sys.exit(
-                "[FEHLER] Zu viele Werte in {} für '{}'"
-                .format(shop_config_path, name)
+                "[FEHLER] Nicht genau ein Wert für '{}' in {}"
+                .format(name, shop_config_path)
             )
         validate_value_type(specification, shop_config_value_types, name, shop_config_path)
         if value_type(specification) == "iterierbar":
