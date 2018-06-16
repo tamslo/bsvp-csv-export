@@ -3,10 +3,10 @@ import time, json, os
 from modules.logger import Logger
 from modules.validator import validate_setup, validate_fields
 from modules.archiver import archive_exports
-from modules.prod_parser import parse_product
-from modules.ilugg_parser import parse_manufacturer_information
-from modules.configurator.exporter import ConfiguratorExporter
-from modules.shop_exporter import ShopExporter
+from modules.parser.prod import parse_product
+from modules.parser.ilugg import parse_manufacturer_information
+from modules.exporter.configurator import ConfiguratorExporter
+from modules.exporter.shop import ShopExporter
 
 # Definition von Konstanten wie Verzeichnissen und Dateiendungen
 GENERAL_CONFIG_FILE = "config.json"

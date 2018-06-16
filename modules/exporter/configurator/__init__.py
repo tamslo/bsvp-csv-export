@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os, json, csv
-from modules.configurator.configs import transform_configs
-from modules.configurator.formatter import format_field
+from .configs import transform_configs
+from .formatter import format_field
 
 class ConfiguratorExporter:
     def __init__(self, general_config_file, configurator_name):

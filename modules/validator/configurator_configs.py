@@ -1,7 +1,7 @@
 import os
 import sys
 import json
-from modules.configurator.formatter import format_rules
+from modules.exporter.configurator.formatter import format_rules
 from .helpers import validate_required_fields, validate_list
 
 export_config_fields = ["produkttyp" ,"felder"]
