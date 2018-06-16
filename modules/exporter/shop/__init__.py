@@ -1,6 +1,17 @@
 # -*- coding: utf-8 -*-
 import os, json, csv
+from .description import export_description
+from .energy_efficiency_text import export_energy_efficiency_text
 from .video import export_video
+
+special_cases = {
+    "p_desc.de": export_description,
+    "products_energy_efficiency_text": export_energy_efficiency_text,
+    "p_movies.de": export_video
+}
+
+def special_case_names():
+    return list(special_cases.keys())
 
 class ShopExporter:
     def __init__(self, general_config_file, shop_name, manufacturer_ending):
@@ -85,8 +96,8 @@ class ShopExporter:
                 self.__iterate(value_specification, prod_fields, ilugg_fields, get_iterable_value)
 
             else:
-                if field_name == "p_movies.de":
-                    value = export_video(prod_fields)
+                if field_name in special_cases:
+                    value = special_cases[field_name](prod_fields)
                 else:
                     value = self.__get_value(value_specification, prod_fields, ilugg_fields)
 
