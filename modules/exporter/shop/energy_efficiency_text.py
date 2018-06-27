@@ -56,17 +56,23 @@ def get_value(prod_fields, field_id):
     else:
         return ""
 
-def export_energy_efficiency_text(prod_fields):
-    rows = []
-    rows.append(table.header_row("Anschluss- und Verbrauchswerte"))
-    for row_specification in body_rows:
-        field_id = row_specification["field_id"]
-        rows += table.body_row(
-            row_specification["description"],
-            get_value(prod_fields, field_id)
-        )
-
-    if len(rows) > 1:
-        return table.table("".join(rows))
+def should_build_table(prod_fields):
+    if "ENERGYCLASS" in prod_fields:
+        return prod_fields["ENERGYCLASS"] != ""
     else:
-        return None
+        return False
+
+def export_energy_efficiency_text(prod_fields):
+    if should_build_table(prod_fields):
+        rows = []
+        rows.append(table.header_row("Anschluss- und Verbrauchswerte"))
+
+        for row_specification in body_rows:
+            field_id = row_specification["field_id"]
+            rows += table.body_row(
+                row_specification["description"],
+                get_value(prod_fields, field_id)
+            )
+
+        if len(rows) > 1:
+            return table.table("".join(rows))
