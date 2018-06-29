@@ -9,6 +9,7 @@ def html_escape(text):
     text = text.replace("Ä", "&Auml;")
     text = text.replace("Ö", "&Ouml;")
     text = text.replace("Ü", "&Uuml;")
+    text = text.replace("°", "&deg;")
     return text
 
 class Table():
@@ -17,11 +18,29 @@ class Table():
         self.header = ""
         self.rows = []
 
+    def __include_tooltip(self, text):
+        for tooltip_key, tooltip_value in self.tooltips.items():
+            tooltip_key = html_escape(tooltip_key)
+            if tooltip_key in text:
+                print(tooltip_key)
+                print(text)
+                tooltip_value = html_escape(tooltip_value)
+                tooltip = '<span class="kb-tooltip" title="'
+                tooltip += tooltip_value
+                tooltip += '">'
+                tooltip += tooltip_key
+                tooltip += "</span>"
+                text = text.replace(tooltip_key, tooltip)
+
+        return text
+
     def __cell(self, class_string, text, trailing_space=False):
         appendix = "&nbsp;" if trailing_space else ""
+        text = html_escape(text)
+        text = self.__include_tooltip(text)
         return '<td class="{}">{}{}</td>'.format(
             class_string,
-            html_escape(text),
+            text,
             appendix
         )
 
