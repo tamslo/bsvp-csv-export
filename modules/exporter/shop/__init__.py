@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, json, csv
+from modules.parser.tooltips import parse_tooltips
 from .description import export_description
 from .energy_efficiency_text import export_energy_efficiency_text
 from .video import export_video
@@ -17,6 +18,7 @@ class ShopExporter:
     def __init__(self, general_config_file, shop_name, manufacturer_ending):
         with open(general_config_file, "r", encoding="utf-8") as config_file:
             general_config = json.load(config_file)
+            self.tooltips = parse_tooltips(general_config["tooltip-datei"])
             self.csv_separator = general_config["shop-csv-separator"]
             self.csv_encoding = general_config["csv-encoding"]
             self.output_directory = general_config["export-ordner"] + shop_name + "/"
@@ -97,7 +99,7 @@ class ShopExporter:
 
             else:
                 if field_name in special_cases:
-                    value = special_cases[field_name](prod_fields)
+                    value = special_cases[field_name](prod_fields, self.tooltips)
                 else:
                     value = self.__get_value(value_specification, prod_fields, ilugg_fields)
 

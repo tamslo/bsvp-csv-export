@@ -2,6 +2,7 @@
   "configs-ordner": "configs/",
   "bsvp-ordner": "../library/",
   "export-ordner": "export/",
+  "tooltip-datei": "../exres/data/tags.da",
   "csv-encoding": "latin-1",
   "konfigurator-csv-separator": ";",
   "shop-csv-separator": "§"

@@ -9,7 +9,8 @@ general_config_fields = [
     "csv-encoding",
     "configs-ordner",
     "bsvp-ordner",
-    "export-ordner"
+    "export-ordner",
+    "tooltip-datei"
 ]
 
 general_config_directories = [
@@ -42,7 +43,7 @@ def validate_general_config(general_config_file, configurator_name, shop_name):
             )
 
 
-    # Überprüfung, ob es die erforderlichen Ordner gibt
+    # Überprüfung, ob es die erforderlichen Ordner und Dateien gibt
     export_configs_directory = config["configs-ordner"]
     if not os.path.isdir(export_configs_directory):
         sys.exit(
@@ -54,6 +55,12 @@ def validate_general_config(general_config_file, configurator_name, shop_name):
         sys.exit(
             "[FEHLER] Es gibt keinen Daten-Ordner '{}'"
             .format(bsvp_directory)
+        )
+    tooltip_path = config["tooltip-datei"]
+    if not os.path.exists(tooltip_path):
+        sys.exit(
+            "[FEHLER] Es gibt keine Tooltip-Datei '{}'"
+            .format(tooltip_path)
         )
 
     # Validierung des angegebenen Encodings

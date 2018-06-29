@@ -32,7 +32,4 @@ def parse_manufacturer_information(manufacturer_path, manufacturer_info_ending):
             field_value = field_parts[1]
             fields[field_name] = field_value
 
-    # if "PicCount" in fields:
-    #     print("Pic Count: {}".format(fields["PicCount"]))
-
     return fields

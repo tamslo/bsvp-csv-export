@@ -62,7 +62,7 @@ def should_build_table(prod_fields):
     else:
         return False
 
-def export_energy_efficiency_text(prod_fields):
+def export_energy_efficiency_text(prod_fields, tooltips):
     if should_build_table(prod_fields):
         rows = []
         rows.append(table.header_row("Anschluss- und Verbrauchswerte"))

@@ -1,7 +1,7 @@
 def build_video(url, description):
     return '<a href="{}" class="movie" title="{}" target="_blank">{}</a>'.format(url, description, description)
 
-def export_video(prod_fields):
+def export_video(prod_fields, tooltips):
     videos = []
     index = 1
     index_present = True
