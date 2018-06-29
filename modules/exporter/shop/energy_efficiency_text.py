@@ -1,6 +1,6 @@
-from . import table
+from .table import Table
 
-body_rows = [
+rows = [
     {
         "description": "Anschlusswert in Watt",
         "field_id": "0000015"
@@ -59,20 +59,15 @@ def get_value(prod_fields, field_id):
 def should_build_table(prod_fields):
     if "ENERGYCLASS" in prod_fields:
         return prod_fields["ENERGYCLASS"] != ""
-    else:
-        return False
 
 def export_energy_efficiency_text(prod_fields, tooltips):
+    table = Table(tooltips)
     if should_build_table(prod_fields):
-        rows = []
-        rows.append(table.header_row("Anschluss- und Verbrauchswerte"))
-
-        for row_specification in body_rows:
+        table.make_header("Anschluss- und Verbrauchswerte")
+        for row_specification in rows:
             field_id = row_specification["field_id"]
-            rows += table.body_row(
+            table.make_row(
                 row_specification["description"],
                 get_value(prod_fields, field_id)
             )
-
-        if len(rows) > 1:
-            return table.table("".join(rows))
+        return table.to_string()

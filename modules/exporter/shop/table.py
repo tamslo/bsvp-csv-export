@@ -1,21 +1,5 @@
 import html
 
-def table(rows):
-    table_attributes = {
-        'class="p_desc-table" '
-        'style="'
-        "width: 90%;"
-        "max-width: 95%;"
-        "border-collapse: collapse;"
-        "font-family: sans-serif;"
-        "-webkit-font-smoothing: antialiased;"
-        '"'
-    }
-    return "<table {}><tbody>{}</tbody></table>".format(table_attributes, rows)
-
-def row(cells):
-    return "<tr>{}</tr>".format("".join(cells))
-
 def html_escape(text):
     text = html.escape(text)
     text = text.replace("ä", "&auml;")
@@ -27,26 +11,52 @@ def html_escape(text):
     text = text.replace("Ü", "&Uuml;")
     return text
 
-def cell(class_string, text, trailing_space=False):
-    appendix = "&nbsp;" if trailing_space else ""
-    return '<td class="{}">{}{}</td>'.format(
-        class_string,
-        html_escape(text),
-        appendix
-    )
+class Table():
+    def __init__(self, tooltips):
+        self.tooltips = tooltips
+        self.header = ""
+        self.rows = []
 
-def description_cell(text):
-    return cell("kb-Tleft", text, trailing_space=True)
+    def __cell(self, class_string, text, trailing_space=False):
+        appendix = "&nbsp;" if trailing_space else ""
+        return '<td class="{}">{}{}</td>'.format(
+            class_string,
+            html_escape(text),
+            appendix
+        )
 
-def value_cell(text):
-    return cell("kb-Tright", text)
+    def __row(self, cells):
+        return "<tr>{}</tr>".format("".join(cells))
 
-def body_row(description, value):
-    return row([
-        description_cell(description),
-        value_cell(value)
-    ])
+    def make_header(self, title):
+        class_string = "kb-THeaderLeft"
+        self.header = self.__row([
+            self.__cell(class_string, title),
+            self.__cell(class_string, "")
+        ])
 
-def header_row(title):
-    class_string = "kb-THeaderLeft"
-    return row([cell(class_string, title), cell(class_string, "")])
+    def make_row(self, description, value):
+        description_cell = self.__cell("kb-Tleft", description, trailing_space=True)
+        value_cell = self.__cell("kb-Tright", value)
+        row = self.__row([
+            description_cell,
+            value_cell
+        ])
+        self.rows.append(row)
+
+    def to_string(self):
+        table_attributes = 'class="p_desc-table" '
+        table_attributes += 'style="'
+        table_attributes += "width: 90%;"
+        table_attributes += "max-width: 95%;"
+        table_attributes += "border-collapse: collapse;"
+        table_attributes += "font-family: sans-serif;"
+        table_attributes += "-webkit-font-smoothing: antialiased;"
+        table_attributes += '"'
+
+        if len(self.rows) > 0:
+            rows = self.header + "".join(self.rows)
+            return "<table {}><tbody>{}</tbody></table>".format(
+                table_attributes,
+                rows
+            )
