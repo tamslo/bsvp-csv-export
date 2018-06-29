@@ -50,9 +50,9 @@ rows = [
     }
 ]
 
-def get_value(prod_fields, field_id):
-    if field_id in prod_fields:
-        return prod_fields[field_id]
+def get_value(fields, field_id):
+    if field_id in fields:
+        return fields[field_id]
     else:
         return ""
 
@@ -70,8 +70,17 @@ def export_energy_efficiency_text(parameters):
         table.make_header("Anschluss- und Verbrauchswerte")
         for row_specification in rows:
             field_id = row_specification["field_id"]
+            field_name = get_value(attribute_names, field_id)
+            if (get_value(attribute_names, field_id) == ""):
+                warning_text = "[ACHTUNG] Kein Attributname im "
+                warning_text += "energy_efficiency_text für das Feld '"
+                warning_text += field_id
+                warning_text += "' im Produkt mit der Artikelnummer"
+                warning_text += prod_fields["ARTNR"]
+                warning_text += ". Das Feld in der Tabelle bleibt leer."
+                print(warning_text)
             table.make_row(
-                row_specification["description"],
+                field_name,
                 get_value(prod_fields, field_id)
             )
         return table.to_string()

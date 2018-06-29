@@ -38,13 +38,13 @@ def parse_product(product_path):
                 try:
                     attribute_parts = attribute[0].split("::")
                     attribute_value = html.unescape(attribute_parts[2]).strip()
+                    attribute_name = html.unescape(attribute_parts[1]).strip()
+                    attribute_names[attribute_id] = attribute_name
                     if attribute_value.strip() == "":
                         continue
-                    attribute_name = html.unescape(attribute_parts[1]).strip()
                 except IndexError:
                     continue
                 attributes[attribute_id] = attribute_value
-                attribute_names[attribute_id] = attribute_name
             fields[field_name] = attributes
         else:
             fields[field_name] = field_value
