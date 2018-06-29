@@ -1,2 +1,2 @@
-def export_description(prod_fields, tooltips):
+def export_description(parameters):
     return None

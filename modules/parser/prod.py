@@ -14,6 +14,7 @@ def parse_product(product_path):
         product_data += line
 
     fields = {}
+    attribute_names = {}
 
     for field in product_data.split(DATA_SEPARTOR):
         field_parts = field.split("=", 1)
@@ -35,14 +36,17 @@ def parse_product(product_path):
                 except AttributeError:
                     continue
                 try:
-                    attribute_value = html.unescape(attribute[0].split("::")[2]).strip()
+                    attribute_parts = attribute[0].split("::")
+                    attribute_value = html.unescape(attribute_parts[2]).strip()
                     if attribute_value.strip() == "":
                         continue
+                    attribute_name = html.unescape(attribute_parts[1]).strip()
                 except IndexError:
                     continue
                 attributes[attribute_id] = attribute_value
+                attribute_names[attribute_id] = attribute_name
             fields[field_name] = attributes
         else:
             fields[field_name] = field_value
 
-    return fields
+    return fields, attribute_names

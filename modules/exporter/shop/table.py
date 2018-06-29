@@ -22,8 +22,6 @@ class Table():
         for tooltip_key, tooltip_value in self.tooltips.items():
             tooltip_key = html_escape(tooltip_key)
             if tooltip_key in text:
-                print(tooltip_key)
-                print(text)
                 tooltip_value = html_escape(tooltip_value)
                 tooltip = '<span class="kb-tooltip" title="'
                 tooltip += tooltip_value

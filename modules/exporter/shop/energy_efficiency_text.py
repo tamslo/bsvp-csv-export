@@ -60,8 +60,12 @@ def should_build_table(prod_fields):
     if "ENERGYCLASS" in prod_fields:
         return prod_fields["ENERGYCLASS"] != ""
 
-def export_energy_efficiency_text(prod_fields, tooltips):
+def export_energy_efficiency_text(parameters):
+    prod_fields = parameters["prod_fields"]
+    attribute_names = parameters["attribute_names"]
+    tooltips = parameters["tooltips"]
     table = Table(tooltips)
+
     if should_build_table(prod_fields):
         table.make_header("Anschluss- und Verbrauchswerte")
         for row_specification in rows:
