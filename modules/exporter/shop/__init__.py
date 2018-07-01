@@ -103,6 +103,7 @@ class ShopExporter:
                 if field_name in special_cases:
                     parameters = {
                         "prod_fields": prod_fields,
+                        "ilugg_fields": ilugg_fields,
                         "attribute_names": attribute_names,
                         "tooltips": self.tooltips,
                         "specification": value_specification
