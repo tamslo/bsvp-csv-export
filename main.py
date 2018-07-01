@@ -66,7 +66,7 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                             product_type = flattened_fields[PRODUCT_TYPE_ID]
                             configurator_exporter.write_to_csv(flattened_fields, product_type)
                             shop_exporter.write_to_csv(
-                                flattened_fields,
+                                fields,
                                 attribute_names,
                                 manufacturer_information,
                                 manufacturer_directory

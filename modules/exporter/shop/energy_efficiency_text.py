@@ -15,6 +15,7 @@ def export_energy_efficiency_text(parameters):
     attribute_names = parameters["attribute_names"]
     tooltips = parameters["tooltips"]
     rows = parameters["specification"]["fields"]
+    techdata = prod_fields["TECHDATA"]
     table = Table(tooltips)
 
     if should_build_table(prod_fields):
@@ -32,6 +33,6 @@ def export_energy_efficiency_text(parameters):
                 print(warning_text)
             table.make_row(
                 field_name,
-                get_value(prod_fields, field_id)
+                get_value(techdata, field_id)
             )
         return table.to_string()
