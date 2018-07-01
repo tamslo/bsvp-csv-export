@@ -1,16 +1,5 @@
-import html, re
-
-def html_escape(text):
-    text = html.escape(text)
-    text = text.replace("ä", "&auml;")
-    text = text.replace("ö", "&ouml;")
-    text = text.replace("ü", "&uuml;")
-    text = text.replace("ß", "&szlig;")
-    text = text.replace("Ä", "&Auml;")
-    text = text.replace("Ö", "&Ouml;")
-    text = text.replace("Ü", "&Uuml;")
-    text = text.replace("°", "&deg;")
-    return text
+import re
+from .html_escape import html_escape
 
 class Table():
     def __init__(self, tooltips):
