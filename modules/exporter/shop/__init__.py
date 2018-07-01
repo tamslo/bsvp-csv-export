@@ -72,7 +72,14 @@ class ShopExporter:
             header_fields = self.__header_fields(prod_fields, ilugg_fields)
             csv_writer.writerow(header_fields)
 
-    def write_to_csv(self, prod_fields, attribute_names, ilugg_fields, manufacturer_directory):
+    def write_to_csv(
+        self,
+        prod_fields,
+        attribute_names,
+        attribute_types,
+        ilugg_fields,
+        manufacturer_directory
+    ):
         csv_path = self.__csv_path(manufacturer_directory)
 
         if not os.path.exists(csv_path):
@@ -81,10 +88,10 @@ class ShopExporter:
         with open(csv_path, "a", encoding=self.csv_encoding, newline="") as file:
             csv_writer = csv.writer(file, delimiter=self.csv_separator)
             csv_writer.writerow(
-                self.extract_information(prod_fields, ilugg_fields, attribute_names)
+                self.extract_information(prod_fields, ilugg_fields, attribute_names, attribute_types)
             )
 
-    def extract_information(self, prod_fields, ilugg_fields, attribute_names):
+    def extract_information(self, prod_fields, ilugg_fields, attribute_names, attribute_types):
         row = []
 
         # Spezifizierte Felder in row schreiben
@@ -105,6 +112,7 @@ class ShopExporter:
                         "prod_fields": prod_fields,
                         "ilugg_fields": ilugg_fields,
                         "attribute_names": attribute_names,
+                        "attribute_types": attribute_types,
                         "tooltips": self.tooltips,
                         "specification": value_specification
                     }

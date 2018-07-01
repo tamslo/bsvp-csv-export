@@ -59,7 +59,7 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                         product_directory
                     ])
                     if os.path.exists(product_path):
-                        fields, attribute_names = parse_product(product_path)
+                        fields, attribute_names, attribute_types = parse_product(product_path)
                         error_code = validate_fields(fields, PRODUCT_TYPE_ID)
                         if error_code == None:
                             flattened_fields = flatten_fields(fields)
@@ -68,6 +68,7 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                             shop_exporter.write_to_csv(
                                 fields,
                                 attribute_names,
+                                attribute_types,
                                 manufacturer_information,
                                 manufacturer_directory
                             )

@@ -4,8 +4,8 @@ from .html_escape import html_escape
 class Table():
     def __init__(self, tooltips):
         self.tooltips = tooltips
-        self.header = ""
         self.rows = []
+        self.content_rows = 0
 
     def __include_tooltip(self, text):
         for tooltip_key, tooltip_value in self.tooltips.items():
@@ -21,7 +21,7 @@ class Table():
 
         return text
 
-    def __cell(self, class_string, text, trailing_space=False):
+    def __cell(self, class_string, text="", trailing_space=False):
         appendix = "&nbsp;" if trailing_space else ""
         text = html_escape(text)
         text = self.__include_tooltip(text)
@@ -36,10 +36,11 @@ class Table():
 
     def make_header(self, title):
         class_string = "kb-THeaderLeft"
-        self.header = self.__row([
+        header_row = self.__row([
             self.__cell(class_string, title),
             self.__cell(class_string, "")
         ])
+        self.rows.append(header_row)
 
     def make_row(self, description, value):
         description_cell = self.__cell("kb-Tleft", description, trailing_space=True)
@@ -47,6 +48,15 @@ class Table():
         row = self.__row([
             description_cell,
             value_cell
+        ])
+        self.rows.append(row)
+        self.content_rows += 1
+
+    def make_empty_row(self):
+        class_string = "kb-Tnull"
+        row = self.__row([
+            self.__cell(class_string),
+            self.__cell(class_string)
         ])
         self.rows.append(row)
 
@@ -60,8 +70,8 @@ class Table():
         table_attributes += "-webkit-font-smoothing: antialiased;"
         table_attributes += '"'
 
-        if len(self.rows) > 0:
-            rows = self.header + "".join(self.rows)
+        if self.content_rows > 0:
+            rows = "".join(self.rows)
             return "<table {}><tbody>{}</tbody></table>".format(
                 table_attributes,
                 rows

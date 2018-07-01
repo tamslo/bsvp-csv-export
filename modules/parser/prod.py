@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, sys, html, re
+from collections import OrderedDict
 
 DATA_SEPARTOR = "§+§"
 ATTRIBUTE_SEPARATOR = "§-§"
@@ -15,6 +16,7 @@ def parse_product(product_path):
 
     fields = {}
     attribute_names = {}
+    attribute_types = OrderedDict()
 
     for field in product_data.split(DATA_SEPARTOR):
         field_parts = field.split("=", 1)
@@ -37,8 +39,10 @@ def parse_product(product_path):
                     continue
                 try:
                     attribute_parts = attribute[0].split("::")
-                    attribute_value = html.unescape(attribute_parts[2]).strip()
+                    attribute_type = attribute_parts[0]
                     attribute_name = html.unescape(attribute_parts[1]).strip()
+                    attribute_value = html.unescape(attribute_parts[2]).strip()
+                    attribute_types[attribute_id] = attribute_type
                     attribute_names[attribute_id] = attribute_name
                     if attribute_value.strip() == "":
                         continue
@@ -49,4 +53,4 @@ def parse_product(product_path):
         else:
             fields[field_name] = field_value
 
-    return fields, attribute_names
+    return fields, attribute_names, attribute_types
