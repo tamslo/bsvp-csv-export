@@ -6,7 +6,6 @@ def export_details(parameters):
     attribute_names = parameters["attribute_names"]
     attribute_types = parameters["attribute_types"]
     tooltips = parameters["tooltips"]
-    # TODO bgcolor (there are Examples with and without it)
     techdata = prod_fields["TECHDATA"]
     table = Table(tooltips)
     for field_id, type in attribute_types.items():

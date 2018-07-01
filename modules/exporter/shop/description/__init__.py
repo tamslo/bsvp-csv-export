@@ -1,6 +1,7 @@
 from .general import export_general_description
 from .details import export_details
 from .downloads import export_downloads
+from ..utils.unescape_bsvp import unescape_bsvp
 
 def export_description(parameters):
     prod_fields = parameters["prod_fields"]
@@ -15,4 +16,4 @@ def export_description(parameters):
     description += "<!--downloads-->"
     description += export_downloads(prod_fields, ilugg_fields)
     description += "<!--/downloads-->"
-    return description
+    return unescape_bsvp(description, prod_fields)

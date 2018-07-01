@@ -1,13 +1,8 @@
 import html
+from .escaped_characters import escaped_characters
 
 def html_escape(text):
     text = html.escape(text)
-    text = text.replace("ä", "&auml;")
-    text = text.replace("ö", "&ouml;")
-    text = text.replace("ü", "&uuml;")
-    text = text.replace("ß", "&szlig;")
-    text = text.replace("Ä", "&Auml;")
-    text = text.replace("Ö", "&Ouml;")
-    text = text.replace("Ü", "&Uuml;")
-    text = text.replace("°", "&deg;")
+    for character, escape_code in escaped_characters.items():
+        text = text.replace(character, escape_code)
     return text
