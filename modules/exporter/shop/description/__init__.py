@@ -7,7 +7,7 @@ def export_description(parameters):
     ilugg_fields = parameters["ilugg_fields"]
 
     description = "<!--description-->"
-    description += export_general_description()
+    description += export_general_description(prod_fields, ilugg_fields)
     description += "<!--/description-->"
     description += "<!--details-->"
     description += export_details()
