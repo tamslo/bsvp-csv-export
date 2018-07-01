@@ -9,12 +9,12 @@ Diese README sieht komisch aus? Dann öffne sie mit einem Editor mit Markdown-Er
 Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamaraslosarek@gmail.com.
 
 1.  [Installation](#installation)
-    * [Updates](#updates)
-    * [Automatische Ausführung](#automatische-ausführung)
+    - [Updates](#updates)
+    - [Automatische Ausführung](#automatische-ausführung)
 2.  [Ausführung](#ausführung)
 3.  [Konfigurationen](#konfigurationen)
-    * [Allgemeine Einstellungen](#allgemeine-einstellungen)
-    * [Export-Konfigurationen](#export-konfigurationen)
+    - [Allgemeine Einstellungen](#allgemeine-einstellungen)
+    - [Export-Konfigurationen](#export-konfigurationen)
 4.  [Fehlerbehebung](#fehlerbehebung)
 
 <a name="installation" />
@@ -22,8 +22,8 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 ## Installation
 
 1.  Python 3 installieren
-    * Mit [offiziellem Installer](https://www.python.org/downloads/)
-    * Installationsverzeichnis zur `PATH` Umgebungsvariable hinzufügen
+    - Mit [offiziellem Installer](https://www.python.org/downloads/)
+    - Installationsverzeichnis zur `PATH` Umgebungsvariable hinzufügen
 2.  Aktuelle Version des Exporters aus dem Trello herunterladen
 3.  Exporter in gewünschtes Verzeichnis verschieben (von jetzt an `EXPORTER_VERZEICHNIS` genannt)
 4.  Verzeichnis für Export-Konfigurationen anlegen
@@ -36,9 +36,9 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 
 1.  Aufgabe im Windows Aufgabenplaner erstellen
 2.  Aktion hinzufügen
-    * Programm/Skript: `C:\Windows\SysWOW64\cmd.exe`
-    * Argumente hinzufügen: `/c "python main.py"`
-    * Starten in: `EXPORTER_VERZEICHNIS` (absoluten Pfad angeben, z.B. `C:\BSVP-Server\CSV Exporter`)
+    - Programm/Skript: `C:\Windows\SysWOW64\cmd.exe`
+    - Argumente hinzufügen: `/c "python main.py"`
+    - Starten in: `EXPORTER_VERZEICHNIS` (absoluten Pfad angeben, z.B. `C:\BSVP-Server\CSV Exporter`)
 
 <a name="updates" />
 
@@ -60,12 +60,12 @@ Die erstellten CSV Dateien werden im in der `config.json` angegebenen Ordner ges
 
 Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in `exporter.log`, dass sie übersprungen wurde. Gründe dafür sind:
 
-* Der `.prod` Ordner und die `.prod` Datei haben unterschiedliche Namen (`PROD_UNTERSCHIEDLICH`)
-* Die `.prod` Datei enthält keine Artikelnummer (`KEINE_ARTNR`)
-* Die `.prod` Datei enthält keinen Lieferstatus (`KEIN_DELSTAT`)
-* Die `.prod` Datei enthält kein `TECHDATA` Feld (`KEIN_TECHDATA`)
-* Das `TECHDATA` Feld enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
-* Die Attribute in `TECHDATA` konnten nicht extrahiert werden, wahrscheinlich weil die numerischen Attribute fehlen (`TECHDATA_LEER`)
+- Der `.prod` Ordner und die `.prod` Datei haben unterschiedliche Namen (`PROD_UNTERSCHIEDLICH`)
+- Die `.prod` Datei enthält keine Artikelnummer (`KEINE_ARTNR`)
+- Die `.prod` Datei enthält keinen Lieferstatus (`KEIN_DELSTAT`)
+- Die `.prod` Datei enthält kein `TECHDATA` Feld (`KEIN_TECHDATA`)
+- Das `TECHDATA` Feld enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
+- Die Attribute in `TECHDATA` konnten nicht extrahiert werden, wahrscheinlich weil die numerischen Attribute fehlen (`TECHDATA_LEER`)
 
 Wenn eine `.ilugg` Datei nicht bearbeitet werden konnte, steht das ebenfalls in der Log-Datei.
 
@@ -108,12 +108,16 @@ Durch die `Shop.json` werden Felder angegeben, die in die CSV Datei pro Herstell
 
 Für den Wert wird der Typ angegeben und der dazugehörige Wert:
 
-* `wert`: Es wird ein fester Wert eingetragen
-* `prod`: Es wird der Name des Feldes in der `.prod`-Datei angegeben
-* `ilugg`: Es wird der Name des Feldes in der `.ilugg`-Datei angegeben
-* `iterierbar`: Es müssen der Präfix des Feldes in der `.prod`-Datei und der Maximalwert angegeben werden; zusätzlich kann der `start` Index (standardmäßig `0`) angegeben werden
+- `wert`: Es wird ein fester Wert eingetragen
+- `prod`: Es wird der Name des Feldes in der `.prod`-Datei angegeben
+- `ilugg`: Es wird der Name des Feldes in der `.ilugg`-Datei angegeben
+- `iterierbar`: Es müssen der Präfix des Feldes in der `.prod`-Datei und der Maximalwert angegeben werden; zusätzlich kann der `start` Index (standardmäßig `0`) angegeben werden
 
-Für Werte, die gesondert zusammengebaut werden müssen, wird ein leeres Objekt (`{}`) angegeben: `p_desc.de`, `p_movies.de` und `products_energy_efficiency_text`.
+Für Werte, die gesondert zusammengebaut werden müssen, wird ein leeres Objekt (`{}`) bzw. werden zusätzliche Spezifikationen angegeben:
+
+- `p_desc.de`: leeres Objekt
+- `p_movies.de`: leeres Objekt
+- `products_energy_efficiency_text`: Liste von Feldern, die in die Tabelle geschrieben werden (`{ "fields": [ "0000015", "0000089" ] }`)
 
 #### Konfigurator
 
@@ -173,8 +177,8 @@ Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. De
 
 Formatierungen können in dem Feld `"formatierungen"` angegeben werden. Einfache Ersetzungen von Werten (Bsp. die Werte `["CNS 1.4301", "CNS 1.4301 (AISI304)", "CNS 18/10"]` sollen immer zu `"CNS"` geändert werden) können im untergeordneten Feld `"ersetzungen"` angegeben werden. Für komliziertere Formatierungen gibt es folgende vordefinierte Regeln:
 
-* `"punkt_zu_komma"`: der Punkt (in einer Kommazahl) wird zu einem Komma geändert
-* `"bereich_von_null"`: zu einem Wert wird "0|" hinzugefügt
+- `"punkt_zu_komma"`: der Punkt (in einer Kommazahl) wird zu einem Komma geändert
+- `"bereich_von_null"`: zu einem Wert wird "0|" hinzugefügt
 
 Zu einer Ersetzung bzw. Regel kann eine Liste von Attribut-IDs angegeben werden, auf die diese dann angewendet werden.
 

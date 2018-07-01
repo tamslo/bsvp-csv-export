@@ -104,7 +104,8 @@ class ShopExporter:
                     parameters = {
                         "prod_fields": prod_fields,
                         "attribute_names": attribute_names,
-                        "tooltips": self.tooltips
+                        "tooltips": self.tooltips,
+                        "specification": value_specification
                     }
                     value = special_cases[field_name](parameters)
                 else:
