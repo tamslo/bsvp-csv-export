@@ -1,4 +1,4 @@
-import html
+import html, re
 
 def html_escape(text):
     text = html.escape(text)
@@ -21,7 +21,7 @@ class Table():
     def __include_tooltip(self, text):
         for tooltip_key, tooltip_value in self.tooltips.items():
             tooltip_key = html_escape(tooltip_key)
-            if tooltip_key in text:
+            if re.search(r'\b' + re.escape(tooltip_key) + r'\b', text):
                 tooltip_value = html_escape(tooltip_value)
                 tooltip = '<span class="kb-tooltip" title="'
                 tooltip += tooltip_value

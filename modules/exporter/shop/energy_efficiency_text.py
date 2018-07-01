@@ -27,6 +27,7 @@ def export_energy_efficiency_text(parameters):
                 warning_text += field_id
                 warning_text += "' im Produkt mit der Artikelnummer"
                 warning_text += prod_fields["ARTNR"]
+                warning_text += " von " + prod_fields["MANUFACTURER"]
                 warning_text += ". Das Feld in der Tabelle bleibt leer."
                 print(warning_text)
             table.make_row(
