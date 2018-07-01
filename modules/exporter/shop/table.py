@@ -1,5 +1,5 @@
 import re
-from .html_escape import html_escape
+from .utils.html_escape import html_escape
 
 class Table():
     def __init__(self, tooltips):

@@ -1,5 +1,5 @@
 from .table import Table
-from .get_techdata_value import get_value
+from .utils.get_techdata_value import get_value
 
 def should_build_table(prod_fields):
     if "ENERGYCLASS" in prod_fields:

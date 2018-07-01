@@ -1,4 +1,4 @@
-from ..html_escape import html_escape
+from ..utils.html_escape import html_escape
 
 download_prefix = "media/Links/"
 

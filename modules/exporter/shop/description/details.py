@@ -1,5 +1,5 @@
 from ..table import Table
-from ..get_techdata_value import get_value
+from ..utils.get_techdata_value import get_value
 
 def export_details(parameters):
     prod_fields = parameters["prod_fields"]
