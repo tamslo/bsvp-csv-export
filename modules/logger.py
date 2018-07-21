@@ -1,14 +1,13 @@
 import os, time, json
 
 class Logger:
-    def __init__(self, manufacturer_ending, product_ending):
+    def __init__(self, product_ending):
         log_file = "exporter.log"
         self.start_time = time.localtime()
         # Create log file or overwrite old one
         log = open(log_file, "w", encoding="utf-8")
         log.close()
         self.log = open(log_file, "a", encoding="utf-8")
-        self.manufacturer_ending = manufacturer_ending
         self.product_ending = product_ending
         self.manufacturer = None
         self.products = 0
@@ -31,8 +30,8 @@ class Logger:
             .format(round(runtime))
         )
 
-    def set_manufacturer(self, manufacturer_directory):
-        self.manufacturer = self.manufacturer_name(manufacturer_directory)
+    def set_manufacturer(self, manufacturer_name):
+        self.manufacturer = manufacturer_name
 
     def print_manufacturer_progress(self):
         self.products += 1
@@ -49,9 +48,6 @@ class Logger:
         print("")
         self.products = 0
         self.skips = 0
-
-    def manufacturer_name(self, manufacturer_directory):
-        return manufacturer_directory.split(self.manufacturer_ending)[0]
 
     def product_name(self, product_directory):
         return product_directory.split(self.product_ending)[0]

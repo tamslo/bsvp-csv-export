@@ -18,7 +18,7 @@ PRODUCT_TYPE_ID = "0000191"
 CONFIGURATOR_NAME = "Konfigurator"
 SHOP_NAME = "Shop"
 
-logger = Logger(MANUFACTURER_ENDING, PRODUCT_ENDING)
+logger = Logger(PRODUCT_ENDING)
 logger.print_start_time()
 
 validate_setup(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, SHOP_NAME)
@@ -43,13 +43,16 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
     for manufacturer_directory in os.listdir(bsvp_directory):
         if manufacturer_directory.endswith(MANUFACTURER_ENDING):
             manufacturer_path = bsvp_directory + manufacturer_directory
-            logger.set_manufacturer(manufacturer_directory)
-            manufacturer_information = parse_manufacturer_information(
-                manufacturer_path,
-                MANUFACTURER_INFO_ENDING
-            )
+            manufacturer_name = manufacturer_directory.split(MANUFACTURER_ENDING)[0]
+            logger.set_manufacturer(manufacturer_name)
+            ilugg_path = manufacturer_path + "/" + manufacturer_name + MANUFACTURER_INFO_ENDING
+            if not os.path.exists(ilugg_path):
+                logger.log_skip("ILUGG", "NICHT_VORHANDEN")
+                continue
+            manufacturer_information = parse_manufacturer_information(ilugg_path)
             if not manufacturer_information:
                 logger.log_skip("ILUGG", "NICHT_AUSWERTBAR")
+                continue
             for product_directory in os.listdir(manufacturer_path):
                 if product_directory.endswith(PRODUCT_ENDING):
                     logger.print_manufacturer_progress()

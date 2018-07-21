@@ -3,20 +3,8 @@ import os, sys
 
 DATA_SEPARTOR = ";"
 
-def parse_manufacturer_information(manufacturer_path, manufacturer_info_ending):
+def parse_manufacturer_information(ilugg_path):
     fields = {}
-    ilugg_files = [path for path in os.listdir(manufacturer_path) if path.endswith(manufacturer_info_ending)]
-    if len(ilugg_files) < 1:
-        return fields
-
-    ilugg_file = ilugg_files[0]
-    if len(ilugg_files) > 1:
-        print(
-            "[WARNUNG] Mehrere .ilugg Dateien in {}, fahre fort mit {}"
-            .format(manufacturer_path, ilugg_file)
-        )
-
-    ilugg_path = manufacturer_path + "/" + ilugg_file
     ilugg_file = open(ilugg_path, "r",  encoding="utf-8", errors="ignore")
     lines = ilugg_file.readlines()
     ilugg_file.close()

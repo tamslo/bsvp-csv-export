@@ -67,7 +67,7 @@ Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in `exporter.log`,
 - Das `TECHDATA` Feld enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
 - Die Attribute in `TECHDATA` konnten nicht extrahiert werden, wahrscheinlich weil die numerischen Attribute fehlen (`TECHDATA_LEER`)
 
-Wenn eine `.ilugg` Datei nicht bearbeitet werden konnte, steht das ebenfalls in der Log-Datei.
+Wenn eine `.ilugg` Datei nicht vorhanden ist oder nicht bearbeitet werden konnte, steht das ebenfalls in der Log-Datei.
 
 <a name="konfigurationen" />
 
