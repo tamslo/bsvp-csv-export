@@ -115,13 +115,15 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                                 configurator_exporter.write_to_csv(flattened_fields, product_type)
 
                             if do_shop_export:
-                                shop_exporter.write_to_csv(
+                                error_code = shop_exporter.write_to_csv(
                                     fields,
                                     attribute_names,
                                     attribute_types,
                                     manufacturer_information,
                                     manufacturer_directory
                                 )
+                                if error_code != None:
+                                    logger.log_skip(product_directory, error_code)
                         else:
                             logger.log_skip(product_directory, error_code)
                     else:

@@ -14,9 +14,9 @@ def export_energy_efficiency_text(parameters):
     table = Table(tooltips)
 
     if should_build_table(prod_fields):
-        table.make_header(get_value(attribute_names, "0000012", warn=True))
+        table.make_header(get_value(attribute_names, "0000012", warn=True, prod_fields=prod_fields))
         for field_id in rows:
-            field_name = get_value(attribute_names, field_id, warn=True)
+            field_name = get_value(attribute_names, field_id, warn=True, prod_fields=prod_fields)
             table.make_row(
                 field_name,
                 get_value(techdata, field_id)

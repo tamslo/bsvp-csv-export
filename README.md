@@ -68,6 +68,7 @@ Wenn eine `.prod` Datei nicht bearbeitet werden konnte, steht in `exporter.log`,
 - Die `.prod` Datei enthält kein `TECHDATA` Feld (`KEIN_TECHDATA`)
 - Das `TECHDATA` Feld enthält keinen Produkttyp (`KEIN_PRODUKTTYP`)
 - Die Attribute in `TECHDATA` konnten nicht extrahiert werden, wahrscheinlich weil die numerischen Attribute fehlen (`TECHDATA_LEER`)
+- Die Shop-CSV Datei konnte aufgrund von unbekannten Zeichen nicht geschrieben werden, die Konfigurator Datei ist davon grundsätzlich nicht beeinflusst (`UNBEKANNTES_ZEICHEN [FEHLER]`)
 
 Wenn eine `.ilugg` Datei nicht vorhanden ist oder nicht bearbeitet werden konnte, steht das ebenfalls in der Log-Datei.
 

@@ -14,6 +14,12 @@ special_cases = {
 def special_case_names():
     return list(special_cases.keys())
 
+def escape(value):
+    if value == None:
+        return None
+    value = value.replace("∆", "&#8710;")
+    return value
+
 class ShopExporter:
     def __init__(self, general_config_file, shop_name, manufacturer_ending):
         with open(general_config_file, "r", encoding="utf-8") as config_file:
@@ -87,9 +93,12 @@ class ShopExporter:
 
         with open(csv_path, "a", encoding=self.csv_encoding, newline="") as file:
             csv_writer = csv.writer(file, delimiter=self.csv_separator)
-            csv_writer.writerow(
-                self.extract_information(prod_fields, ilugg_fields, attribute_names, attribute_types)
-            )
+            row = self.extract_information(prod_fields, ilugg_fields, attribute_names, attribute_types)
+            row = map(escape, row)
+            try:
+                csv_writer.writerow(row)
+            except UnicodeEncodeError as error:
+                return "UNBEKANNTES_ZEICHEN [{}]".format(error)
 
     def extract_information(self, prod_fields, ilugg_fields, attribute_names, attribute_types):
         row = []
