@@ -9,6 +9,7 @@ from modules.exporter.configurator import ConfiguratorExporter
 from modules.exporter.shop import ShopExporter
 
 # Definition von Konstanten wie Verzeichnissen und Dateiendungen
+
 GENERAL_CONFIG_FILE = "config.json"
 MANUFACTURER_ENDING = ".lugg"
 MANUFACTURER_INFO_ENDING = ".ilugg"
@@ -17,14 +18,6 @@ PRODUCT_TYPE_ID = "0000191"
 
 CONFIGURATOR_NAME = "Konfigurator"
 SHOP_NAME = "Shop"
-
-logger = Logger(PRODUCT_ENDING)
-logger.print_start_time()
-
-validate_setup(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, SHOP_NAME)
-archive_exports(GENERAL_CONFIG_FILE)
-configurator_exporter = ConfiguratorExporter(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME)
-shop_exporter = ShopExporter(GENERAL_CONFIG_FILE, SHOP_NAME, MANUFACTURER_ENDING)
 
 # Kommandozeilen-Argumente definieren und auslesen
 
@@ -54,7 +47,19 @@ if not do_configurator_export and not do_shop_export:
     do_configurator_export = True
     do_shop_export = True
 
-# Entpackt verschachtelte Felder wie TECHDATA
+# Start des eigentlichen Skripts
+
+logger = Logger(PRODUCT_ENDING)
+logger.print_start_time()
+
+validate_setup(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, SHOP_NAME)
+archive_exports(GENERAL_CONFIG_FILE)
+if do_configurator_export:
+    configurator_exporter = ConfiguratorExporter(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME)
+if do_shop_export:
+    shop_exporter = ShopExporter(GENERAL_CONFIG_FILE, SHOP_NAME, MANUFACTURER_ENDING)
+
+# Hilfsmethode, entpackt verschachtelte Felder wie TECHDATA
 def flatten_fields(fields):
     flattened_fields = {}
     for field_name, field_value in fields.items():
@@ -83,8 +88,6 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                 if not manufacturer_information:
                     logger.log_skip("ILUGG", "NICHT_AUSWERTBAR")
                     continue
-            else:
-                manufacturer_information = {}
 
             # Wenn nur ein Shop-Export durchgeführt werden soll und nur für
             # bestimmte Hersteller, wird hier überprüft, ob der aktuelle
