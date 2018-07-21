@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import time, json, os
+import time, json, os, argparse
 from modules.logger import Logger
 from modules.validator import validate_setup, validate_fields
 from modules.archiver import archive_exports
@@ -26,6 +26,34 @@ archive_exports(GENERAL_CONFIG_FILE)
 configurator_exporter = ConfiguratorExporter(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME)
 shop_exporter = ShopExporter(GENERAL_CONFIG_FILE, SHOP_NAME, MANUFACTURER_ENDING)
 
+# Kommandozeilen-Argumente definieren und auslesen
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "-c", "--configurator",
+    help="nur den Konfigurator Export starten",
+    action="store_true"
+)
+parser.add_argument(
+    "-s", "--shop",
+    help="nur den Shop Export starten - wenn Hersteller Ordner angegeben werden, werden nur diese exportiert",
+    nargs="*",
+    metavar="hersteller",
+    default=None
+)
+
+args = parser.parse_args()
+do_configurator_export = args.configurator
+do_shop_export = args.shop != None
+# Wenn Hersteller-Ordner angegeben sind, ist limited_manufacturers eine Liste,
+# sonst False
+limited_manufacturers = isinstance(args.shop, list) and len(args.shop) > 0 and args.shop
+
+# Wenn kein Parameter angegeben ist, dann wird alles exportiert
+if not do_configurator_export and not do_shop_export:
+    do_configurator_export = True
+    do_shop_export = True
+
 # Entpackt verschachtelte Felder wie TECHDATA
 def flatten_fields(fields):
     flattened_fields = {}
@@ -44,15 +72,28 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
         if manufacturer_directory.endswith(MANUFACTURER_ENDING):
             manufacturer_path = bsvp_directory + manufacturer_directory
             manufacturer_name = manufacturer_directory.split(MANUFACTURER_ENDING)[0]
+
+            # Die Hersteller Informationen werden nur für den Shop-Export benötigt
+            if do_shop_export:
+                ilugg_path = manufacturer_path + "/" + manufacturer_name + MANUFACTURER_INFO_ENDING
+                if not os.path.exists(ilugg_path):
+                    logger.log_skip("ILUGG", "NICHT_VORHANDEN")
+                    continue
+                manufacturer_information = parse_manufacturer_information(ilugg_path)
+                if not manufacturer_information:
+                    logger.log_skip("ILUGG", "NICHT_AUSWERTBAR")
+                    continue
+            else:
+                manufacturer_information = {}
+
+            # Wenn nur ein Shop-Export durchgeführt werden soll und nur für
+            # bestimmte Hersteller, wird hier überprüft, ob der aktuelle
+            # Hersteller exportiert werden soll
+            if not do_configurator_export and limited_manufacturers and not manufacturer_name in limited_manufacturers:
+                continue
+
             logger.set_manufacturer(manufacturer_name)
-            ilugg_path = manufacturer_path + "/" + manufacturer_name + MANUFACTURER_INFO_ENDING
-            if not os.path.exists(ilugg_path):
-                logger.log_skip("ILUGG", "NICHT_VORHANDEN")
-                continue
-            manufacturer_information = parse_manufacturer_information(ilugg_path)
-            if not manufacturer_information:
-                logger.log_skip("ILUGG", "NICHT_AUSWERTBAR")
-                continue
+
             for product_directory in os.listdir(manufacturer_path):
                 if product_directory.endswith(PRODUCT_ENDING):
                     logger.print_manufacturer_progress()
@@ -65,16 +106,19 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
                         fields, attribute_names, attribute_types = parse_product(product_path)
                         error_code = validate_fields(fields, PRODUCT_TYPE_ID)
                         if error_code == None:
-                            flattened_fields = flatten_fields(fields)
-                            product_type = flattened_fields[PRODUCT_TYPE_ID]
-                            configurator_exporter.write_to_csv(flattened_fields, product_type)
-                            shop_exporter.write_to_csv(
-                                fields,
-                                attribute_names,
-                                attribute_types,
-                                manufacturer_information,
-                                manufacturer_directory
-                            )
+                            if do_configurator_export:
+                                flattened_fields = flatten_fields(fields)
+                                product_type = flattened_fields[PRODUCT_TYPE_ID]
+                                configurator_exporter.write_to_csv(flattened_fields, product_type)
+
+                            if do_shop_export:
+                                shop_exporter.write_to_csv(
+                                    fields,
+                                    attribute_names,
+                                    attribute_types,
+                                    manufacturer_information,
+                                    manufacturer_directory
+                                )
                         else:
                             logger.log_skip(product_directory, error_code)
                     else:
