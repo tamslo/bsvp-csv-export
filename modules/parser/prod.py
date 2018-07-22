@@ -39,10 +39,10 @@ def parse_product(product_path):
                 try:
                     attribute_parts = attribute[0].split("::")
                     attribute_type = attribute_parts[0]
-                    attribute_name = html.unescape(attribute_parts[1]).strip()
-                    attribute_value = html.unescape(attribute_parts[2]).strip()
                     attribute_types[attribute_id] = attribute_type
+                    attribute_name = html.unescape(attribute_parts[1]).strip()
                     attribute_names[attribute_id] = attribute_name
+                    attribute_value = html.unescape(attribute_parts[2]).strip()
                     if attribute_value.strip() == "":
                         continue
                 except IndexError:

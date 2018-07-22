@@ -132,3 +132,5 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
             logger.print_manufacturer_summary()
 
 logger.print_end_time()
+input("Zum Beenden ENTER drücken...")
+print("")

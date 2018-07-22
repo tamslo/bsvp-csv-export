@@ -14,6 +14,7 @@ class Logger:
         self.skips = 0
 
     def print_start_time(self):
+        print("")
         print(
             "Export gestartet am {} um {}"
             .format(
@@ -21,14 +22,20 @@ class Logger:
                 time.strftime("%H:%M", self.start_time)
             )
         )
+        print("")
 
     def print_end_time(self):
         end_time = time.localtime()
-        runtime = (time.mktime(end_time) - time.mktime(self.start_time))
-        print(
-            "Export abgeschlossen in {} Sekunden"
-            .format(round(runtime))
-        )
+        runtime = round(time.mktime(end_time) - time.mktime(self.start_time))
+        text = "Export abgeschlossen in ".format(runtime)
+
+        if runtime > 120:
+            text += " {} Minuten und {} Sekunden".format(runtime//60, runtime % 60)
+        else:
+            text += "{} Sekunden".format(runtime)
+
+        print("")
+        print(text)
 
     def set_manufacturer(self, manufacturer_name):
         self.manufacturer = manufacturer_name
