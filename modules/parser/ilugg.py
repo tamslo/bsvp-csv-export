@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 import os, sys
 
 DATA_SEPARTOR = ";"
 
 def parse_manufacturer_information(ilugg_path):
     fields = {}
-    ilugg_file = open(ilugg_path, "r",  encoding="utf-8", errors="ignore")
+    ilugg_file = open(ilugg_path, "r",  encoding="utf-8")
     lines = ilugg_file.readlines()
     ilugg_file.close()
 

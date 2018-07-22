@@ -77,6 +77,7 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
         if manufacturer_directory.endswith(MANUFACTURER_ENDING):
             manufacturer_path = bsvp_directory + manufacturer_directory
             manufacturer_name = manufacturer_directory.split(MANUFACTURER_ENDING)[0]
+            logger.set_manufacturer(manufacturer_name)
 
             # Die Hersteller Informationen werden nur für den Shop-Export benötigt
             if do_shop_export:
@@ -95,7 +96,6 @@ with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
             if not do_configurator_export and limited_manufacturers and not manufacturer_name in limited_manufacturers:
                 continue
 
-            logger.set_manufacturer(manufacturer_name)
 
             for product_directory in os.listdir(manufacturer_path):
                 if product_directory.endswith(PRODUCT_ENDING):

@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
 import os, sys
 
 DATA_SEPARTOR = ";"
 
 def parse_tooltips(tooltip_path):
     fields = {}
-    tooltip_file = open(tooltip_path, "r",  encoding="utf-8", errors="ignore")
+    tooltip_file = open(tooltip_path, "r",  encoding="utf-8")
     lines = tooltip_file.readlines()
     tooltip_file.close()
 

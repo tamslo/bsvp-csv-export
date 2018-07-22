@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os, sys, html, re
 from collections import OrderedDict
 
@@ -6,7 +5,7 @@ DATA_SEPARTOR = "§+§"
 ATTRIBUTE_SEPARATOR = "§-§"
 
 def parse_product(product_path):
-    bsvp_file = open(product_path, "r",  encoding="utf-8", errors="ignore")
+    bsvp_file = open(product_path, "r",  encoding="utf-8")
     lines = bsvp_file.readlines()
     bsvp_file.close()
 
