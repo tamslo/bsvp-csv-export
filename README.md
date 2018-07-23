@@ -37,7 +37,7 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 1.  Aufgabe im Windows Aufgabenplaner erstellen
 2.  Aktion hinzufügen
     - Programm/Skript: `C:\Windows\SysWOW64\cmd.exe`
-    - Argumente hinzufügen: `/c "python main.py"`
+    - Argumente hinzufügen: `/c "python cmd.py"`
     - Starten in: `EXPORTER_VERZEICHNIS` (absoluten Pfad angeben, z.B. `C:\BSVP-Server\CSV Exporter`)
 
 <a name="updates" />
@@ -54,11 +54,11 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 
 1.  Kommandozeile starten (z.B. `WINDOWS + R` drücken, `cmd` eingeben und bestätigen)
 2.  In das EXPORTER_VERZEICHNIS wechseln mit `cd EXPORTER_VERZEICHNIS`
-3.  Kompletten Export ausführen mit `python main.py`
+3.  Kompletten Export ausführen mit `python cmd.py` oder Benutzeroberfläche starten mit `python gui.py`
 
-Alternativ: Eine Verknüfung zur `main.py` anlegen und doppelklicken.
+Alternativ: Eine Verknüfung zur `main.py` oder `gui.py` anlegen und doppelklicken.
 
-Zusätzlich zum Befehl `python main.py` können Parameter angegeben werden. Mit `python main.py -c` wird nur der Konfigurator Export durchgeführt, mit `python main.py -s` nur der Shop Export. Zusätzlich können zum Shop Export Hersteller angegeben werden. Wenn Leerzeichen im Ordnernamen vorhanden sind, muss der Name in Anführungszeichen gesetzt werden: `python main.py -s "AHT 2015" Bäumer`. Informationen zu den Parametern können in der Kommandozeile mit `python main.py -h` ausgegeben werden.
+Zusätzlich zum Befehl `python cmd.py` können Parameter angegeben werden. Mit `python cmd.py -c` wird nur der Konfigurator Export durchgeführt, mit `python cmd.py -s` nur der Shop Export. Zusätzlich können zum Shop Export Hersteller angegeben werden. Wenn Leerzeichen im Ordnernamen vorhanden sind, muss der Name in Anführungszeichen gesetzt werden: `python cmd.py -s "AHT 2015" Bäumer`. Informationen zu den Parametern können in der Kommandozeile mit `python cmd.py -h` ausgegeben werden.
 
 Die erstellten CSV Dateien werden im in der `config.json` angegebenen Ordner gespeichert, der angelegt wird, wenn er noch nicht vorhanden ist. Der jeweils letzte Export wird in den angegebenen Archiv-Ordner verschoben.
 

@@ -35,8 +35,7 @@ class ShopExporter:
                 self.config = json.load(export_config_file)
             self.__setup()
 
-    def __csv_path(self, manufacturer_directory):
-        manufacturer_name = manufacturer_directory.split(self.manufacturer_ending)[0]
+    def __csv_path(self, manufacturer_name):
         return self.output_directory + manufacturer_name + ".csv"
 
     def __setup(self):
@@ -84,9 +83,9 @@ class ShopExporter:
         attribute_names,
         attribute_types,
         ilugg_fields,
-        manufacturer_directory
+        manufacturer_name
     ):
-        csv_path = self.__csv_path(manufacturer_directory)
+        csv_path = self.__csv_path(manufacturer_name)
 
         if not os.path.exists(csv_path):
             self.__create_csv(csv_path, prod_fields, ilugg_fields)
