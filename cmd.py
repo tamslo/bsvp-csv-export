@@ -1,5 +1,5 @@
 import argparse
-from modules.main import run
+from modules.runner import run
 
 # Kommandozeilen-Argumente definieren und auslesen
 

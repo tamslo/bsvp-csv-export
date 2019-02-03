@@ -100,7 +100,7 @@ def run(do_configurator_export, do_shop_export, limited_manufacturers):
                 manufacturer_name
             )
 
-        if not do_configurator_export and limited_manufacturers and not  manufacturer_name in limited_manufacturers:
+        if not do_configurator_export and limited_manufacturers and not manufacturer_name in limited_manufacturers:
             continue
 
         for product_name, product_path in manufacturer["products"].items():

@@ -1,5 +1,5 @@
 from tkinter import Tk, Label, Button, Checkbutton, IntVar, Frame
-from modules.main import run, manufacturers
+from modules.runner import run, manufacturers
 
 class GUI:
     def __init__(self, master):
