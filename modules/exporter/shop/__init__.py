@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import os, json, csv
+from ..base_exporter import BaseExporter
+import json
 from modules.parser.tooltips import parse_tooltips
 from .description import export_description
 from .energy_efficiency_text import export_energy_efficiency_text
@@ -20,29 +21,18 @@ def escape(value):
     value = value.replace("∆", "&#8710;")
     return value
 
-class ShopExporter:
+class ShopExporter(BaseExporter):
     def __init__(self, general_config_file, shop_name, manufacturer_ending):
-        with open(general_config_file, "r", encoding="utf-8") as config_file:
-            general_config = json.load(config_file)
-            self.tooltips = parse_tooltips(general_config["tooltip-datei"])
-            self.csv_separator = general_config["shop-csv-separator"]
-            self.csv_encoding = general_config["csv-encoding"]
-            self.output_directory = general_config["export-ordner"] + shop_name + "/"
-            self.bsvp_directory = general_config["bsvp-ordner"]
-            self.manufacturer_ending = manufacturer_ending
-            export_config_path = general_config["configs-ordner"] + shop_name + ".json"
-            with open(export_config_path, "r", encoding="utf-8") as export_config_file:
-                self.config = json.load(export_config_file)
-            self.__setup()
+        super().__init__(general_config_file, shop_name)
+        self.manufacturer_ending = manufacturer_ending
+        self.tooltips = parse_tooltips(self.tooltip_path)
+        self.csv_separator = self.shop_csv_separator
+        export_config_path = self.configs_base_directory + shop_name + ".json"
+        with open(export_config_path, "r", encoding="utf-8") as export_config_file:
+            self.config = json.load(export_config_file)
 
     def __csv_path(self, manufacturer_name):
         return self.output_directory + manufacturer_name + ".csv"
-
-    def __setup(self):
-        # Erstelle das Verzeichnis in das exportiert werden soll, wenn noch
-        # nicht vorhanden
-        if not os.path.exists(self.output_directory):
-            os.makedirs(self.output_directory)
 
     def __header_fields(self, prod_fields, ilugg_fields):
         header_fields = []
@@ -68,15 +58,6 @@ class ShopExporter:
             callback(specification, start)
             start += 1
 
-    def __create_csv(self, path, prod_fields, ilugg_fields):
-        with open(path, "w", encoding=self.csv_encoding, newline="") as file:
-            csv_writer = csv.writer(
-                file,
-                delimiter=self.csv_separator
-            )
-            header_fields = self.__header_fields(prod_fields, ilugg_fields)
-            csv_writer.writerow(header_fields)
-
     def write_to_csv(
         self,
         prod_fields,
@@ -86,18 +67,13 @@ class ShopExporter:
         manufacturer_name
     ):
         csv_path = self.__csv_path(manufacturer_name)
-
-        if not os.path.exists(csv_path):
-            self.__create_csv(csv_path, prod_fields, ilugg_fields)
-
-        with open(csv_path, "a", encoding=self.csv_encoding, newline="") as file:
-            csv_writer = csv.writer(file, delimiter=self.csv_separator)
-            row = self.extract_information(prod_fields, ilugg_fields, attribute_names, attribute_types)
-            row = map(escape, row)
-            try:
-                csv_writer.writerow(row)
-            except UnicodeEncodeError as error:
-                return "UNBEKANNTES_ZEICHEN [{}]".format(error)
+        self.maybe_create_csv(csv_path, self.__header_fields(prod_fields, ilugg_fields))
+        row = self.extract_information(prod_fields, ilugg_fields, attribute_names, attribute_types)
+        row = map(escape, row)
+        try:
+            self.write_csv_row(csv_path, row)
+        except UnicodeEncodeError as error:
+            return "UNBEKANNTES_ZEICHEN [{}], MUSS ESCAPED WERDEN".format(error)
 
     def extract_information(self, prod_fields, ilugg_fields, attribute_names, attribute_types):
         row = []

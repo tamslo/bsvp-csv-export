@@ -9,6 +9,7 @@ from modules.parser.ilugg import parse_manufacturer_information
 from modules.logger import Logger
 from modules.exporter.configurator import ConfiguratorExporter
 from modules.exporter.shop import ShopExporter
+from modules.exporter.price import PriceExporter
 
 GENERAL_CONFIG_FILE = "config.json"
 MANUFACTURER_ENDING = ".lugg"
@@ -16,7 +17,15 @@ MANUFACTURER_INFO_ENDING = ".ilugg"
 PRODUCT_ENDING = ".prod"
 PRODUCT_TYPE_ID = "0000191"
 
+# Felder für den Preis Export, mappen auf Felder in der .prod Datei
+PRICE_CONFIG = {
+    "artikelnummer": "ARTNR",
+    "artikelname": "NAME",
+    "listenpreis": "PRICE"
+}
+
 CONFIGURATOR_NAME = "Konfigurator"
+PRICE_NAME = "Listenpreise"
 SHOP_NAME = "Shop"
 
 validate_setup(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, SHOP_NAME)
@@ -75,17 +84,14 @@ def get_manufacturer_information(manufacturer_path, manufacturer_name):
     return manufacturer_information
 
 
-def run(do_configurator_export, do_shop_export, limited_manufacturers):
+def run(do_configurator_export, do_price_export, do_shop_export, limited_manufacturers):
     logger.print_start_time()
     archive_exports(GENERAL_CONFIG_FILE)
 
-    # Wenn kein Parameter angegeben ist, dann wird alles exportiert
-    if not do_configurator_export and not do_shop_export:
-        do_configurator_export = True
-        do_shop_export = True
-
     if do_configurator_export:
         configurator_exporter = ConfiguratorExporter(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME)
+    if do_price_export:
+        price_exporter = PriceExporter(GENERAL_CONFIG_FILE, PRICE_NAME, PRICE_CONFIG)
     if do_shop_export:
         shop_exporter = ShopExporter(GENERAL_CONFIG_FILE, SHOP_NAME, MANUFACTURER_ENDING)
 
@@ -119,6 +125,9 @@ def run(do_configurator_export, do_shop_export, limited_manufacturers):
                 flattened_fields = flatten_fields(fields)
                 product_type = flattened_fields[PRODUCT_TYPE_ID]
                 configurator_exporter.write_to_csv(flattened_fields, product_type)
+
+            if do_price_export:
+                price_exporter.write_to_csv(manufacturer_name, fields)
 
             if do_shop_export:
                 if manufacturer_information == None:
