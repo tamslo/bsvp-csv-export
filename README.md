@@ -58,7 +58,13 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 
 Alternativ: Eine Verknüfung zur `main.py` oder `gui.py` anlegen und doppelklicken.
 
-Zusätzlich zum Befehl `python cmd.py` können Parameter angegeben werden. Mit `python cmd.py -c` wird nur der Konfigurator Export durchgeführt, mit `python cmd.py -s` nur der Shop Export. Zusätzlich können zum Shop Export Hersteller angegeben werden. Wenn Leerzeichen im Ordnernamen vorhanden sind, muss der Name in Anführungszeichen gesetzt werden: `python cmd.py -s "AHT 2015" Bäumer`. Informationen zu den Parametern können in der Kommandozeile mit `python cmd.py -h` ausgegeben werden.
+Zusätzlich zum Befehl `python cmd.py` können Parameter angegeben (und kombiniert) werden:
+
+* `python cmd.py -c` führt den Konfigurator Export durch
+* `python cmd.py -s` führt den Shop Export durch, zusätzlich können Hersteller angegeben werden. Wenn Leerzeichen im Ordnernamen vorhanden sind, muss der Name in Anführungszeichen gesetzt werden: `python cmd.py -s "AHT 2015" Bäumer`.
+* `python cmd.py -p` führt den Listenpreis Export durch
+* `python cmd.py -a` führt den kompletten Export durch
+* `python cmd.py -h` gibt Informationen zu allen Parametern aus
 
 Die erstellten CSV Dateien werden im in der `config.json` angegebenen Ordner gespeichert, der angelegt wird, wenn er noch nicht vorhanden ist. Der jeweils letzte Export wird in den angegebenen Archiv-Ordner verschoben.
 

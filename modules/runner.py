@@ -8,6 +8,7 @@ from modules.parser.ilugg import parse_manufacturer_information
 
 from modules.logger import Logger
 from modules.exporter.configurator import ConfiguratorExporter
+from modules.exporter.complete import CompleteExporter
 from modules.exporter.shop import ShopExporter
 from modules.exporter.price import PriceExporter
 
@@ -25,6 +26,7 @@ PRICE_CONFIG = {
 }
 
 CONFIGURATOR_NAME = "Konfigurator"
+COMPLETE_NAME = "Komplett"
 PRICE_NAME = "Listenpreise"
 SHOP_NAME = "Shop"
 
@@ -84,16 +86,19 @@ def get_manufacturer_information(manufacturer_path, manufacturer_name):
     return manufacturer_information
 
 
-def run(do_configurator_export, do_price_export, do_shop_export, limited_manufacturers):
+def run(do_configurator_export, do_complete_export, do_price_export, do_shop_export, limited_manufacturers):
     logger.print_start_time()
     archive_exports(GENERAL_CONFIG_FILE)
 
     if do_configurator_export:
         configurator_exporter = ConfiguratorExporter(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME)
+    if do_complete_export:
+        complete_exporter = CompleteExporter(GENERAL_CONFIG_FILE, COMPLETE_NAME, manufacturers)
     if do_price_export:
         price_exporter = PriceExporter(GENERAL_CONFIG_FILE, PRICE_NAME, PRICE_CONFIG)
     if do_shop_export:
         shop_exporter = ShopExporter(GENERAL_CONFIG_FILE, SHOP_NAME, MANUFACTURER_ENDING)
+
 
     for manufacturer_name, manufacturer in manufacturers.items():
         manufacturer_path = manufacturer["path"]
@@ -125,6 +130,9 @@ def run(do_configurator_export, do_price_export, do_shop_export, limited_manufac
                 flattened_fields = flatten_fields(fields)
                 product_type = flattened_fields[PRODUCT_TYPE_ID]
                 configurator_exporter.write_to_csv(flattened_fields, product_type)
+
+            if do_complete_export:
+                complete_exporter.write_to_csv(manufacturer_name, fields)
 
             if do_price_export:
                 price_exporter.write_to_csv(manufacturer_name, fields)

@@ -9,6 +9,7 @@ class GUI:
         self.do_configurator_export = IntVar(value=1);
         self.do_price_export = IntVar(value=1);
         self.do_shop_export = IntVar(value=1);
+        self.do_complete_export = IntVar(value=1);
         row = 0
 
         self.configurator_label = Label(master, text="Konfigurator Export")
@@ -20,6 +21,17 @@ class GUI:
             variable=self.do_configurator_export
         )
         self.do_configurator_export_button.grid(sticky="W", row=row)
+        row += 1
+
+        self.complete_label = Label(master, text="Kompletter Export")
+        self.complete_label.grid(sticky="W", row=row)
+        row += 1
+        self.do_complete_export_button = Checkbutton(
+            master,
+            text="Kompletten Export ausführen",
+            variable=self.do_complete_export
+        )
+        self.do_complete_export_button.grid(sticky="W", row=row)
         row += 1
 
         self.price_label = Label(master, text="Listenpreis Export")
@@ -111,6 +123,7 @@ class GUI:
                 limited_manufacturers.append(manufacturer)
         run(
             bool(self.do_configurator_export.get()),
+            bool(self.do_complete_export.get()),
             bool(self.do_price_export.get()),
             bool(self.do_shop_export.get()),
             limited_manufacturers
