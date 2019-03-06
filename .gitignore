@@ -4,6 +4,7 @@ configs/
 data/
 export/
 archive/
+.running
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

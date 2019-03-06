@@ -12,6 +12,7 @@ from modules.exporter.complete import CompleteExporter
 from modules.exporter.shop import ShopExporter
 from modules.exporter.price import PriceExporter
 
+RUNNING_INDICATOR = ".running"
 GENERAL_CONFIG_FILE = "config.json"
 MANUFACTURER_ENDING = ".lugg"
 MANUFACTURER_INFO_ENDING = ".ilugg"
@@ -87,70 +88,82 @@ def get_manufacturer_information(manufacturer_path, manufacturer_name):
 
 
 def run(do_configurator_export, do_complete_export, do_price_export, do_shop_export, limited_manufacturers):
-    logger.print_start_time()
-    archive_exports(GENERAL_CONFIG_FILE)
+    if os.path.exists(RUNNING_INDICATOR):
+        print("Es läuft bereits ein Export!")
+        return
 
-    if do_configurator_export:
-        configurator_exporter = ConfiguratorExporter(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME)
-    if do_complete_export:
-        complete_exporter = CompleteExporter(GENERAL_CONFIG_FILE, COMPLETE_NAME, manufacturers)
-    if do_price_export:
-        price_exporter = PriceExporter(GENERAL_CONFIG_FILE, PRICE_NAME, PRICE_CONFIG)
-    if do_shop_export:
-        shop_exporter = ShopExporter(GENERAL_CONFIG_FILE, SHOP_NAME, MANUFACTURER_ENDING)
+    running_indicator = open(RUNNING_INDICATOR, "w")
+    running_indicator.close()
 
+    try:
+        logger.print_start_time()
+        archive_exports(GENERAL_CONFIG_FILE)
 
-    for manufacturer_name, manufacturer in manufacturers.items():
-        manufacturer_path = manufacturer["path"]
-        logger.set_manufacturer(manufacturer_name)
-
-        # Die Hersteller Informationen werden nur für den Shop-Export benötigt
+        if do_configurator_export:
+            configurator_exporter = ConfiguratorExporter(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME)
+        if do_complete_export:
+            complete_exporter = CompleteExporter(GENERAL_CONFIG_FILE, COMPLETE_NAME, manufacturers)
+        if do_price_export:
+            price_exporter = PriceExporter(GENERAL_CONFIG_FILE, PRICE_NAME, PRICE_CONFIG)
         if do_shop_export:
-            manufacturer_information = get_manufacturer_information(
-                manufacturer_path,
-                manufacturer_name
-            )
+            shop_exporter = ShopExporter(GENERAL_CONFIG_FILE, SHOP_NAME, MANUFACTURER_ENDING)
 
-        if not do_configurator_export and limited_manufacturers and not manufacturer_name in limited_manufacturers:
-            continue
 
-        for product_name, product_path in manufacturer["products"].items():
-            logger.print_manufacturer_progress()
-            if not os.path.exists(product_path):
-                logger.log_skip(product_name, "PROD_UNTERSCHIEDLICH")
-                continue
+        for manufacturer_name, manufacturer in manufacturers.items():
+            manufacturer_path = manufacturer["path"]
+            logger.set_manufacturer(manufacturer_name)
 
-            fields, attribute_names, attribute_types = parse_product(product_path)
-            error_code = validate_fields(fields, PRODUCT_TYPE_ID)
-            if error_code != None:
-                logger.log_skip(product_name, error_code)
-                continue
-
-            if do_configurator_export:
-                flattened_fields = flatten_fields(fields)
-                product_type = flattened_fields[PRODUCT_TYPE_ID]
-                configurator_exporter.write_to_csv(flattened_fields, product_type)
-
-            if do_complete_export:
-                complete_exporter.write_to_csv(manufacturer_name, fields)
-
-            if do_price_export:
-                price_exporter.write_to_csv(manufacturer_name, fields)
-
+            # Die Hersteller Informationen werden nur für den Shop-Export benötigt
             if do_shop_export:
-                if manufacturer_information == None:
+                manufacturer_information = get_manufacturer_information(
+                    manufacturer_path,
+                    manufacturer_name
+                )
+
+            if not do_configurator_export and limited_manufacturers and not manufacturer_name in limited_manufacturers:
+                continue
+
+            for product_name, product_path in manufacturer["products"].items():
+                logger.print_manufacturer_progress()
+                if not os.path.exists(product_path):
+                    logger.log_skip(product_name, "PROD_UNTERSCHIEDLICH")
                     continue
 
-                if not limited_manufacturers or manufacturer_name in limited_manufacturers:
-                    error_code = shop_exporter.write_to_csv(
-                        fields,
-                        attribute_names,
-                        attribute_types,
-                        manufacturer_information,
-                        manufacturer_name
-                    )
+                fields, attribute_names, attribute_types = parse_product(product_path)
+                error_code = validate_fields(fields, PRODUCT_TYPE_ID)
+                if error_code != None:
+                    logger.log_skip(product_name, error_code)
+                    continue
 
-        logger.print_manufacturer_summary()
+                if do_configurator_export:
+                    flattened_fields = flatten_fields(fields)
+                    product_type = flattened_fields[PRODUCT_TYPE_ID]
+                    configurator_exporter.write_to_csv(flattened_fields, product_type)
 
-    logger.print_end_time()
-    print("")
+                if do_complete_export:
+                    complete_exporter.write_to_csv(manufacturer_name, fields)
+
+                if do_price_export:
+                    price_exporter.write_to_csv(manufacturer_name, fields)
+
+                if do_shop_export:
+                    if manufacturer_information == None:
+                        continue
+
+                    if not limited_manufacturers or manufacturer_name in limited_manufacturers:
+                        error_code = shop_exporter.write_to_csv(
+                            fields,
+                            attribute_names,
+                            attribute_types,
+                            manufacturer_information,
+                            manufacturer_name
+                        )
+
+            logger.print_manufacturer_summary()
+
+        logger.print_end_time()
+        print("")
+    except Exception as exception:
+        raise
+    finally:
+        os.remove(RUNNING_INDICATOR)
