@@ -1,0 +1,12 @@
+<div class="m-3">
+  <div class="accordion" id="exporter-accordion" role="tablist">
+    {% for exporter in exporters %}
+      {% set title = exporters[exporter]['name'] + " Export "%}
+      {% set log = exporters[exporter]['log'] %}
+      {% set running = exporters[exporter]['running'] %}
+      {% with id=exporter, title=title, log=log, running=running %}
+      {% include "exporter.html" %}
+      {% endwith %}
+    {% endfor %}
+  </div>
+</div>

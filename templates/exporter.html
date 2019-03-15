@@ -1,0 +1,36 @@
+{% set expandable = log is defined and log is not none  %}
+
+<div class="card my-2">
+  {% if expandable %}
+    <a
+    data-toggle="collapse"
+    data-parent="#exporter-accordion"
+    href="#{{id}}-collapse"
+    aria-expanded="true"
+    aria-controls="{{id}}-collapse"
+    class="flex-1"
+    >
+  {% endif %}
+    <div class="card-header d-flex justify-content-between align-items-center" role="tab" id="{{id}}-heading">
+        <h5 class="mb-0 text-dark">
+          {{title}}
+        </h5>
+      <div class="mx-2">
+        <div class="icon-button" onclick="runExport('{{id}}')"><i class="fas fa-play" aria-hidden="true"></i></div>
+      </div>
+    </div>
+  {% if expandable %}
+    </a>
+    <div
+      id="{{id}}-collapse"
+      class="collapse show"
+      role="tabpanel"
+      aria-labelledby="{{id}}-heading"
+      data-parent="#exporter-accordion"
+    >
+      <div class="card-body">
+        {{ log }}
+      </div>
+    </div>
+  {% endif %}
+</div>

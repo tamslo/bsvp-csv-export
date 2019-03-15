@@ -1,0 +1,17 @@
+.icon-button {
+  padding: 3px;
+  cursor: pointer;
+  color: grey;
+}
+
+.icon-button:hover {
+  color: darkgrey;
+}
+
+.icon-button-light {
+  color: white;
+}
+
+.icon-button-light:hover {
+  color: lightgrey;
+}

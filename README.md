@@ -9,13 +9,12 @@ Diese README sieht komisch aus? Dann öffne sie mit einem Editor mit Markdown-Er
 Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamaraslosarek@gmail.com.
 
 1.  [Installation](#installation)
-    - [Updates](#updates)
-    - [Automatische Ausführung](#automatische-ausführung)
-2.  [Ausführung](#ausführung)
-3.  [Konfigurationen](#konfigurationen)
+2.  [Updates](#updates)
+3.  [Ausführung](#ausführung)
+4.  [Konfigurationen](#konfigurationen)
     - [Allgemeine Einstellungen](#allgemeine-einstellungen)
     - [Export-Konfigurationen](#export-konfigurationen)
-4.  [Fehlerbehebung](#fehlerbehebung)
+5.  [Fehlerbehebung](#fehlerbehebung)
 
 <a name="installation" />
 
@@ -29,24 +28,15 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 4.  Verzeichnis für Export-Konfigurationen anlegen
 5.  Konfigurationen aus dem Trello herunterladen oder neu anlegen
 6.  Die `config.json.example` in `config.json` umbenennen und ggf. anpassen
-
-<a name="automatische-ausführung" />
-
-### Automatische Ausführung
-
-1.  Aufgabe im Windows Aufgabenplaner erstellen
-2.  Aktion hinzufügen
-    - Programm/Skript: `C:\Windows\SysWOW64\cmd.exe`
-    - Argumente hinzufügen: `/c "python cmd.py"`
-    - Starten in: `EXPORTER_VERZEICHNIS` (absoluten Pfad angeben, z.B. `C:\BSVP-Server\CSV Exporter`)
+7.  Eingabeaufforderung in `EXPORTER_VERZEICHNIS` öffnen und Abhängigkeiten mit `pip install -r requirements.txt` installieren
 
 <a name="updates" />
 
-### Updates
+## Updates
 
 1.  Neue Version aus dem Trello herunterladen
-2.  Inhalt in EXPORTER_VERZEICHNIS verschieben und vorhandene Dateien ersetzen, es wird nur der Code überschrieben, Konfigurationen und andere Daten bleiben so wie sie sind
-3.  Vorhandene `config.json` ggf. an Änderungen in `config.json.example` anpassen
+2.  Inhalt in `EXPORTER_VERZEICHNIS` verschieben und vorhandene Dateien ersetzen, es wird nur der Code überschrieben, Konfigurationen und andere Daten bleiben so wie sie sind
+3.  Ggf. Konfigurationen anpassen
 
 <a name="ausführung" />
 
@@ -54,17 +44,10 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 
 1.  Kommandozeile starten (z.B. `WINDOWS + R` drücken, `cmd` eingeben und bestätigen)
 2.  In das EXPORTER_VERZEICHNIS wechseln mit `cd EXPORTER_VERZEICHNIS`
-3.  Kompletten Export ausführen mit `python cmd.py` oder Benutzeroberfläche starten mit `python gui.py`
-
-Alternativ: Eine Verknüfung zur `main.py` oder `gui.py` anlegen und doppelklicken.
-
-Zusätzlich zum Befehl `python cmd.py` können Parameter angegeben (und kombiniert) werden:
-
-* `python cmd.py -c` führt den Konfigurator Export durch
-* `python cmd.py -s` führt den Shop Export durch, zusätzlich können Hersteller angegeben werden. Wenn Leerzeichen im Ordnernamen vorhanden sind, muss der Name in Anführungszeichen gesetzt werden: `python cmd.py -s "AHT 2015" Bäumer`.
-* `python cmd.py -p` führt den Listenpreis Export durch
-* `python cmd.py -a` führt den kompletten Export durch
-* `python cmd.py -h` gibt Informationen zu allen Parametern aus
+3.  Server starten mit `python server.py`
+4.  Browser öffnen und `HOST:PORT` in Adresszeile eingeben
+    - `HOST`: auf lokalem PC `localhost`, auf Netzwerkrechner die jeweilige IP des Rechners auf dem der Server läuft
+    - `PORT`: 5000 (muss für Zugriff im Netzwerk freigegeben werden)
 
 Die erstellten CSV Dateien werden im in der `config.json` angegebenen Ordner gespeichert, der angelegt wird, wenn er noch nicht vorhanden ist. Der jeweils letzte Export wird in den angegebenen Archiv-Ordner verschoben.
 

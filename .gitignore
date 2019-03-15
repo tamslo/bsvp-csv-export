@@ -1,10 +1,12 @@
 # Project-specific files and directories
+
 config.json
 configs/
 data/
 export/
 archive/
 .running
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -107,3 +109,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+
+# Custom overrides
+
+!/static/lib
