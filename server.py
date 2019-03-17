@@ -1,8 +1,10 @@
-from flask import Flask, render_template, json, request
+from flask import Flask, render_template, json, request, redirect, url_for
+from flask_cors import CORS
 
 from modules.runner import Runner
 
 app = Flask(__name__)
+CORS(app)
 runner = Runner()
 
 def prepare_exporters(exporters):
@@ -15,24 +17,20 @@ def prepare_exporters(exporters):
         }
     return sendable_exporters
 
-@app.route("/", methods=["GET"])
-def index():
-    return render_template(
-        "index.html",
-        manufacturers = list(runner.manufacturers.keys()),
-        exporters = prepare_exporters(runner.exporters)
-    )
+@app.route("/manufacturers", methods=["GET"])
+def manufacturers():
+    return json.dumps(list(runner.manufacturers.keys()))
 
-@app.route("/run", methods=["POST"])
+@app.route("/exporters", methods=["GET"])
+def exporters():
+    return json.dumps(prepare_exporters(runner.exporters))
+
+@app.route("/run", methods=["GET"])
 def run():
-    exporter = request.json["exporter"]
-    manufacturers = request.json["manufacturers"]
+    exporter = request.args.get("exporter")
+    manufacturers = request.args.get("manufacturers").split(",")
     runner.run(exporter, manufacturers)
-    return render_template(
-        "index.html",
-        manufacturers = list(runner.manufacturers.keys()),
-        exporters = prepare_exporters(runner.exporters)
-    )
+    return json.dumps(prepare_exporters(runner.exporters));
 
 if __name__ == "__main__":
     app.env = "development"

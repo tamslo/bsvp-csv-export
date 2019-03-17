@@ -90,4 +90,4 @@ class Runner:
         if not self.exporters[exporter]["running"]:
             self.exporters[exporter]["running"] = True
             print("Running export", flush=True)
-            self.exporters[exporter]["running"] = False
+            # self.exporters[exporter]["running"] = False
