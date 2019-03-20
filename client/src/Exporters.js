@@ -31,9 +31,17 @@ export default class Exporters extends Component {
 
   runExporter(exporterId) {
     const { manufacturers } = this.props;
-    get("/run", { exporter: exporterId, manufacturers }).then(exporters =>
-      this.setState({ exporters })
+    const manufacturersParameter = Object.keys(manufacturers).reduce(
+      (selectedManufacturers, manufacturer) =>
+        manufacturers[manufacturer]
+          ? [...selectedManufacturers, manufacturer]
+          : selectedManufacturers,
+      []
     );
+    get("/run", {
+      exporter: exporterId,
+      manufacturers: manufacturersParameter
+    }).then(exporters => this.setState({ exporters }));
   }
 }
 

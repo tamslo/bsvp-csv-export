@@ -8,32 +8,38 @@ import { get } from "./api";
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { manufacturers: null, showSettings: false };
+    this.state = { manufacturers: null, selectAll: false, showSettings: false };
   }
 
   componentDidMount() {
     get("/manufacturers").then(manufacturers =>
       this.setState({
-        manufacturers: manufacturers.map(manufacturer => ({
-          name: manufacturer,
-          selected: true
-        }))
+        manufacturers: manufacturers.reduce(
+          (selectedManufacturers, manufacturer) => ({
+            ...selectedManufacturers,
+            [manufacturer]: true
+          }),
+          {}
+        )
       })
     );
   }
 
   render() {
-    const { showSettings, manufacturers } = this.state;
+    const { showSettings, manufacturers, selectAll } = this.state;
     return (
       <div className="App">
         <GlobalStyle />
         <Header showSettings={this.toggleSettings.bind(this)} />
-        <Exporters />
+        <Exporters manufacturers={manufacturers} />
         {manufacturers && (
           <Settings
             open={showSettings}
             close={this.toggleSettings.bind(this)}
             manufacturers={manufacturers}
+            selectAll={selectAll}
+            toggleManufacturer={this.toggleManufacturer.bind(this)}
+            toggleAll={this.toggleAll.bind(this)}
           />
         )}
       </div>
@@ -43,6 +49,48 @@ export default class App extends Component {
   toggleSettings() {
     const { showSettings } = this.state;
     this.setState({ showSettings: !showSettings });
+  }
+
+  toggleManufacturer(manufacturer) {
+    const { manufacturers } = this.state;
+    this.setState(
+      {
+        manufacturers: {
+          ...manufacturers,
+          [manufacturer]: !manufacturers[manufacturer]
+        }
+      },
+      this.updateSelectAll
+    );
+  }
+
+  updateSelectAll() {
+    const { selectAll, manufacturers } = this.state;
+    // TODO: Wenn alle nicht selected sind und selectAll false ist, sollte selectAll in true geändert werden und andersrum
+    const firstSelection = manufacturers[Object.keys(manufacturers)[0]];
+    const allSame = Object.keys(manufacturers).reduce(
+      (previousSame, manufacturer) =>
+        previousSame && manufacturers[manufacturer] === firstSelection,
+      true
+    );
+    if (allSame && firstSelection === selectAll) {
+      this.setState({ selectAll: !selectAll });
+    }
+  }
+
+  toggleAll() {
+    const { manufacturers, selectAll } = this.state;
+    const toggledManufacturers = Object.keys(manufacturers).reduce(
+      (reducedManufacturers, manufacturer) => ({
+        ...reducedManufacturers,
+        [manufacturer]: selectAll
+      }),
+      {}
+    );
+    this.setState({
+      manufacturers: toggledManufacturers,
+      selectAll: !selectAll
+    });
   }
 }
 

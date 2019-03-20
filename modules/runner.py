@@ -86,8 +86,10 @@ class Runner:
             }
         }
 
-    def run(self, exporter, manufacturers):
+    def run(self, exporter, selected_manufacturers):
         if not self.exporters[exporter]["running"]:
             self.exporters[exporter]["running"] = True
+            print(exporter, flush=True)
+            print(selected_manufacturers, flush=True)
             print("Running export", flush=True)
-            # self.exporters[exporter]["running"] = False
+            self.exporters[exporter]["running"] = False
