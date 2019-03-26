@@ -1,5 +1,7 @@
 import os
 import json
+import logging
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from modules.validator import validate_setup
 from modules.exporter.configurator import ConfiguratorExporter
@@ -25,7 +27,7 @@ COMPLETE_NAME = "Komplett"
 PRICE_NAME = "Listenpreise"
 SHOP_NAME = "Shop"
 
-def get_manufacturers():
+def parse_manufacturers():
     with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
         config = json.load(config_file)
         bsvp_directory = config["bsvp-ordner"]
@@ -58,38 +60,88 @@ def get_manufacturers():
 class Runner:
     def __init__(self):
         validate_setup(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, SHOP_NAME)
-        self.manufacturers = get_manufacturers()
+
+        self.manufacturers = parse_manufacturers()
         self.exporters = {
             "configurator": {
                 "module": ConfiguratorExporter,
+                "scheduled": False,
                 "running": False,
                 "log": None,
                 "name": CONFIGURATOR_NAME
             },
             "shop": {
                 "module": ShopExporter,
+                "scheduled": False,
                 "running": False,
                 "log": None,
                 "name": SHOP_NAME
             },
             "price": {
                 "module": PriceExporter,
+                "scheduled": False,
                 "running": False,
                 "log": None,
                 "name": PRICE_NAME
             },
             "complete": {
                 "module": CompleteExporter,
+                "scheduled": False,
                 "running": False,
                 "log": None,
                 "name": COMPLETE_NAME
             }
         }
 
-    def run(self, exporter, selected_manufacturers):
+        self.scheduler = BackgroundScheduler()
+        self.scheduler.add_job(
+            func=self.check_tasks,
+            trigger="interval",
+            seconds=8,
+            timezone="Europe/Berlin"
+        )
+        self.running = False
+        self.tasks = []
+        self.scheduler.start()
+        logging.getLogger('apscheduler').setLevel("ERROR")
+
+    def get_manufacturers(self):
+        return list(self.manufacturers.keys())
+
+    def get_exporters(self):
+        # Module entfernen, kann (und soll) nicht mitgeschickt werden
+        sendable_exporters = {}
+        for exporter_key, exporter_values in self.exporters.items():
+            sendable_exporters[exporter_key] = {
+                "name": exporter_values["name"],
+                "scheduled": exporter_values["scheduled"],
+                "running": exporter_values["running"],
+                "log": exporter_values["log"]
+            }
+        return sendable_exporters
+
+    def check_tasks(self):
+        if not self.running and len(self.tasks) > 0:
+            self.run(self.tasks.pop(0))
+
+    def add_task(self, exporter, selected_manufacturers):
+        if not self.exporters[exporter]["scheduled"]:
+            self.tasks.append({
+                "exporter": exporter,
+                "selected_manufacturers": selected_manufacturers
+            })
+            self.mark_scheduled(exporter)
+        return self.get_exporters()
+
+    def mark_scheduled(self, exporter):
+        self.exporters[exporter]["scheduled"] = True
+        self.exporters[exporter]["log"] = ["Export zu Aufgaben hinzugefügt"]
+
+    def run(self, task):
+        exporter = task["exporter"]
+        selected_manufacturers = task["selected_manufacturers"]
         if not self.exporters[exporter]["running"]:
+            self.exporters[exporter]["scheduled"] = False
             self.exporters[exporter]["running"] = True
-            print(exporter, flush=True)
-            print(selected_manufacturers, flush=True)
-            print("Running export", flush=True)
+            self.exporters[exporter]["module"](self.manufacturers).run(selected_manufacturers)
             self.exporters[exporter]["running"] = False

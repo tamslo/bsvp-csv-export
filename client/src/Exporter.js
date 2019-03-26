@@ -6,13 +6,13 @@ import styled from "styled-components";
 
 export default class Exporter extends Component {
   render() {
-    const { name, running, runExporter } = this.props;
+    const { name, scheduled, running, runExporter } = this.props;
     return (
       <Container className="Exporter">
         <StyledCard>
           <ContentContainer>
             <Name>{name}</Name>
-            {running.toString()}
+            {scheduled.toString()}
             <Actions>
               <IconButton onClick={runExporter}>
                 <PlayIcon />

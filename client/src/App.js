@@ -66,7 +66,6 @@ export default class App extends Component {
 
   updateSelectAll() {
     const { selectAll, manufacturers } = this.state;
-    // TODO: Wenn alle nicht selected sind und selectAll false ist, sollte selectAll in true geändert werden und andersrum
     const firstSelection = manufacturers[Object.keys(manufacturers)[0]];
     const allSame = Object.keys(manufacturers).reduce(
       (previousSame, manufacturer) =>

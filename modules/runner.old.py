@@ -8,6 +8,25 @@ from modules.parser.ilugg import parse_manufacturer_information
 
 from modules.logger import Logger
 
+RUNNING_INDICATOR = ".running"
+GENERAL_CONFIG_FILE = "config.json"
+MANUFACTURER_ENDING = ".lugg"
+MANUFACTURER_INFO_ENDING = ".ilugg"
+PRODUCT_ENDING = ".prod"
+PRODUCT_TYPE_ID = "0000191"
+
+# Felder für den Preis Export, mappen auf Felder in der .prod Datei
+PRICE_CONFIG = {
+    "artikelnummer": "ARTNR",
+    "artikelname": "NAME",
+    "listenpreis": "PRICE"
+}
+
+CONFIGURATOR_NAME = "Konfigurator"
+COMPLETE_NAME = "Komplett"
+PRICE_NAME = "Listenpreise"
+SHOP_NAME = "Shop"
+
 logger = Logger()
 
 # Hilfsmethode, entpackt verschachtelte Felder wie TECHDATA

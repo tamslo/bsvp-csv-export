@@ -1,25 +1,44 @@
 import csv
 import json
 import os
+import shutil
+from .constants import GENERAL_CONFIG_FILE, ARCHIVE_DIRECTORY
 
 class BaseExporter:
-    def __init__(self, general_config_file, exporter_name):
-        with open(general_config_file, "r", encoding="utf-8") as config_file:
-            general_config = json.load(config_file)
-            self.shop_csv_separator = general_config["shop-csv-separator"]
-            self.configurator_csv_separator = general_config["konfigurator-csv-separator"]
-            self.csv_encoding = general_config["csv-encoding"]
-            self.configs_base_directory = general_config["configs-ordner"]
-            self.bsvp_directory = general_config["bsvp-ordner"]
-            self.tooltip_path = general_config["tooltip-datei"]
-            self.output_directory = general_config["export-ordner"] + exporter_name + "/"
-            self.__setup()
+    def __init__(self, manufacturers):
+        with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
+            self.config = json.load(config_file)
+            self.manufacturers = manufacturers
+            self.shop_csv_separator = self.config["shop-csv-separator"]
+            self.configurator_csv_separator = self.config["konfigurator-csv-separator"]
+            self.csv_encoding = self.config["csv-encoding"]
+            self.configs_base_directory = self.config["configs-ordner"]
+            self.bsvp_directory = self.config["bsvp-ordner"]
+            self.tooltip_path = self.config["tooltip-datei"]
 
-    def __setup(self):
-        # Erstelle das Verzeichnis in das exportiert werden soll, wenn noch
-        # nicht vorhanden
-        if not os.path.exists(self.output_directory):
-            os.makedirs(self.output_directory)
+    def name(self):
+        raise Exception("BaseExporter::__name needs to be implemented by extending classes")
+
+    def output_directory(self):
+        return self.config["export-ordner"] + self.name() + "/"
+
+    def run(self, selected_manufacturers):
+        output_directory = self.output_directory()
+
+        # Archivierung
+        if os.path.exists(output_directory):
+            archive_base_directory = self.config["export-ordner"] + ARCHIVE_DIRECTORY + "/"
+            if not os.path.exists(archive_base_directory):
+                os.makedirs(archive_base_directory)
+
+            archive_directory = archive_base_directory + self.name() + "/"
+            if os.path.exists(archive_directory):
+                shutil.rmtree(archive_directory)
+
+            shutil.move(output_directory, archive_directory)
+
+        os.makedirs(self.output_directory())
+        print("WOULD RUN EXPORTER", flush=True)
 
     def maybe_create_csv(self, path, header_fields):
         if not os.path.exists(path):

@@ -4,12 +4,15 @@ from .configs import transform_configs
 from .formatter import format_field
 
 class ConfiguratorExporter(BaseExporter):
-    def __init__(self, general_config_file, configurator_name):
-        super().__init__(general_config_file, configurator_name)
+    def __init__(self, manufacturers):
+        super().__init__(manufacturers)
         self.csv_separator = self.configurator_csv_separator
-        self.configs_directory = self.configs_base_directory + configurator_name + "/"
-        self.configs = transform_configs(self.configs_directory, self.output_directory)
+        self.configs_directory = self.configs_base_directory + self.name() + "/"
+        self.configs = transform_configs(self.configs_directory, self.output_directory())
         self.__create_csvs()
+
+    def name(self):
+        return "Konfigurator"
 
     def __create_csvs(self):
         # Erstelle die CSV Dateien und schreibe die festgelegten Attribute als

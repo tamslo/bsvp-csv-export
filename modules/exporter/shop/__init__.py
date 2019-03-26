@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from ..base_exporter import BaseExporter
+from ..constants import MANUFACTURER_ENDING
 import json
 from modules.parser.tooltips import parse_tooltips
 from .description import export_description
@@ -22,17 +23,20 @@ def escape(value):
     return value
 
 class ShopExporter(BaseExporter):
-    def __init__(self, general_config_file, shop_name, manufacturer_ending):
-        super().__init__(general_config_file, shop_name)
-        self.manufacturer_ending = manufacturer_ending
+    def __init__(self, manufacturers):
+        super().__init__(manufacturers)
+        self.manufacturer_ending = MANUFACTURER_ENDING
         self.tooltips = parse_tooltips(self.tooltip_path)
         self.csv_separator = self.shop_csv_separator
-        export_config_path = self.configs_base_directory + shop_name + ".json"
+        export_config_path = self.configs_base_directory + self.name() + ".json"
         with open(export_config_path, "r", encoding="utf-8") as export_config_file:
             self.config = json.load(export_config_file)
 
+    def name(self):
+        return "Shop"
+
     def __csv_path(self, manufacturer_name):
-        return self.output_directory + manufacturer_name + ".csv"
+        return self.output_directory() + manufacturer_name + ".csv"
 
     def __header_fields(self, prod_fields, ilugg_fields):
         header_fields = []

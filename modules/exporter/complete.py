@@ -22,8 +22,8 @@ from .base_exporter import BaseExporter
 from collections import OrderedDict
 
 class CompleteExporter(BaseExporter):
-    def __init__(self, general_config_file, complete_name, manufacturers):
-        super().__init__(general_config_file, complete_name)
+    def __init__(self, manufacturers):
+        super().__init__(manufacturers)
         self.csv_separator = self.configurator_csv_separator
         self.general_fields, self.techdata_fields = get_complete_header_fields(manufacturers)
 
@@ -33,8 +33,11 @@ class CompleteExporter(BaseExporter):
             self.techdata_fields
         ))
 
+    def name(self):
+        return "Komplett"
+
     def write_to_csv(self, manufacturer_name, prod_fields):
-        csv_path = self.output_directory + manufacturer_name + ".csv"
+        csv_path = self.output_directory() + manufacturer_name + ".csv"
         self.maybe_create_csv(csv_path, self.__header_fields())
         csv_row = list(map(
             lambda field: field in prod_fields and prod_fields[field] or None,
