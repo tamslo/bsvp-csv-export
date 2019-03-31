@@ -2,7 +2,7 @@ import csv
 import json
 import os
 import shutil
-from .constants import GENERAL_CONFIG_FILE, ARCHIVE_DIRECTORY
+from modules.constants import GENERAL_CONFIG_FILE
 
 class BaseExporter:
     def __init__(self, manufacturers):
@@ -17,28 +17,16 @@ class BaseExporter:
             self.tooltip_path = self.config["tooltip-datei"]
 
     def name(self):
-        raise Exception("BaseExporter::__name needs to be implemented by extending classes")
+        raise Exception("BaseExporter::name needs to be implemented by extending classes")
 
     def output_directory(self):
         return self.config["export-ordner"] + self.name() + "/"
 
-    def run(self, selected_manufacturers):
-        output_directory = self.output_directory()
+    def should_skip(self, manufacturer_name, selected_manufacturers):
+        return not manufacturer_name in selected_manufacturers
 
-        # Archivierung
-        if os.path.exists(output_directory):
-            archive_base_directory = self.config["export-ordner"] + ARCHIVE_DIRECTORY + "/"
-            if not os.path.exists(archive_base_directory):
-                os.makedirs(archive_base_directory)
-
-            archive_directory = archive_base_directory + self.name() + "/"
-            if os.path.exists(archive_directory):
-                shutil.rmtree(archive_directory)
-
-            shutil.move(output_directory, archive_directory)
-
-        os.makedirs(self.output_directory())
-        print("WOULD RUN EXPORTER", flush=True)
+    def uses_manufacturer_information(self):
+        return False
 
     def maybe_create_csv(self, path, header_fields):
         if not os.path.exists(path):

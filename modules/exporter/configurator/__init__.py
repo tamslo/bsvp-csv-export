@@ -2,6 +2,7 @@
 from ..base_exporter import BaseExporter
 from .configs import transform_configs
 from .formatter import format_field
+from modules.constants import CONFIGURATOR_NAME
 
 class ConfiguratorExporter(BaseExporter):
     def __init__(self, manufacturers):
@@ -12,7 +13,10 @@ class ConfiguratorExporter(BaseExporter):
         self.__create_csvs()
 
     def name(self):
-        return "Konfigurator"
+        return CONFIGURATOR_NAME
+
+    def should_skip(self, manufacturer_name, selected_manufacturers):
+        return False
 
     def __create_csvs(self):
         # Erstelle die CSV Dateien und schreibe die festgelegten Attribute als
@@ -30,7 +34,9 @@ class ConfiguratorExporter(BaseExporter):
                 header_fields += list(config["kombinationen"].keys())
                 self.write_csv_row(output["path"], header_fields, file_mode="w")
 
-    def write_to_csv(self, fields, product_type):
+    def write_to_csv(self, parameters):
+        fields = parameters["flattened_fields"]
+        product_type = parameters["product_type"]
         manufacturer = fields["MANUFACTURER"]
         delivery_status = fields["DELSTAT"]
         active_delivery_statuses = ["0", "1", "2", "3", "4"]

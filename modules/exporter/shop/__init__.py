@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+from modules.constants import MANUFACTURER_ENDING, SHOP_NAME
 from ..base_exporter import BaseExporter
-from ..constants import MANUFACTURER_ENDING
 import json
 from modules.parser.tooltips import parse_tooltips
 from .description import export_description
@@ -33,7 +33,10 @@ class ShopExporter(BaseExporter):
             self.config = json.load(export_config_file)
 
     def name(self):
-        return "Shop"
+        return SHOP_NAME
+
+    def uses_manufacturer_information(self):
+        return True
 
     def __csv_path(self, manufacturer_name):
         return self.output_directory() + manufacturer_name + ".csv"
@@ -62,14 +65,13 @@ class ShopExporter(BaseExporter):
             callback(specification, start)
             start += 1
 
-    def write_to_csv(
-        self,
-        prod_fields,
-        attribute_names,
-        attribute_types,
-        ilugg_fields,
-        manufacturer_name
-    ):
+    def write_to_csv(self, parameters):
+        prod_fields = parameters["fields"]
+        attribute_names = parameters["attribute_names"]
+        attribute_types = parameters["attribute_types"]
+        ilugg_fields = parameters["manufacturer_information"]
+        manufacturer_name = parameters["manufacturer_name"]
+
         csv_path = self.__csv_path(manufacturer_name)
         self.maybe_create_csv(csv_path, self.__header_fields(prod_fields, ilugg_fields))
         row = self.extract_information(prod_fields, ilugg_fields, attribute_names, attribute_types)

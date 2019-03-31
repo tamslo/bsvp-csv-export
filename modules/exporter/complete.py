@@ -1,5 +1,6 @@
 import os
 from modules.parser.prod import parse_product
+from modules.constants import COMPLETE_NAME
 
 def get_complete_header_fields(manufacturers):
     general_fields = set()
@@ -34,9 +35,11 @@ class CompleteExporter(BaseExporter):
         ))
 
     def name(self):
-        return "Komplett"
+        return COMPLETE_NAME
 
-    def write_to_csv(self, manufacturer_name, prod_fields):
+    def write_to_csv(self,parameters):
+        fields = parameters["fields"]
+        manufacturer_name = parameters["manufacturer_name"]
         csv_path = self.output_directory() + manufacturer_name + ".csv"
         self.maybe_create_csv(csv_path, self.__header_fields())
         csv_row = list(map(

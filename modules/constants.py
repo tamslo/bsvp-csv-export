@@ -1,6 +1,12 @@
 GENERAL_CONFIG_FILE = "config.json"
+SKIP_LOG_FILE = "skips.log"
 MANUFACTURER_ENDING = ".lugg"
 MANUFACTURER_INFO_ENDING = ".ilugg"
 PRODUCT_ENDING = ".prod"
 PRODUCT_TYPE_ID = "0000191"
 ARCHIVE_DIRECTORY = "Archiv"
+
+CONFIGURATOR_NAME = "Konfigurator"
+SHOP_NAME = "Shop"
+PRICE_NAME = "Listenpreise"
+COMPLETE_NAME = "Komplett"
