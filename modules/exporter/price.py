@@ -25,4 +25,4 @@ class PriceExporter(BaseExporter):
             lambda field: prod_fields[field],
             list(self.export_config.values())
         ))
-        self.write_csv_row(csv_path, csv_row)
+        return self.write_csv_row(csv_path, csv_row)

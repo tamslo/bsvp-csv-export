@@ -9,8 +9,7 @@ class ConfiguratorExporter(BaseExporter):
         super().__init__(manufacturers)
         self.csv_separator = self.configurator_csv_separator
         self.configs_directory = self.configs_base_directory + self.name() + "/"
-        self.configs = transform_configs(self.configs_directory, self.output_directory())
-        self.__create_csvs()
+        self.export_configs = transform_configs(self.configs_directory, self.output_directory())
 
     def name(self):
         return CONFIGURATOR_NAME
@@ -18,10 +17,11 @@ class ConfiguratorExporter(BaseExporter):
     def should_skip(self, manufacturer_name, selected_manufacturers):
         return False
 
-    def __create_csvs(self):
+    def setup(self):
+        super().setup()
         # Erstelle die CSV Dateien und schreibe die festgelegten Attribute als
         # Header
-        for config in list(self.configs.values()):
+        for config in list(self.export_configs.values()):
             for output in config["outputs"]:
                 header_fields = []
                 fields = config["felder"]
@@ -40,12 +40,12 @@ class ConfiguratorExporter(BaseExporter):
         manufacturer = fields["MANUFACTURER"]
         delivery_status = fields["DELSTAT"]
         active_delivery_statuses = ["0", "1", "2", "3", "4"]
-        if product_type in self.configs and delivery_status in active_delivery_statuses:
-            config = self.configs[product_type]
+        if product_type in self.export_configs and delivery_status in active_delivery_statuses:
+            config = self.export_configs[product_type]
             for output in config["outputs"]:
                 if output["base"] or output["manufacturer"] == manufacturer:
                     product_information = extract_product_information(config, fields)
-                    self.write_csv_row(output["path"], product_information)
+                    return self.write_csv_row(output["path"], product_information)
 
 def get_field(config, fields, field_name):
     if field_name in fields:

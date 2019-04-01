@@ -9,7 +9,9 @@ def get_complete_header_fields(manufacturers):
     for manufacturer_name, manufacturer in manufacturers.items():
         for product_name, product_path in manufacturer["products"].items():
             if os.path.exists(product_path):
-                fields, attribute_names, attribute_types = parse_product(product_path)
+                fields, attribute_names, attribute_types, error_code = parse_product(product_path)
+                if error_code != None:
+                    continue
                 for field_name, field_value in fields.items():
                     if field_name != "TECHDATA":
                         general_fields.add(field_name)
@@ -37,8 +39,8 @@ class CompleteExporter(BaseExporter):
     def name(self):
         return COMPLETE_NAME
 
-    def write_to_csv(self,parameters):
-        fields = parameters["fields"]
+    def write_to_csv(self, parameters):
+        prod_fields = parameters["fields"]
         manufacturer_name = parameters["manufacturer_name"]
         csv_path = self.output_directory() + manufacturer_name + ".csv"
         self.maybe_create_csv(csv_path, self.__header_fields())
@@ -50,4 +52,4 @@ class CompleteExporter(BaseExporter):
             lambda field: field in prod_fields["TECHDATA"] and prod_fields["TECHDATA"][field] or None,
             self.techdata_fields
         ))
-        self.write_csv_row(csv_path, csv_row)
+        return self.write_csv_row(csv_path, csv_row)

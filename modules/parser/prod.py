@@ -6,7 +6,10 @@ ATTRIBUTE_SEPARATOR = "§-§"
 
 def parse_product(product_path):
     bsvp_file = open(product_path, "r",  encoding="utf-8")
-    lines = bsvp_file.readlines()
+    try:
+        lines = bsvp_file.readlines()
+    except UnicodeDecodeError as error:
+        return None, None, None, "READ_ERROR: {}".format(error)
     bsvp_file.close()
 
     product_data = ""
@@ -52,4 +55,4 @@ def parse_product(product_path):
         else:
             fields[field_name] = field_value
 
-    return fields, attribute_names, attribute_types
+    return fields, attribute_names, attribute_types, None

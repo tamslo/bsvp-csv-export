@@ -30,7 +30,7 @@ class ShopExporter(BaseExporter):
         self.csv_separator = self.shop_csv_separator
         export_config_path = self.configs_base_directory + self.name() + ".json"
         with open(export_config_path, "r", encoding="utf-8") as export_config_file:
-            self.config = json.load(export_config_file)
+            self.export_config = json.load(export_config_file)
 
     def name(self):
         return SHOP_NAME
@@ -43,7 +43,7 @@ class ShopExporter(BaseExporter):
 
     def __header_fields(self, prod_fields, ilugg_fields):
         header_fields = []
-        for field_name, value_specification in self.config.items():
+        for field_name, value_specification in self.export_config.items():
             if "iterierbar" in value_specification:
                 def make_header_field(specification, index):
                     header_fields.append(field_name + str(index))
@@ -76,16 +76,13 @@ class ShopExporter(BaseExporter):
         self.maybe_create_csv(csv_path, self.__header_fields(prod_fields, ilugg_fields))
         row = self.extract_information(prod_fields, ilugg_fields, attribute_names, attribute_types)
         row = map(escape, row)
-        try:
-            self.write_csv_row(csv_path, row)
-        except UnicodeEncodeError as error:
-            return "UNBEKANNTES_ZEICHEN [{}], MUSS ESCAPED WERDEN".format(error)
+        return self.write_csv_row(csv_path, row)
 
     def extract_information(self, prod_fields, ilugg_fields, attribute_names, attribute_types):
         row = []
 
         # Spezifizierte Felder in row schreiben
-        for field_name, value_specification in self.config.items():
+        for field_name, value_specification in self.export_config.items():
             if "iterierbar" in value_specification:
                 def get_iterable_value(specification, index):
                     value = None

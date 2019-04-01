@@ -2,7 +2,7 @@ import csv
 import json
 import os
 import shutil
-from modules.constants import GENERAL_CONFIG_FILE
+from modules.constants import GENERAL_CONFIG_FILE, ARCHIVE_DIRECTORY
 
 class BaseExporter:
     def __init__(self, manufacturers):
@@ -28,6 +28,22 @@ class BaseExporter:
     def uses_manufacturer_information(self):
         return False
 
+    def setup(self):
+        # Wenn es bereits einen Export gibt, wird dieser archiviert, sonst
+        # erstellt
+        output_directory = self.output_directory()
+        if os.path.exists(output_directory):
+            archive_base_directory = self.config["export-ordner"] + ARCHIVE_DIRECTORY + "/"
+            if not os.path.exists(archive_base_directory):
+                os.makedirs(archive_base_directory)
+
+            archive_directory = archive_base_directory + self.name() + "/"
+            if os.path.exists(archive_directory):
+                shutil.rmtree(archive_directory)
+
+            shutil.move(output_directory, archive_directory)
+        os.makedirs(output_directory)
+
     def maybe_create_csv(self, path, header_fields):
         if not os.path.exists(path):
             self.write_csv_row(path, header_fields, file_mode="w")
@@ -35,7 +51,11 @@ class BaseExporter:
     def write_csv_row(self, path, row, file_mode="a"):
         with open(path, file_mode, encoding=self.csv_encoding, newline="") as file:
             csv_writer = csv.writer(file, delimiter=self.csv_separator)
-            csv_writer.writerow(row)
+            try:
+                csv_writer.writerow(row)
+                return None
+            except UnicodeEncodeError as error:
+                return "WRITE_ERROR: {}".format(error)
 
     def write_to_csv(self, **args):
         raise Exception("BaseExporter::write_to_csv needs to be implemented by extending classes")

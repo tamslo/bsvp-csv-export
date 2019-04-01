@@ -5,12 +5,12 @@ import time
 import shutil
 
 from apscheduler.schedulers.background import BackgroundScheduler
-from modules.constants import GENERAL_CONFIG_FILE, ARCHIVE_DIRECTORY, \
-    MANUFACTURER_ENDING, MANUFACTURER_INFO_ENDING, PRODUCT_ENDING, \
-    PRODUCT_TYPE_ID, SKIP_LOG_FILE, CONFIGURATOR_NAME, SHOP_NAME, PRICE_NAME, \
-    COMPLETE_NAME
+from modules.constants import GENERAL_CONFIG_FILE, MANUFACTURER_ENDING, \
+    MANUFACTURER_INFO_ENDING, PRODUCT_ENDING, PRODUCT_TYPE_ID, SKIP_LOG_FILE, \
+    CONFIGURATOR_NAME, SHOP_NAME, PRICE_NAME, COMPLETE_NAME
 
 from modules.parser.prod import parse_product
+from modules.parser.ilugg import parse_manufacturer_information
 from modules.validator import validate_fields
 from modules.exporter.configurator import ConfiguratorExporter
 from modules.exporter.complete import CompleteExporter
@@ -151,36 +151,19 @@ class Runner:
             self.exporters[exporter]["log"].append("Export zu Aufgaben hinzugefügt")
         return self.get_exporters()
 
-    def prepare_run(self, exporter_module, exporter):
-        # Wenn es bereits einen Export gibt, wird dieser archiviert, sonst
-        # erstellt
-        output_directory = exporter_module.output_directory()
-        if os.path.exists(output_directory):
-            archive_base_directory = exporter_module.config["export-ordner"] + ARCHIVE_DIRECTORY + "/"
-            if not os.path.exists(archive_base_directory):
-                os.makedirs(archive_base_directory)
-
-            archive_directory = archive_base_directory + exporter_module.name() + "/"
-            if os.path.exists(archive_directory):
-                shutil.rmtree(archive_directory)
-
-            shutil.move(output_directory, archive_directory)
-            exporter["log"].append("Letzer Export wurde archiviert")
-        os.makedirs(output_directory)
-        exporter["log"].append("Export Verzeichnis wurde erstellt")
-
     def run(self, task):
         exporter_id = task["exporter"]
         selected_manufacturers = task["selected_manufacturers"]
         exporter = self.exporters[exporter_id]
         exporter_module = exporter["module"](self.manufacturers)
-        skip_log_file_name = ("{}_{}_{}".format(int(time.time()), exporter, SKIP_LOG_FILE))
+        skip_log_file_name = ("{}_{}_{}".format(int(time.time()), exporter_id, SKIP_LOG_FILE))
         if not exporter["running"]:
             exporter["scheduled"] = False
             exporter["running"] = True
 
-            exporter["log"].append("Export gestartet um {}".format(time.strftime("%H:%M", time.localtime())))
-            self.prepare_run(exporter_module, exporter)
+            print("[{}] Export started".format(exporter["name"]), flush=True)
+            exporter["log"].append("Export gestartet um {}".format(time.strftime("%H:%M:%S", time.localtime())))
+            exporter_module.setup()
 
             # Variablen für Log
             current_manufacturer = None
@@ -197,6 +180,9 @@ class Runner:
                 if exporter_module.should_skip(manufacturer_name, selected_manufacturers):
                     continue
 
+                print("[{}] {}".format(
+                    exporter["name"], manufacturer_name
+                ), flush=True)
                 exporter["log"].append(current_manufacturer)
 
                 manufacturer_information = None
@@ -221,12 +207,18 @@ class Runner:
                         write_skip_log(skip_log_file_name, manufacturer_name, product_name, "PROD_UNTERSCHIEDLICH")
                         continue
 
-                    fields, attribute_names, attribute_types = parse_product(product_path)
+                    fields, attribute_names, attribute_types, error_code = parse_product(product_path)
+                    if error_code != None:
+                        exporter["log"][-1] = "{} übersprungen".format(current_manufacturer)
+                        write_skip_log(skip_log_file_name, manufacturer_name, product_name, error_code)
+                        continue
+
                     error_code = validate_fields(fields, PRODUCT_TYPE_ID)
                     if error_code != None:
                         current_product_skips += 1
                         write_skip_log(skip_log_file_name, manufacturer_name, product_name, error_code)
                         continue
+
                     flattened_fields = flatten_fields(fields)
                     product_type = flattened_fields[PRODUCT_TYPE_ID]
 
@@ -239,7 +231,6 @@ class Runner:
                         "manufacturer_name": manufacturer_name,
                         "manufacturer_information": manufacturer_information
                     })
-
                     if error_code != None:
                         current_product_skips += 1
                         write_skip_log(skip_log_file_name, manufacturer_name, product_name, error_code)
@@ -250,6 +241,6 @@ class Runner:
                     current_product_skips
                 )
 
-            exporter["log"].append("Export beended um {}".format(time.strftime("%H:%M", time.localtime())))
-
-            self.exporters[exporter]["running"] = False
+            print("[{}] Export done".format(exporter["name"]), flush=True)
+            exporter["log"].append("Export beended um {}".format(time.strftime("%H:%M:%S", time.localtime())))
+            exporter["running"] = False
