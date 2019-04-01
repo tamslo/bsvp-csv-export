@@ -148,7 +148,7 @@ class Runner:
                 "selected_manufacturers": selected_manufacturers
             })
             self.exporters[exporter]["scheduled"] = True
-            self.exporters[exporter]["log"].append("Export zu Aufgaben hinzugefügt")
+            self.exporters[exporter]["log"] = ["Export wird ausgeführt"]
         return self.get_exporters()
 
     def run(self, task):

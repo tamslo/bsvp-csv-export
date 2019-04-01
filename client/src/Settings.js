@@ -79,4 +79,5 @@ const Manufacturers = styled.div`
   margin: 10px;
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
 `;
