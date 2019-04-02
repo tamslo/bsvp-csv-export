@@ -1,37 +1,84 @@
-import React, { Component } from "react";
-import Card from "@material-ui/core/Card";
+import React, { Component, Fragment } from "react";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Collapse from "@material-ui/core/Collapse";
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
 import IconButton from "@material-ui/core/IconButton";
 import PlayIcon from "@material-ui/icons/PlayArrow";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styled from "styled-components";
 
 export default class Exporter extends Component {
+  constructor(props) {
+    super(props);
+    const { scheduled, running } = props;
+    this.state = { open: scheduled || running };
+  }
+
+  toggleLog() {
+    const { open } = this.state;
+    this.setState({ open: !open });
+  }
+
   render() {
     const { name } = this.props;
+    const { open } = this.state;
+    const disabled = !this.hasLog();
     return (
-      <Container className="Exporter">
-        <StyledCard>
-          <ContentContainer>
-            <Name>{name}</Name>
-            <Actions>{this.renderRunButton()}</Actions>
-          </ContentContainer>
+      <Fragment>
+        <ListItem
+          button
+          onClick={disabled ? () => {} : this.toggleLog.bind(this)}
+          className="Exporter"
+        >
+          <ListItemText primary={name} />
+          <Actions>
+            {this.renderRunButton()}
+            {this.renderExpandButton()}
+          </Actions>
+        </ListItem>
+        <Collapse in={open} timeout="auto" unmountOnExit>
           {this.renderLog()}
-        </StyledCard>
-      </Container>
+        </Collapse>
+      </Fragment>
     );
   }
 
   renderRunButton() {
-    const { scheduled, running, runExporter } = this.props;
+    const { scheduled, running } = this.props;
     if (running) {
       return <StyledCircularProgress />;
     } else {
       return (
-        <IconButton onClick={runExporter} disabled={scheduled}>
+        <IconButton onClick={this.runExporter.bind(this)} disabled={scheduled}>
           <PlayIcon />
         </IconButton>
       );
     }
+  }
+
+  renderExpandButton() {
+    const { open } = this.state;
+    const disabled = !this.hasLog();
+    return (
+      <IconButton
+        onClick={disabled ? this.toggleLog.bind(this) : () => {}}
+        disabled={disabled}
+      >
+        {open && !disabled ? <ExpandLess /> : <ExpandMore />}
+      </IconButton>
+    );
+  }
+
+  runExporter() {
+    const { runExporter } = this.props;
+    this.setState({ open: true }, runExporter);
+  }
+
+  hasLog() {
+    const { log } = this.props;
+    return log.length !== 0;
   }
 
   renderLog() {
@@ -48,31 +95,14 @@ export default class Exporter extends Component {
   }
 }
 
-const StyledCard = styled(Card)`
-  border-radius: 1px !important;
-`;
-
-const Container = styled.div``;
-
-const ContentContainer = styled.div`
-  padding: 5px;
-  display: flex;
-`;
-
 const LogContainer = styled.div`
-  margin: 0 15px 15px 15px;
+  padding: 5px 20px;
 `;
 
 const LogEntry = styled.div`
   font-family: monospace;
-`;
-
-const Name = styled.div`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  font-size: 18px;
-  padding-left: 10px;
+  font-size: 12px;
+  line-height: 18px;
 `;
 
 const Actions = styled.div``;

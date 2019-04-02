@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import Grid from "@material-ui/core/Grid";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import List from "@material-ui/core/List";
 import Exporter from "./Exporter";
 import { get } from "./api";
 
@@ -19,16 +20,18 @@ export default class Exporters extends Component {
       this.maybeTriggerUpdates();
       return (
         <Container className="Exporters">
-          <Grid container spacing={24}>
+          <List
+            component="nav"
+            subheader={<ListSubheader component="div">Exporter</ListSubheader>}
+          >
             {Object.keys(exporters).map(exporterId => (
-              <Grid key={exporterId} item xs={12} sm={12}>
-                <Exporter
-                  runExporter={() => this.runExporter(exporterId)}
-                  {...exporters[exporterId]}
-                />
-              </Grid>
+              <Exporter
+                key={exporterId}
+                runExporter={() => this.runExporter(exporterId)}
+                {...exporters[exporterId]}
+              />
             ))}
-          </Grid>
+          </List>
         </Container>
       );
     } else {

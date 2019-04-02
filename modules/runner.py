@@ -148,7 +148,17 @@ class Runner:
                 "selected_manufacturers": selected_manufacturers
             })
             self.exporters[exporter]["scheduled"] = True
-            self.exporters[exporter]["log"] = ["Export wird ausgeführt"]
+            self.exporters[exporter]["log"] = ["Export wartet auf Ausführung"]
+
+            # Wenn Hersteller eingeschränkt werden können, sollen diese
+            # angezeigt werden
+            exporter_module = self.exporters[exporter]["module"](self.manufacturers)
+            show_selected_manufacturers = exporter_module.should_skip("Not a manufacturer", selected_manufacturers)
+            if show_selected_manufacturers:
+                self.exporters[exporter]["log"].append(
+                    "Ausgewählte Hersteller: {}".format(", ".join(selected_manufacturers))
+                )
+
         return self.get_exporters()
 
     def run(self, task):
