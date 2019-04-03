@@ -3,8 +3,11 @@ import styled from "styled-components";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
 import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "@material-ui/core/Button";
 import Exporter from "./Exporter";
 import { get } from "./api";
 
@@ -14,15 +17,16 @@ let refreshInterval = null;
 export default class Exporters extends Component {
   constructor(props) {
     super(props);
-    this.state = { exporters: null };
+    this.state = { exporters: null, error: null };
   }
 
   render() {
-    const { exporters } = this.state;
+    const { exporters, error } = this.state;
     if (exporters !== null) {
       this.maybeTriggerUpdates();
       return (
         <Container className="Exporters">
+          {error && this.renderWarningDialog()}
           <List
             component="nav"
             subheader={<ListSubheader component="div">Exporter</ListSubheader>}
@@ -48,6 +52,32 @@ export default class Exporters extends Component {
         </Dialog>
       );
     }
+  }
+
+  renderWarningDialog() {
+    const { error } = this.state;
+    const messages = {
+      RUNNING: "Der Exporter wird bereits ausgeführt",
+      SCHEDULED: "Der Exporter wurde bereits zur Ausführung vorgemerkt"
+    };
+    const message = `${
+      messages[error]
+    }. Sie können den Exporter erneut starten, wenn der aktuelle Durchlauf beendet ist.`;
+    return (
+      <Dialog open={true}>
+        <DialogTitle>Exporter läuft bereits</DialogTitle>
+        <DialogContent>{message}</DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              this.setState({ error: null });
+            }}
+          >
+            Schließen
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
   }
 
   maybeTriggerUpdates() {
@@ -85,7 +115,13 @@ export default class Exporters extends Component {
     get("/run", {
       exporter: exporterId,
       manufacturers: manufacturersParameter
-    }).then(exporters => this.setState({ exporters }));
+    }).then(response => {
+      if (response.error) {
+        this.setState({ error: response.code, exporters: response.exporters });
+      } else {
+        this.setState({ exporters: response });
+      }
+    });
   }
 }
 

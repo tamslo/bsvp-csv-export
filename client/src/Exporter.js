@@ -71,8 +71,9 @@ export default class Exporter extends Component {
     );
   }
 
-  runExporter() {
+  runExporter(event) {
     const { runExporter } = this.props;
+    event.stopPropagation();
     this.setState({ open: true }, runExporter);
   }
 
@@ -86,8 +87,8 @@ export default class Exporter extends Component {
     if (log.length > 0) {
       return (
         <LogContainer>
-          {log.map(message => (
-            <LogEntry>{message}</LogEntry>
+          {log.map((message, index) => (
+            <LogEntry key={`entry-${index}`}>{message}</LogEntry>
           ))}
         </LogContainer>
       );

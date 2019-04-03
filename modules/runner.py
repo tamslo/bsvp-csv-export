@@ -135,7 +135,7 @@ class Runner:
         for exporter_key, exporter_values in self.exporters.items():
             last_export_date = exporter_values["module"].last_export_date(exporter_values["running"])
             if last_export_date != None:
-                last_export_date = datetime.utcfromtimestamp(last_export_date).strftime("%d.%m.%y")
+                last_export_date = datetime.utcfromtimestamp(last_export_date).strftime("%d.%m.%Y")
             sendable_exporters[exporter_key] = {
                 "name": exporter_values["name"],
                 "scheduled": exporter_values["scheduled"],
@@ -150,24 +150,27 @@ class Runner:
             self.run(self.tasks.pop(0))
 
     def add_task(self, exporter, selected_manufacturers):
-        if not self.exporters[exporter]["scheduled"]:
-            self.tasks.append({
-                "exporter": exporter,
-                "selected_manufacturers": selected_manufacturers
-            })
-            self.exporters[exporter]["scheduled"] = True
-            self.exporters[exporter]["log"] = ["Export wartet auf Ausführung seit {}".format(get_time())]
+        if self.exporters[exporter]["scheduled"]:
+            return "SCHEDULED"
+        if self.exporters[exporter]["running"]:
+            return "RUNNING"
 
-            # Wenn Hersteller eingeschränkt werden können, sollen diese
-            # angezeigt werden
-            exporter_module = self.exporters[exporter]["module"]
-            show_selected_manufacturers = exporter_module.should_skip("Not a manufacturer", selected_manufacturers)
-            if show_selected_manufacturers:
-                self.exporters[exporter]["log"].append(
-                    "Ausgewählte Hersteller: {}".format(", ".join(selected_manufacturers))
-                )
+        self.tasks.append({
+            "exporter": exporter,
+            "selected_manufacturers": selected_manufacturers
+        })
+        self.exporters[exporter]["scheduled"] = True
+        self.exporters[exporter]["log"] = ["Export wartet auf Ausführung seit {}".format(get_time())]
 
-        return self.get_exporters()
+        # Wenn Hersteller eingeschränkt werden können, sollen diese
+        # angezeigt werden
+        exporter_module = self.exporters[exporter]["module"]
+        show_selected_manufacturers = exporter_module.should_skip("Not a manufacturer", selected_manufacturers)
+        if show_selected_manufacturers:
+            self.exporters[exporter]["log"].append(
+                "Ausgewählte Hersteller: {}".format(", ".join(selected_manufacturers))
+            )
+        return None
 
     def run(self, task):
         exporter_id = task["exporter"]

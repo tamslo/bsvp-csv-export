@@ -26,8 +26,11 @@ def exporters():
 def run():
     exporter = request.args.get("exporter")
     manufacturers = request.args.get("manufacturers").split(",")
-    runner.add_task(exporter, manufacturers)
-    return json.dumps(runner.get_exporters());
+    error_code = runner.add_task(exporter, manufacturers)
+    if error_code != None:
+        return json.dumps({ "error": True, "code": error_code, "exporters": runner.get_exporters() })
+    else:
+        return json.dumps(runner.get_exporters());
 
 if __name__ == "__main__":
     app.env = "development"
