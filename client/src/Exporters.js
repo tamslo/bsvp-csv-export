@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Exporter from "./Exporter";
 import { get } from "./api";
 
@@ -36,7 +39,14 @@ export default class Exporters extends Component {
       );
     } else {
       this.getExporters();
-      return null;
+      return (
+        <Dialog open={true}>
+          <StyledDialogContent>
+            Lade Daten...
+            <StyledCircularProgress />
+          </StyledDialogContent>
+        </Dialog>
+      );
     }
   }
 
@@ -81,4 +91,16 @@ export default class Exporters extends Component {
 
 const Container = styled.div`
   margin: 24px;
+`;
+
+const StyledDialogContent = styled(DialogContent)`
+  display: flex;
+  align-items: center;
+  font-size: large;
+`;
+
+const StyledCircularProgress = styled(CircularProgress)`
+  height: 24px !important;
+  width: 24px !important;
+  margin: 12px;
 `;
