@@ -2,6 +2,7 @@ import os
 import json
 import logging
 import time
+from datetime import datetime
 import shutil
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -76,33 +77,36 @@ def flatten_fields(fields):
                 flattened_fields[attribute_name] = attribute_value
     return flattened_fields
 
+def get_time():
+    return time.strftime("%H:%M:%S", time.localtime())
+
 class Runner:
     def __init__(self):
         self.manufacturers = parse_manufacturers()
         self.exporters = {
             "configurator": {
-                "module": ConfiguratorExporter,
+                "module": ConfiguratorExporter(self.manufacturers),
                 "scheduled": False,
                 "running": False,
                 "log": [],
                 "name": CONFIGURATOR_NAME
             },
             "shop": {
-                "module": ShopExporter,
+                "module": ShopExporter(self.manufacturers),
                 "scheduled": False,
                 "running": False,
                 "log": [],
                 "name": SHOP_NAME
             },
             "price": {
-                "module": PriceExporter,
+                "module": PriceExporter(self.manufacturers),
                 "scheduled": False,
                 "running": False,
                 "log": [],
                 "name": PRICE_NAME
             },
             "complete": {
-                "module": CompleteExporter,
+                "module": CompleteExporter(self.manufacturers),
                 "scheduled": False,
                 "running": False,
                 "log": [],
@@ -129,11 +133,15 @@ class Runner:
         # Module entfernen, kann (und soll) nicht mitgeschickt werden
         sendable_exporters = {}
         for exporter_key, exporter_values in self.exporters.items():
+            last_export_date = exporter_values["module"].last_export_date(exporter_values["running"])
+            if last_export_date != None:
+                last_export_date = datetime.utcfromtimestamp(last_export_date).strftime("%d.%m.%y")
             sendable_exporters[exporter_key] = {
                 "name": exporter_values["name"],
                 "scheduled": exporter_values["scheduled"],
                 "running": exporter_values["running"],
-                "log": exporter_values["log"]
+                "log": exporter_values["log"],
+                "last": last_export_date
             }
         return sendable_exporters
 
@@ -148,11 +156,11 @@ class Runner:
                 "selected_manufacturers": selected_manufacturers
             })
             self.exporters[exporter]["scheduled"] = True
-            self.exporters[exporter]["log"] = ["Export wartet auf Ausführung"]
+            self.exporters[exporter]["log"] = ["Export wartet auf Ausführung seit {}".format(get_time())]
 
             # Wenn Hersteller eingeschränkt werden können, sollen diese
             # angezeigt werden
-            exporter_module = self.exporters[exporter]["module"](self.manufacturers)
+            exporter_module = self.exporters[exporter]["module"]
             show_selected_manufacturers = exporter_module.should_skip("Not a manufacturer", selected_manufacturers)
             if show_selected_manufacturers:
                 self.exporters[exporter]["log"].append(
@@ -165,14 +173,14 @@ class Runner:
         exporter_id = task["exporter"]
         selected_manufacturers = task["selected_manufacturers"]
         exporter = self.exporters[exporter_id]
-        exporter_module = exporter["module"](self.manufacturers)
+        exporter_module = exporter["module"]
         skip_log_file_name = ("{}_{}_{}".format(int(time.time()), exporter_id, SKIP_LOG_FILE))
         if not exporter["running"]:
             exporter["scheduled"] = False
             exporter["running"] = True
 
             print("[{}] Export started".format(exporter["name"]), flush=True)
-            exporter["log"].append("Export gestartet um {}".format(time.strftime("%H:%M:%S", time.localtime())))
+            exporter["log"].append("Export gestartet um {}".format(get_time()))
             exporter_module.setup()
 
             # Variablen für Log
@@ -252,5 +260,5 @@ class Runner:
                 )
 
             print("[{}] Export done".format(exporter["name"]), flush=True)
-            exporter["log"].append("Export beended um {}".format(time.strftime("%H:%M:%S", time.localtime())))
+            exporter["log"].append("Export beended um {}".format(get_time()))
             exporter["running"] = False

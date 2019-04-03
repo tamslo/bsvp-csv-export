@@ -22,7 +22,7 @@ export default class Exporter extends Component {
   }
 
   render() {
-    const { name } = this.props;
+    const { name, last } = this.props;
     const { open } = this.state;
     const disabled = !this.hasLog();
     return (
@@ -32,7 +32,7 @@ export default class Exporter extends Component {
           onClick={disabled ? () => {} : this.toggleLog.bind(this)}
           className="Exporter"
         >
-          <ListItemText primary={name} />
+          <ListItemText primary={name} secondary={last} />
           <Actions>
             {this.renderRunButton()}
             {this.renderExpandButton()}

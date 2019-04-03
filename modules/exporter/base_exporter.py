@@ -22,22 +22,39 @@ class BaseExporter:
     def output_directory(self):
         return self.config["export-ordner"] + self.name() + "/"
 
+    def __archive_base_directory(self):
+        return self.config["export-ordner"] + ARCHIVE_DIRECTORY + "/"
+
+    def __archive_directory(self):
+        return self.__archive_base_directory() + self.name() + "/"
+
     def should_skip(self, manufacturer_name, selected_manufacturers):
         return not manufacturer_name in selected_manufacturers
 
     def uses_manufacturer_information(self):
         return False
 
+    def last_export_date(self, running):
+        last_export_folder = None
+        if running:
+            last_export_folder = self.__archive_directory()
+        else:
+            last_export_folder = self.output_directory()
+        if os.path.exists(last_export_folder):
+            return os.path.getmtime(last_export_folder)
+        else:
+            return None
+
     def setup(self):
         # Wenn es bereits einen Export gibt, wird dieser archiviert, sonst
         # erstellt
         output_directory = self.output_directory()
         if os.path.exists(output_directory):
-            archive_base_directory = self.config["export-ordner"] + ARCHIVE_DIRECTORY + "/"
+            archive_base_directory = self.__archive_base_directory()
             if not os.path.exists(archive_base_directory):
                 os.makedirs(archive_base_directory)
 
-            archive_directory = archive_base_directory + self.name() + "/"
+            archive_directory = self.__archive_directory()
             if os.path.exists(archive_directory):
                 shutil.rmtree(archive_directory)
 
