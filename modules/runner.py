@@ -7,24 +7,19 @@ import shutil
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from modules.constants import GENERAL_CONFIG_FILE, MANUFACTURER_ENDING, \
-    MANUFACTURER_INFO_ENDING, PRODUCT_ENDING, PRODUCT_TYPE_ID, SKIP_LOG_FILE, \
+    MANUFACTURER_INFO_ENDING, PRODUCT_ENDING, PRODUCT_TYPE_ID, \
     CONFIGURATOR_NAME, SHOP_NAME, PRICE_NAME, COMPLETE_NAME
 
 from modules.parser.prod import parse_product
 from modules.parser.ilugg import parse_manufacturer_information
-from modules.validator import validate_fields
 from modules.exporter.configurator import ConfiguratorExporter
 from modules.exporter.complete import CompleteExporter
 from modules.exporter.shop import ShopExporter
 from modules.exporter.price import PriceExporter
+from modules.logger import Logger
 
-def write_skip_log(file_name, manufacturer, file, error):
-    with open(file_name, "a", encoding="utf-8") as log:
-        log.write("{} {} {}\n".format(
-            manufacturer,
-            file,
-            error
-        ))
+def write_skip_log(logger, file, error):
+    logger.log(file + ": " + error)
 
 
 def parse_manufacturers():
@@ -65,17 +60,6 @@ def get_manufacturer_information(manufacturer_path, manufacturer_name):
     if not manufacturer_information:
         return None, "NICHT_AUSWERTBAR"
     return manufacturer_information, None
-
-# Hilfsmethode, entpackt verschachtelte Felder wie TECHDATA
-def flatten_fields(fields):
-    flattened_fields = {}
-    for field_name, field_value in fields.items():
-        if isinstance(field_value, str):
-            flattened_fields[field_name] = field_value
-        else:
-            for attribute_name, attribute_value in field_value.items():
-                flattened_fields[attribute_name] = attribute_value
-    return flattened_fields
 
 def get_time():
     return time.strftime("%H:%M:%S", time.localtime())
@@ -160,7 +144,7 @@ class Runner:
             "selected_manufacturers": selected_manufacturers
         })
         self.exporters[exporter]["scheduled"] = True
-        self.exporters[exporter]["log"] = ["Export wartet auf Ausführung seit {}".format(get_time())]
+        self.exporters[exporter]["log"] = ["Export um {} zur Warteschlange hinzugefügt".format(get_time())]
 
         # Wenn Hersteller eingeschränkt werden können, sollen diese
         # angezeigt werden
@@ -177,13 +161,15 @@ class Runner:
         selected_manufacturers = task["selected_manufacturers"]
         exporter = self.exporters[exporter_id]
         exporter_module = exporter["module"]
-        skip_log_file_name = ("{}_{}_{}".format(int(time.time()), exporter_id, SKIP_LOG_FILE))
+        logger = Logger()
+        logger.set_path(exporter_id)
         if not exporter["running"]:
             exporter["scheduled"] = False
             exporter["running"] = True
 
-            print("[{}] Export started".format(exporter["name"]), flush=True)
-            exporter["log"].append("Export gestartet um {}".format(get_time()))
+            start_text = "Export gestartet um {}".format(get_time())
+            exporter["log"].append(start_text)
+            logger.log(start_text)
             exporter_module.setup()
 
             # Variablen für Log
@@ -201,9 +187,7 @@ class Runner:
                 if exporter_module.should_skip(manufacturer_name, selected_manufacturers):
                     continue
 
-                print("[{}] {}".format(
-                    exporter["name"], manufacturer_name
-                ), flush=True)
+                logger.log("\n{}".format(current_manufacturer))
                 exporter["log"].append(current_manufacturer)
 
                 manufacturer_information = None
@@ -213,8 +197,8 @@ class Runner:
                         manufacturer_name
                     )
                     if error_code != None:
-                        exporter["log"][-1] = "{} übersprungen".format(current_manufacturer)
-                        write_skip_log(skip_log_file_name, manufacturer_name, "ILUGG", error_code)
+                        exporter["log"][-1] = "{} übersprungen, ILUGG Datei konnte nicht gelesen werden".format(current_manufacturer)
+                        write_skip_log(logger, "ILUGG", error_code)
                         continue
 
                 for product_name, product_path in manufacturer["products"].items():
@@ -225,36 +209,25 @@ class Runner:
                     )
                     if not os.path.exists(product_path):
                         current_product_skips += 1
-                        write_skip_log(skip_log_file_name, manufacturer_name, product_name, "PROD_UNTERSCHIEDLICH")
+                        write_skip_log(logger, product_name, "PROD_UNTERSCHIEDLICH")
                         continue
 
                     fields, attribute_names, attribute_types, error_code = parse_product(product_path)
                     if error_code != None:
-                        exporter["log"][-1] = "{} übersprungen".format(current_manufacturer)
-                        write_skip_log(skip_log_file_name, manufacturer_name, product_name, error_code)
-                        continue
-
-                    error_code = validate_fields(fields, PRODUCT_TYPE_ID)
-                    if error_code != None:
                         current_product_skips += 1
-                        write_skip_log(skip_log_file_name, manufacturer_name, product_name, error_code)
+                        write_skip_log(logger, product_name, error_code)
                         continue
-
-                    flattened_fields = flatten_fields(fields)
-                    product_type = flattened_fields[PRODUCT_TYPE_ID]
 
                     error_code = exporter_module.write_to_csv({
                         "fields": fields,
                         "attribute_names": attribute_names,
                         "attribute_types": attribute_types,
-                        "flattened_fields": flattened_fields,
-                        "product_type": product_type,
                         "manufacturer_name": manufacturer_name,
                         "manufacturer_information": manufacturer_information
                     })
                     if error_code != None:
                         current_product_skips += 1
-                        write_skip_log(skip_log_file_name, manufacturer_name, product_name, error_code)
+                        write_skip_log(logger, product_name, error_code)
 
                 exporter["log"][-1] = "{} ({} gesamt, {} übersprungen)".format(
                     current_manufacturer,
@@ -262,6 +235,7 @@ class Runner:
                     current_product_skips
                 )
 
-            print("[{}] Export done".format(exporter["name"]), flush=True)
-            exporter["log"].append("Export beended um {}".format(get_time()))
+            end_text = "Export beended um {}".format(get_time())
+            logger.log("\n" + end_text)
+            exporter["log"].append(end_text)
             exporter["running"] = False

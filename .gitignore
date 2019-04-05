@@ -4,8 +4,7 @@ config.json
 configs/
 data/
 export/
-archive/
-.running
+logs/
 
 
 # Byte-compiled / optimized / DLL files

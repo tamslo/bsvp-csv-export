@@ -49,7 +49,7 @@ class CompleteExporter(BaseExporter):
             self.general_fields
         ))
         csv_row += list(map(
-            lambda field: field in prod_fields["TECHDATA"] and prod_fields["TECHDATA"][field] or None,
+            lambda field: "TECHDATA" in prod_fields and field in prod_fields["TECHDATA"] and prod_fields["TECHDATA"][field] or None,
             self.techdata_fields
         ))
         return self.write_csv_row(csv_path, csv_row)

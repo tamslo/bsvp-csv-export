@@ -11,7 +11,8 @@ def export_description(parameters):
     description += export_general_description(prod_fields, ilugg_fields)
     description += "<!--/description-->"
     description += "<!--details-->"
-    description += export_details(parameters)
+    if ("TECHDATA" in prod_fields and prod_fields["TECHDATA"]):
+        description += export_details(parameters)
     description += "<!--/details-->"
     description += "<!--downloads-->"
     description += export_downloads(prod_fields, ilugg_fields)

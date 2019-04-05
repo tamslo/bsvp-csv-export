@@ -1,3 +1,5 @@
+from modules.logger import Logger
+
 max_placeholders = 5
 def placeholder(index):
     return "$BT_Passage{}$".format(index)
@@ -9,8 +11,12 @@ def export_general_description(prod_fields, ilugg_fields):
     welcome_text = ""
     if "WELCOMETEXT" in prod_fields and prod_fields["WELCOMETEXT"] != "":
         welcome_text = prod_fields["WELCOMETEXT"]
-    else:
+    elif ("WELCOMETHISTEXT" in prod_fields):
         welcome_text = prod_fields["WELCOMETHISTEXT"]
+    else:
+        Logger().log("[WARNUNG] {} hat kein WELCOMETEXT und kein WELCOMETHISTEXT Feld".format(
+            prod_fields["ARTNR"]
+        ))
 
     index = 1
     while index <= max_placeholders:

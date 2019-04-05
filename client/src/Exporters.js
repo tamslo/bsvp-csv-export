@@ -58,7 +58,7 @@ export default class Exporters extends Component {
     const { error } = this.state;
     const messages = {
       RUNNING: "Der Exporter wird bereits ausgeführt",
-      SCHEDULED: "Der Exporter wurde bereits zur Ausführung vorgemerkt"
+      SCHEDULED: "Der Exporter wurde bereits zur Warteschlange hinzugefügt"
     };
     const message = `${
       messages[error]

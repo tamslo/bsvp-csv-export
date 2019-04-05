@@ -2,7 +2,7 @@
 from ..base_exporter import BaseExporter
 from .configs import transform_configs
 from .formatter import format_field
-from modules.constants import CONFIGURATOR_NAME
+from modules.constants import CONFIGURATOR_NAME, PRODUCT_TYPE_ID
 
 class ConfiguratorExporter(BaseExporter):
     def __init__(self, manufacturers):
@@ -35,10 +35,15 @@ class ConfiguratorExporter(BaseExporter):
                 self.write_csv_row(output["path"], header_fields, file_mode="w")
 
     def write_to_csv(self, parameters):
-        fields = parameters["flattened_fields"]
-        product_type = parameters["product_type"]
-        manufacturer = fields["MANUFACTURER"]
+        fields = parameters["fields"]
+        error_code = validate_fields(fields)
+        if error_code != None:
+            return error_code
+
+        fields = flatten_fields(fields)
         delivery_status = fields["DELSTAT"]
+        manufacturer = fields["MANUFACTURER"]
+        product_type = fields[PRODUCT_TYPE_ID]
         active_delivery_statuses = ["0", "1", "2", "3", "4"]
         if product_type in self.export_configs and delivery_status in active_delivery_statuses:
             config = self.export_configs[product_type]
@@ -46,6 +51,28 @@ class ConfiguratorExporter(BaseExporter):
                 if output["base"] or output["manufacturer"] == manufacturer:
                     product_information = extract_product_information(config, fields)
                     return self.write_csv_row(output["path"], product_information)
+
+def validate_fields(fields):
+    if not "DELSTAT" in fields:
+        return "KEIN_DELSTAT"
+    if not "TECHDATA" in fields:
+        return "KEIN_TECHDATA"
+    if not fields["TECHDATA"]:
+        return "TECHDATA_LEER"
+    if not PRODUCT_TYPE_ID in fields["TECHDATA"]:
+        return "KEIN_PRODUKTTYP"
+    return None
+
+# Hilfsmethode, entpackt verschachtelte Felder wie TECHDATA
+def flatten_fields(fields):
+    flattened_fields = {}
+    for field_name, field_value in fields.items():
+        if isinstance(field_value, str):
+            flattened_fields[field_name] = field_value
+        else:
+            for attribute_name, attribute_value in field_value.items():
+                flattened_fields[attribute_name] = attribute_value
+    return flattened_fields
 
 def get_field(config, fields, field_name):
     if field_name in fields:

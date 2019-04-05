@@ -72,7 +72,7 @@ class BaseExporter:
                 csv_writer.writerow(row)
                 return None
             except UnicodeEncodeError as error:
-                return "WRITE_ERROR: {}".format(error)
+                return "FEHLER BEIM SCHREIBEN ({})".format(error)
 
     def write_to_csv(self, **args):
         raise Exception("BaseExporter::write_to_csv needs to be implemented by extending classes")

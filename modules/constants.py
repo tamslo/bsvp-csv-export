@@ -1,5 +1,5 @@
 GENERAL_CONFIG_FILE = "config.json"
-SKIP_LOG_FILE = "skips.log"
+LOG_DIRECTORY = "logs"
 MANUFACTURER_ENDING = ".lugg"
 MANUFACTURER_INFO_ENDING = ".ilugg"
 PRODUCT_ENDING = ".prod"

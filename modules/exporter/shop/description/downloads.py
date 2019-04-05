@@ -1,4 +1,5 @@
 from ..utils.html_escape import html_escape
+from modules.logger import Logger
 
 download_prefix = "media/Links/"
 
@@ -17,11 +18,10 @@ def build_download(prod_fields, download_field):
         if (len(download_parts) != 5):
             warning_text = "[ACHTUNG] Unbekanntes Download-Format von "
             warning_text += download_field
-            warning_text += " in PROD Datei des Produkts mit der Artikelnummer"
+            warning_text += " in "
             warning_text += prod_fields["ARTNR"]
-            warning_text += " von " + prod_fields["MANUFACTURER"]
             warning_text += ". Der Download wird übersprungen."
-            print(warning_text)
+            Logger().log(warning_text)
             return download
 
         download_path = build_download_path(download_parts[0]).strip()

@@ -9,7 +9,7 @@ def parse_product(product_path):
     try:
         lines = bsvp_file.readlines()
     except UnicodeDecodeError as error:
-        return None, None, None, "READ_ERROR: {}".format(error)
+        return None, None, None, "FEHLER BEIM LESEN ({})".format(error)
     bsvp_file.close()
 
     product_data = ""
