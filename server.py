@@ -12,8 +12,6 @@ CORS(app)
 validate_setup(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, SHOP_NAME)
 runner = Runner()
 
-
-
 @app.route("/manufacturers", methods=["GET"])
 def manufacturers():
     return json.dumps(runner.get_manufacturers())
@@ -31,6 +29,27 @@ def run():
         return json.dumps({ "error": True, "code": error_code, "exporters": runner.get_exporters() })
     else:
         return json.dumps(runner.get_exporters());
+
+# Routes for client built with `npm run build`
+
+@app.route("/")
+def serve(task_id):
+    return send_from_directory("client/build/", "index.html")
+
+
+@app.route("/static/js/<path:path>")
+def servejs(path):
+    return send_from_directory("client/build/static/js/", path)
+
+
+@app.route("/favicon.ico")
+def servefav():
+    return send_from_directory("client/build/", "favicon.png")
+
+
+@app.route("/static/media/<path:path>")
+def servemedia(path):
+    return send_from_directory("client/build/static/media/", path)
 
 if __name__ == "__main__":
     app.env = "development"

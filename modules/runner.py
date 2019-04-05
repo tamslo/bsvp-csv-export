@@ -40,7 +40,7 @@ def parse_manufacturers():
         }
 
         for product_directory in os.listdir(manufacturer_path):
-            if not product_directory.endswith(PRODUCT_ENDING):
+            if not product_directory.endswith(PRODUCT_ENDING) or product_directory == PRODUCT_ENDING:
                 continue
             product_name = product_directory.split(PRODUCT_ENDING)[0]
             product_path = "/".join([
