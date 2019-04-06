@@ -1,9 +1,0 @@
-{
-  "configs-ordner": "configs/",
-  "bsvp-ordner": "../library/",
-  "export-ordner": "export/",
-  "tooltip-datei": "../exres/data/tags.da",
-  "csv-encoding": "cp1252",
-  "konfigurator-csv-separator": ";",
-  "shop-csv-separator": "§"
-}
