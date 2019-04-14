@@ -5,6 +5,7 @@ configs/
 data/
 export/
 logs/
+mappings/
 
 
 # Byte-compiled / optimized / DLL files

@@ -1,4 +1,7 @@
-from flask import Flask, render_template, json, request, redirect, url_for
+#!/usr/bin/env python
+
+from flask import Flask, render_template, json, request, redirect, url_for, \
+    send_from_directory
 from flask_cors import CORS
 
 from modules.runner import Runner
@@ -33,7 +36,7 @@ def run():
 # Routes for client built with `npm run build`
 
 @app.route("/")
-def serve(task_id):
+def serve():
     return send_from_directory("client/build/", "index.html")
 
 

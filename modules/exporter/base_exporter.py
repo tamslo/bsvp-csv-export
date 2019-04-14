@@ -2,7 +2,8 @@ import csv
 import json
 import os
 import shutil
-from modules.constants import GENERAL_CONFIG_FILE, ARCHIVE_DIRECTORY
+from modules.constants import GENERAL_CONFIG_FILE, ARCHIVE_DIRECTORY, \
+    CONFIGS_DIRECTORY, DATA_DIRECTORY, TOOLTIP_PATH, EXPORT_DIRECTORY
 
 class BaseExporter:
     def __init__(self, manufacturers):
@@ -12,18 +13,18 @@ class BaseExporter:
             self.shop_csv_separator = self.config["shop-csv-separator"]
             self.configurator_csv_separator = self.config["konfigurator-csv-separator"]
             self.csv_encoding = self.config["csv-encoding"]
-            self.configs_base_directory = self.config["configs-ordner"]
-            self.bsvp_directory = self.config["bsvp-ordner"]
-            self.tooltip_path = self.config["tooltip-datei"]
+            self.configs_base_directory = CONFIGS_DIRECTORY
+            self.bsvp_directory = DATA_DIRECTORY
+            self.tooltip_path = TOOLTIP_PATH
 
     def name(self):
         raise Exception("BaseExporter::name needs to be implemented by extending classes")
 
     def output_directory(self):
-        return self.config["export-ordner"] + self.name() + "/"
+        return EXPORT_DIRECTORY + self.name() + "/"
 
     def __archive_base_directory(self):
-        return self.config["export-ordner"] + ARCHIVE_DIRECTORY + "/"
+        return EXPORT_DIRECTORY + ARCHIVE_DIRECTORY + "/"
 
     def __archive_directory(self):
         return self.__archive_base_directory() + self.name() + "/"

@@ -1,3 +1,8 @@
+CONFIGS_DIRECTORY = "configs/"
+DATA_DIRECTORY = "data/"
+EXPORT_DIRECTORY = "export/"
+TOOLTIP_PATH = "mappings/tags.da"
+
 GENERAL_CONFIG_FILE = "config.json"
 LOG_DIRECTORY = "logs"
 MANUFACTURER_ENDING = ".lugg"

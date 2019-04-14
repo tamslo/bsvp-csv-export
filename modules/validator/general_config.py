@@ -6,17 +6,7 @@ from .helpers import validate_required_fields, validate_list
 general_config_fields = [
     "konfigurator-csv-separator",
     "shop-csv-separator",
-    "csv-encoding",
-    "configs-ordner",
-    "bsvp-ordner",
-    "export-ordner",
-    "tooltip-datei"
-]
-
-general_config_directories = [
-    "configs-ordner",
-    "bsvp-ordner",
-    "export-ordner"
+    "csv-encoding"
 ]
 
 def validate_general_config(general_config_file, configurator_name, shop_name):
@@ -34,35 +24,6 @@ def validate_general_config(general_config_file, configurator_name, shop_name):
     # Überprüfung, ob es die erforderlichen Felder gibt
     validate_required_fields(config, general_config_file, general_config_fields)
 
-    # Überprüfung, ob die angegebenen Verzeichnisse mit einem '/' enden
-    for directory_field in general_config_directories:
-        if not config[directory_field].endswith("/"):
-            sys.exit(
-                "[FEHLER] Das Verzeichnis '{}' in {} muss mit '/' enden"
-                .format(directory_field, general_config_file)
-            )
-
-
-    # Überprüfung, ob es die erforderlichen Ordner und Dateien gibt
-    export_configs_directory = config["configs-ordner"]
-    if not os.path.isdir(export_configs_directory):
-        sys.exit(
-            "[FEHLER] Es gibt keinen Export-Configs-Ordner '{}'"
-            .format(export_configs_directory)
-        )
-    bsvp_directory = config["bsvp-ordner"]
-    if not os.path.isdir(bsvp_directory):
-        sys.exit(
-            "[FEHLER] Es gibt keinen Daten-Ordner '{}'"
-            .format(bsvp_directory)
-        )
-    tooltip_path = config["tooltip-datei"]
-    if not os.path.exists(tooltip_path):
-        sys.exit(
-            "[FEHLER] Es gibt keine Tooltip-Datei '{}'"
-            .format(tooltip_path)
-        )
-
     # Validierung des angegebenen Encodings
     test_path = "test.csv"
     try:
@@ -75,4 +36,4 @@ def validate_general_config(general_config_file, configurator_name, shop_name):
             "[FEHLER] Die Export-Konfiguration in {} enthält invalides Encoding {}"
             .format(export_config_path, encoding)
         )
-    return export_configs_directory, config
+    return config

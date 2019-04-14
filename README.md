@@ -8,4 +8,4 @@ Diese README sieht komisch aus? Dann öffne sie mit einem Editor mit Markdown-Er
 
 Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamaraslosarek@gmail.com.
 
-Inforationen zur Installation stehen [hier](https://github.com/tamslo/bsvp-csv-export-installer). Informationen, welche Abhängigkeiten, Konfigurationsdateien und Output-Ordner benötigt werden, stehen im `Dockerfile`, im `paths.txt.example` und im `start.bat` Skript.
+Inforationen zur Installation stehen [hier](https://github.com/tamslo/bsvp-csv-export-installer). Informationen, welche Abhängigkeiten, Konfigurationsdateien und Output-Ordner benötigt werden, stehen im `Dockerfile`, im `paths.txt.example` und im `run.bat` Skript.
