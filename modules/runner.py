@@ -4,6 +4,7 @@ import logging
 import time
 from datetime import datetime
 import shutil
+from pytz import utc
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from modules.constants import GENERAL_CONFIG_FILE, MANUFACTURER_ENDING, \
@@ -98,7 +99,7 @@ class Runner:
             }
         }
 
-        self.scheduler = BackgroundScheduler()
+        self.scheduler = BackgroundScheduler(timezone=utc)
         self.scheduler.add_job(
             func=self.check_tasks,
             trigger="interval",
