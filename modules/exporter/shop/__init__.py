@@ -32,11 +32,11 @@ class ShopExporter(BaseExporter):
         with open(export_config_path, "r", encoding="utf-8") as export_config_file:
             self.export_config = json.load(export_config_file)
 
+        # Konfiguration des Exporters
+        self.uses_manufacturer_information = True
+
     def name(self):
         return SHOP_NAME
-
-    def uses_manufacturer_information(self):
-        return True
 
     def __csv_path(self, manufacturer_name):
         return self.output_directory() + manufacturer_name + ".csv"

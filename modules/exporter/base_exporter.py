@@ -17,6 +17,13 @@ class BaseExporter:
             self.bsvp_directory = DATA_DIRECTORY
             self.tooltip_path = TOOLTIP_PATH
 
+            # Standardwerte für Konfiguration des Exporters
+            self.uses_manufacturer_information = False
+            self.skipping_policy = {
+                "manufacturers": True,
+                "delivery_status": True
+            }
+
     def name(self):
         raise Exception("BaseExporter::name needs to be implemented by extending classes")
 
@@ -29,11 +36,19 @@ class BaseExporter:
     def __archive_directory(self):
         return self.__archive_base_directory() + self.name() + "/"
 
-    def should_skip(self, manufacturer_name, selected_manufacturers):
-        return not manufacturer_name in selected_manufacturers
+    def skip_manufacturer(self, manufacturer_name, selected_manufacturers):
+        return self.skipping_policy["manufacturers"] and not manufacturer_name in selected_manufacturers
 
-    def uses_manufacturer_information(self):
-        return False
+    def skip_product(self, fields):
+        if not self.skipping_policy["delivery_status"]:
+            return False, None
+
+        if not "DELSTAT" in fields:
+            return None, "KEIN_DELSTAT"
+
+        delivery_status = fields["DELSTAT"]
+        active_delivery_statuses = ["0", "1", "2", "3", "4"]
+        return not delivery_status in active_delivery_statuses, None
 
     def last_export_date(self, running):
         last_export_folder = None

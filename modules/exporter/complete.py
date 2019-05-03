@@ -30,6 +30,9 @@ class CompleteExporter(BaseExporter):
         self.csv_separator = self.configurator_csv_separator
         self.general_fields, self.techdata_fields = get_complete_header_fields(manufacturers)
 
+        # Konfiguration des Exporters
+        self.skipping_policy["delivery_status"] = False
+
     def __header_fields(self):
         return self.general_fields + list(map(
             lambda field: "TECHDATA.{}".format(field),

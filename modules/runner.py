@@ -150,7 +150,7 @@ class Runner:
         # Wenn Hersteller eingeschränkt werden können, sollen diese
         # angezeigt werden
         exporter_module = self.exporters[exporter]["module"]
-        show_selected_manufacturers = exporter_module.should_skip("Not a manufacturer", selected_manufacturers)
+        show_selected_manufacturers = exporter_module.skip_manufacturer("Not a manufacturer", selected_manufacturers)
         if show_selected_manufacturers:
             self.exporters[exporter]["log"].append(
                 "Ausgewählte Hersteller: {}".format(", ".join(selected_manufacturers))
@@ -185,14 +185,14 @@ class Runner:
                 current_product_skips = 0
 
                 manufacturer_path = manufacturer["path"]
-                if exporter_module.should_skip(manufacturer_name, selected_manufacturers):
+                if exporter_module.skip_manufacturer(manufacturer_name, selected_manufacturers):
                     continue
 
                 logger.log("\n{}".format(current_manufacturer))
                 exporter["log"].append(current_manufacturer)
 
                 manufacturer_information = None
-                if exporter_module.uses_manufacturer_information():
+                if exporter_module.uses_manufacturer_information:
                     manufacturer_information, error_code = get_manufacturer_information(
                         manufacturer_path,
                         manufacturer_name
@@ -217,6 +217,14 @@ class Runner:
                     if error_code != None:
                         current_product_skips += 1
                         write_skip_log(logger, product_name, error_code)
+                        continue
+
+                    skip_product, error_code = exporter_module.skip_product(fields)
+                    if error_code != None:
+                        current_product_skips += 1
+                        write_skip_log(logger, product_name, error_code)
+                        continue
+                    if skip_product:
                         continue
 
                     error_code = exporter_module.write_to_csv({

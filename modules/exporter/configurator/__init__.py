@@ -11,11 +11,11 @@ class ConfiguratorExporter(BaseExporter):
         self.configs_directory = self.configs_base_directory + self.name() + "/"
         self.export_configs = transform_configs(self.configs_directory, self.output_directory())
 
+        # Konfiguration des Exporters
+        self.skipping_policy["manufacturers"] = False
+
     def name(self):
         return CONFIGURATOR_NAME
-
-    def should_skip(self, manufacturer_name, selected_manufacturers):
-        return False
 
     def setup(self):
         super().setup()
@@ -41,11 +41,9 @@ class ConfiguratorExporter(BaseExporter):
             return error_code
 
         fields = flatten_fields(fields)
-        delivery_status = fields["DELSTAT"]
         manufacturer = fields["MANUFACTURER"]
         product_type = fields[PRODUCT_TYPE_ID]
-        active_delivery_statuses = ["0", "1", "2", "3", "4"]
-        if product_type in self.export_configs and delivery_status in active_delivery_statuses:
+        if product_type in self.export_configs:
             config = self.export_configs[product_type]
             for output in config["outputs"]:
                 if output["base"] or output["manufacturer"] == manufacturer:
@@ -53,8 +51,6 @@ class ConfiguratorExporter(BaseExporter):
                     return self.write_csv_row(output["path"], product_information)
 
 def validate_fields(fields):
-    if not "DELSTAT" in fields:
-        return "KEIN_DELSTAT"
     if not "TECHDATA" in fields:
         return "KEIN_TECHDATA"
     if not fields["TECHDATA"]:
