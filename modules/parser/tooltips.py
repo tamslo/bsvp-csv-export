@@ -10,7 +10,7 @@ def parse_tooltips(tooltip_path):
 
     tooltip_data = ""
     for line in lines:
-        tooltip_data += line
+        tooltip_data += line.strip()
 
     for field in tooltip_data.split(DATA_SEPARTOR):
         if field != "":

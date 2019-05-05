@@ -10,7 +10,7 @@ def parse_manufacturer_information(ilugg_path):
 
     manufacturer_data = ""
     for line in lines:
-        manufacturer_data += line
+        manufacturer_data += line.strip()
 
     for field in manufacturer_data.split(DATA_SEPARTOR):
         if field != "":

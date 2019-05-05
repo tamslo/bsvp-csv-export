@@ -14,7 +14,7 @@ def parse_product(product_path):
 
     product_data = ""
     for line in lines:
-        product_data += line
+        product_data += line.strip()
 
     fields = {}
     attribute_names = {}
