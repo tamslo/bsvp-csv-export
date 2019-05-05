@@ -72,6 +72,11 @@ class ShopExporter(BaseExporter):
         ilugg_fields = parameters["manufacturer_information"]
         manufacturer_name = parameters["manufacturer_name"]
 
+        export_flag = prod_fields["EXPORTFLAG"]
+        exportable_flags = ["export", "explicit"]
+        if not export_flag in exportable_flags:
+            return "EXPORTFLAG = {}".format(export_flag)
+
         csv_path = self.__csv_path(manufacturer_name)
         self.maybe_create_csv(csv_path, self.__header_fields(prod_fields, ilugg_fields))
         row = self.extract_information(prod_fields, ilugg_fields, attribute_names, attribute_types)
