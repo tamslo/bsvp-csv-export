@@ -1,5 +1,6 @@
 import os
 from modules.parser.prod import parse_product
+from modules.parser.attributes import parse_attributes
 from modules.constants import COMPLETE_NAME
 
 def get_complete_header_fields(manufacturers):
@@ -29,13 +30,27 @@ class CompleteExporter(BaseExporter):
         super().__init__(manufacturers)
         self.csv_separator = self.configurator_csv_separator
         self.general_fields, self.techdata_fields = get_complete_header_fields(manufacturers)
+        self.attribute_mapping = parse_attributes()
+
+        # Sanity checks
+        unnmamed_fields = []
+        for techdata_field in self.techdata_fields:
+            if techdata_field not in self.attribute_mapping:
+                unnmamed_fields.append(techdata_field)
+        print("Unnamed fields:\n\t{}".format("\n\t".join(unnmamed_fields)), flush=True)
+
+        unused_fields = []
+        for techdata_field, attribute_name in self.attribute_mapping.items():
+            if techdata_field not in self.techdata_fields:
+                unused_fields.append("{} ({})".format(attribute_name, techdata_field))
+        print("Unused fields:\n\t{}".format("\n\t".join(unused_fields)), flush=True)
 
         # Konfiguration des Exporters
         self.skipping_policy["delivery_status"] = False
 
     def __header_fields(self):
         return self.general_fields + list(map(
-            lambda field: "TECHDATA.{}".format(field),
+            lambda field: (field in self.attribute_mapping and self.attribute_mapping[field]) or "TECHDATA.{}".format(field),
             self.techdata_fields
         ))
 

@@ -2,6 +2,7 @@ CONFIGS_DIRECTORY = "configs/"
 DATA_DIRECTORY = "data/"
 EXPORT_DIRECTORY = "export/"
 TOOLTIP_PATH = "mappings/tags.da"
+ATTRIBUTES_PATH = "mappings/attributes.da"
 
 GENERAL_CONFIG_FILE = "config.json"
 LOG_DIRECTORY = "logs"
