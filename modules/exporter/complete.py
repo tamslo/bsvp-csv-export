@@ -2,6 +2,7 @@ import os
 from modules.parser.prod import parse_product
 from modules.parser.attributes import parse_attributes
 from modules.constants import COMPLETE_NAME
+from modules.logger import Logger
 
 def get_complete_header_fields(manufacturers):
     general_fields = set()
@@ -30,32 +31,43 @@ class CompleteExporter(BaseExporter):
         super().__init__(manufacturers)
         self.csv_separator = self.configurator_csv_separator
         self.general_fields, self.techdata_fields = get_complete_header_fields(manufacturers)
-        self.attribute_mapping = parse_attributes()
-
-        # Sanity checks
-        unnmamed_fields = []
-        for techdata_field in self.techdata_fields:
-            if techdata_field not in self.attribute_mapping:
-                unnmamed_fields.append(techdata_field)
-        print("Unnamed fields:\n\t{}".format("\n\t".join(unnmamed_fields)), flush=True)
-
-        unused_fields = []
-        for techdata_field, attribute_name in self.attribute_mapping.items():
-            if techdata_field not in self.techdata_fields:
-                unused_fields.append("{} ({})".format(attribute_name, techdata_field))
-        print("Unused fields:\n\t{}".format("\n\t".join(unused_fields)), flush=True)
 
         # Konfiguration des Exporters
         self.skipping_policy["delivery_status"] = False
 
     def __header_fields(self):
-        return self.general_fields + list(map(
-            lambda field: (field in self.attribute_mapping and self.attribute_mapping[field]) or "TECHDATA.{}".format(field),
-            self.techdata_fields
-        ))
+        return self.general_fields + self.techdata_fields
 
     def name(self):
         return COMPLETE_NAME
+
+    def setup(self):
+        super().setup()
+
+        # Sanity checks
+        attribute_mapping = parse_attributes()
+        logger = Logger()
+
+        logger.log("")
+        logger.log("Starte Plausibilitätsprüfung der technischen Datenfelder...")
+        logger.log("")
+
+        logger.log("Felder ohne Namen in MasterRecordMask:")
+        logger.log("")
+        for techdata_field in self.techdata_fields:
+            if techdata_field not in attribute_mapping:
+                logger.log(techdata_field)
+
+        logger.log("")
+        logger.log("Felder die nicht in Produkten genutzt werden:")
+        logger.log("")
+        for techdata_field, attribute_name in attribute_mapping.items():
+            if techdata_field not in self.techdata_fields:
+                logger.log("{} ({})".format(attribute_name, techdata_field))
+
+        logger.log("")
+        logger.log("Plausibilitätsprüfung der technischen Datenfelder beendet.")
+        logger.log("")
 
     def write_to_csv(self, parameters):
         prod_fields = parameters["fields"]
