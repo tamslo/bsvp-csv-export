@@ -1,10 +1,11 @@
 import os
+import json
 from modules.parser.prod import parse_product
 from modules.parser.attributes import parse_attributes
 from modules.constants import COMPLETE_NAME
 from modules.logger import Logger
 
-def get_complete_header_fields(manufacturers):
+def get_complete_header_fields(manufacturers, export_config):
     general_fields = set()
     techdata_fields = set()
 
@@ -15,11 +16,12 @@ def get_complete_header_fields(manufacturers):
                 if error_code != None:
                     continue
                 for field_name, field_value in fields.items():
-                    if field_name != "TECHDATA":
-                        general_fields.add(field_name)
-                    else:
-                        for field_id in field_value.keys():
-                            techdata_fields.add(field_id)
+                    if not field_name in export_config["exclude"]:
+                        if field_name != "TECHDATA":
+                            general_fields.add(field_name)
+                        else:
+                            for field_id in field_value.keys():
+                                techdata_fields.add(field_id)
 
     return sorted(general_fields), sorted(techdata_fields)
 
@@ -30,7 +32,10 @@ class CompleteExporter(BaseExporter):
     def __init__(self, manufacturers):
         super().__init__(manufacturers)
         self.csv_separator = self.configurator_csv_separator
-        self.general_fields, self.techdata_fields = get_complete_header_fields(manufacturers)
+        export_config_path = self.configs_base_directory + self.name() + ".json"
+        with open(export_config_path, "r", encoding="utf-8") as export_config_file:
+            export_config = json.load(export_config_file)
+            self.general_fields, self.techdata_fields = get_complete_header_fields(manufacturers, export_config)
 
         # Konfiguration des Exporters
         self.skipping_policy["delivery_status"] = False
