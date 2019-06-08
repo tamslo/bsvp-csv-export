@@ -4,7 +4,7 @@ from modules.parser.prod import parse_product
 from modules.parser.attributes import parse_attributes
 from modules.constants import COMPLETE_NAME
 from modules.logger import Logger
-from modules.exporter.utils.unescape_bsvp import unescape_bsvp_to_text
+from modules.exporter.utils.unescape_bsvp import unescape_bsvp_to_html
 
 def treat_special_cases(field_name, field_value):
     # DOWNLOAD.X -- wenn media/Links/ am Anfang, Zeichenkette löschen
@@ -16,7 +16,7 @@ def treat_special_cases(field_name, field_value):
 
 def finalize(field_name, field_value):
     field_value = treat_special_cases(field_name, field_value)
-    return unescape_bsvp_to_text(field_value)
+    return unescape_bsvp_to_html(field_value)
 
 def get_complete_header_fields(manufacturers, export_config):
     general_fields = set()
