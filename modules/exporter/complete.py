@@ -21,7 +21,8 @@ def get_complete_header_fields(manufacturers, export_config):
                             general_fields.add(field_name)
                         else:
                             for field_id in field_value.keys():
-                                techdata_fields.add(field_id)
+                                if not field_id in export_config["exclude"]:
+                                    techdata_fields.add(field_id)
 
     return sorted(general_fields), sorted(techdata_fields)
 
