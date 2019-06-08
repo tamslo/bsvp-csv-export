@@ -4,7 +4,7 @@ from collections import OrderedDict
 def transform_configs(configs_directory, output_directory):
     # Schreibe Konfigurationen so um, dass sie über den Produkttyp als Key
     # erreichbar sind.
-    configs = {}
+    configs = OrderedDict()
 
     for export_config_name in os.listdir(configs_directory):
         if export_config_name.endswith(".json"):

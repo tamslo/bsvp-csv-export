@@ -4,6 +4,19 @@ from modules.parser.prod import parse_product
 from modules.parser.attributes import parse_attributes
 from modules.constants import COMPLETE_NAME
 from modules.logger import Logger
+from modules.exporter.utils.unescape_bsvp import unescape_bsvp_to_text
+
+def treat_special_cases(field_name, field_value):
+    # DOWNLOAD.X -- wenn media/Links/ am Anfang, Zeichenkette löschen
+    remove_string = "media/Links/"
+    if field_name.startswith("DOWNLOAD.") and field_value.startswith(remove_string):
+        return field_value.replace(remove_string, "")
+
+    return field_value
+
+def finalize(field_name, field_value):
+    field_value = treat_special_cases(field_name, field_value)
+    return unescape_bsvp_to_text(field_value)
 
 def get_complete_header_fields(manufacturers, export_config):
     general_fields = set()
@@ -81,11 +94,11 @@ class CompleteExporter(BaseExporter):
         csv_path = self.output_directory() + manufacturer_name + ".csv"
         self.maybe_create_csv(csv_path, self.__header_fields())
         csv_row = list(map(
-            lambda field: field in prod_fields and prod_fields[field] or None,
+            lambda field: field in prod_fields and finalize(field, prod_fields[field]) or None,
             self.general_fields
         ))
         csv_row += list(map(
-            lambda field: "TECHDATA" in prod_fields and field in prod_fields["TECHDATA"] and prod_fields["TECHDATA"][field] or None,
+            lambda field: "TECHDATA" in prod_fields and field in prod_fields["TECHDATA"] and finalize(field, prod_fields["TECHDATA"][field]) or None,
             self.techdata_fields
         ))
         return self.write_csv_row(csv_path, csv_row)

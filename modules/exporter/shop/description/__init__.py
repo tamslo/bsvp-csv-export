@@ -1,7 +1,12 @@
 from .general import export_general_description
 from .details import export_details
 from .downloads import export_downloads
-from ..utils.unescape_bsvp import unescape_bsvp
+
+def unescape_bsvp(text, prod_fields):
+    text = text.replace("$Artikelname$", prod_fields["NAME"])
+    text = text.replace("$Artikelnumber$", prod_fields["ARTNR"])
+    text = text.replace("$LP$", prod_fields["PRICE"])
+    return text
 
 def export_description(parameters):
     prod_fields = parameters["prod_fields"]

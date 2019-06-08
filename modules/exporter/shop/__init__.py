@@ -6,6 +6,8 @@ from modules.parser.tooltips import parse_tooltips
 from .description import export_description
 from .energy_efficiency_text import export_energy_efficiency_text
 from .video import export_video
+from modules.exporter.utils.unescape_bsvp import unescape_bsvp_to_html
+from collections import OrderedDict
 
 special_cases = {
     "p_desc.de": export_description,
@@ -20,7 +22,7 @@ def escape(value):
     if value == None:
         return None
     value = value.replace("∆", "&#8710;")
-    return value
+    return unescape_bsvp_to_html(value)
 
 class ShopExporter(BaseExporter):
     def __init__(self, manufacturers):
@@ -30,7 +32,7 @@ class ShopExporter(BaseExporter):
         self.csv_separator = self.shop_csv_separator
         export_config_path = self.configs_base_directory + self.name() + ".json"
         with open(export_config_path, "r", encoding="utf-8") as export_config_file:
-            self.export_config = json.load(export_config_file)
+            self.export_config = json.load(export_config_file, object_pairs_hook=OrderedDict)
 
         # Konfiguration des Exporters
         self.uses_manufacturer_information = True

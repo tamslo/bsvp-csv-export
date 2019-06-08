@@ -1,5 +1,5 @@
 import html
-from .escaped_characters import escaped_characters
+from modules.exporter.utils.escaped_characters import escaped_characters
 
 def html_escape(text):
     text = html.escape(text)
