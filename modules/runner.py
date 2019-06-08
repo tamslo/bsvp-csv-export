@@ -5,6 +5,7 @@ import time
 from datetime import datetime
 import shutil
 from pytz import utc
+from collections import OrderedDict
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from modules.constants import GENERAL_CONFIG_FILE, MANUFACTURER_ENDING, \
@@ -28,7 +29,7 @@ def parse_manufacturers():
         config = json.load(config_file)
         bsvp_directory = DATA_DIRECTORY
 
-    manufacturers = {}
+    manufacturers = OrderedDict()
     for manufacturer_directory in os.listdir(bsvp_directory):
         if not manufacturer_directory.endswith(MANUFACTURER_ENDING):
             continue
