@@ -45,7 +45,7 @@ from collections import OrderedDict
 class CompleteExporter(BaseExporter):
     def __init__(self, manufacturers):
         super().__init__(manufacturers)
-        self.csv_separator = self.configurator_csv_separator
+        self.csv_separator = self.shop_csv_separator
         export_config_path = self.configs_base_directory + self.name() + ".json"
         with open(export_config_path, "r", encoding="utf-8") as export_config_file:
             export_config = json.load(export_config_file)
