@@ -84,8 +84,24 @@ class BaseExporter:
     def write_csv_row(self, path, row, file_mode="a"):
         with open(path, file_mode, encoding=self.csv_encoding, newline="") as file:
             csv_writer = csv.writer(file, delimiter=self.csv_separator)
+
+            # Remove knwon characters that cause UnicodeEncodeError
+            toxic_characters = {
+                "Δ": "&Delta;",
+                "✓": "&checkmark;"
+            }
+            clean_row = []
+            for field in row:
+                clean_field = field
+                if clean_field != None:
+                    for toxic_character, html_escape_code in toxic_characters.items():
+                        clean_field = clean_field.replace(toxic_character, html_escape_code)
+                clean_row.append(clean_field)
+
+            print(row, flush=True)
+            print(clean_row, flush=True)
             try:
-                csv_writer.writerow(row)
+                csv_writer.writerow(clean_row)
                 return None
             except UnicodeEncodeError as error:
                 return "FEHLER BEIM SCHREIBEN ({})".format(error)
