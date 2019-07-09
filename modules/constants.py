@@ -4,6 +4,8 @@ EXPORT_DIRECTORY = "export/"
 TOOLTIP_PATH = "mappings/tags.da"
 ATTRIBUTES_PATH = "mappings/attributes.da"
 
+KEEP_LOGS = 2
+
 GENERAL_CONFIG_FILE = "config.json"
 LOG_DIRECTORY = "logs"
 MANUFACTURER_ENDING = ".lugg"
