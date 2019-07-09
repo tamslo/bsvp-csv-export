@@ -98,8 +98,6 @@ class BaseExporter:
                         clean_field = clean_field.replace(toxic_character, html_escape_code)
                 clean_row.append(clean_field)
 
-            print(row, flush=True)
-            print(clean_row, flush=True)
             try:
                 csv_writer.writerow(clean_row)
                 return None
