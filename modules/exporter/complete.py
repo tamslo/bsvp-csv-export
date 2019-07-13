@@ -2,16 +2,15 @@ import os
 import json
 from modules.parser.prod import parse_product
 from modules.parser.attributes import parse_attributes
+from modules.parser.download import parse_download
 from modules.constants import COMPLETE_NAME
 from modules.logger import Logger
 from modules.exporter.utils.unescape_bsvp import unescape_bsvp_to_html
 
 def treat_special_cases(field_name, field_value):
-    # DOWNLOAD.X -- wenn media/Links/ am Anfang, Zeichenkette löschen
-    remove_string = "media/Links/"
-    if field_name.startswith("DOWNLOAD.") and field_value.startswith(remove_string):
-        return field_value.replace(remove_string, "")
-
+    # DOWNLOAD.X -- soll vernünftig geparsed werden
+    if field_name.startswith("DOWNLOAD."):
+        return json.dumps(parse_download(field_value), ensure_ascii=False)
     return field_value
 
 def finalize(field_name, field_value):

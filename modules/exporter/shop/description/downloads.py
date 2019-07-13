@@ -1,6 +1,5 @@
 from ..utils.html_escape import html_escape
 from modules.parser.download import parse_download
-from modules.logger import Logger
 
 def build_download(prod_fields, download_field):
     download = ""

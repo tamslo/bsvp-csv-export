@@ -21,7 +21,6 @@ def special_case_names():
 def escape(value):
     if value == None:
         return None
-    value = value.replace("∆", "&#8710;")
     return unescape_bsvp_to_html(value)
 
 class ShopExporter(BaseExporter):

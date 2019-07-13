@@ -1,23 +1,26 @@
 import os
-
-download_prefix = "media/Links/"
+from modules.logger import Logger
 
 def build_download_path(path):
-    if path.startswith(download_prefix):
-        return path
+    old_download_prefix = "media/Links"
+    download_prefix = "media/Links" # TODO: get from config
+
+    if path.startswith(old_download_prefix):
+        return path.replace(old_download_prefix, download_prefix)
     else:
         return os.path.join(download_prefix, path)
 
-def parse_download(download_content, article):
+def parse_download(download_content, article = None):
     download_parts = download_content.split("][")
 
-    if (len(download_parts) != 5):
-        warning_text = "[ACHTUNG] Unbekanntes Download-Format von "
-        warning_text += download_field
-        warning_text += " in "
-        warning_text += article
-        warning_text += ". Der Download wird übersprungen."
-        Logger().log(warning_text)
+    if (len(download_parts) < 3):
+        if article != None:
+            warning_text = "[ACHTUNG] Unbekanntes Download-Format von "
+            warning_text += download_field
+            warning_text += " in "
+            warning_text += article
+            warning_text += ". Der Download wird übersprungen."
+            Logger().log(warning_text)
         return None
 
     return {
