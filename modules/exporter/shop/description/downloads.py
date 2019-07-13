@@ -1,37 +1,19 @@
 from ..utils.html_escape import html_escape
+from modules.parser.download import parse_download
 from modules.logger import Logger
-
-download_prefix = "media/Links/"
-
-def build_download_path(path):
-    if path.startswith(download_prefix):
-        return path
-    else:
-        return download_prefix + path
 
 def build_download(prod_fields, download_field):
     download = ""
     if download_field in prod_fields:
-        download_content = prod_fields[download_field]
-        download_parts = download_content.split("][")
+        download_content = parse_download(prod_fields[download_field], prod_fields["ARTNR"])
 
-        if (len(download_parts) != 5):
-            warning_text = "[ACHTUNG] Unbekanntes Download-Format von "
-            warning_text += download_field
-            warning_text += " in "
-            warning_text += prod_fields["ARTNR"]
-            warning_text += ". Der Download wird übersprungen."
-            Logger().log(warning_text)
+        if download_content == None:
             return download
 
-        download_path = build_download_path(download_parts[0]).strip()
-        product_name = download_parts[1].strip()
-        download_type = download_parts[2].strip()
         download_name = html_escape(
-            "{} - {}".format(download_type, product_name)
+            "{} - {}".format(download_content["type"], download_content["product"])
         )
-
-        download += '<a href="{}" target="_blank">'.format(download_path)
+        download += '<a href="{}" target="_blank">'.format(download_content["path"])
         download += '<img title="Download {}" '.format(download_name)
         download += 'alt="Download" src="/images/download.jpg" '
         download += 'style="vertical-align: middle;">'
