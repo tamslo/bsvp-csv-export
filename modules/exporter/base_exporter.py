@@ -87,7 +87,7 @@ class BaseExporter:
 
             # Remove knwon characters that cause UnicodeEncodeError
             toxic_characters = {
-                "Δ": "&Delta;",
+                "∆": "&#8710;",
                 "✓": "&checkmark;"
             }
             clean_row = []

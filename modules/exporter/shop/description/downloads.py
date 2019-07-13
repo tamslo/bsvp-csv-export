@@ -4,7 +4,11 @@ from modules.parser.download import parse_download
 def build_download(prod_fields, download_field):
     download = ""
     if download_field in prod_fields:
-        download_content = parse_download(prod_fields[download_field], prod_fields["ARTNR"])
+        download_content = parse_download(
+            prod_fields[download_field],
+            download_field,
+            prod_fields["ARTNR"]
+        )
 
         if download_content == None:
             return download

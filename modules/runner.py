@@ -239,7 +239,7 @@ class Runner:
                         current_product_skips += 1
                         write_skip_log(logger, product_name, error_code)
 
-                exporter["log"][-1] = "{} ({} gesamt, {} übersprungen)".format(
+                exporter["log"][-1] = "{} ({} gesamt, {} mit Fehler)".format(
                     current_manufacturer,
                     current_product_number,
                     current_product_skips

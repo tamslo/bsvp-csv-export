@@ -10,17 +10,19 @@ def build_download_path(path):
     else:
         return os.path.join(download_prefix, path)
 
-def parse_download(download_content, article = None):
+def parse_download(download_content, download_field = None, article = None):
     download_parts = download_content.split("][")
-
     if (len(download_parts) < 3):
-        if article != None:
-            warning_text = "[ACHTUNG] Unbekanntes Download-Format von "
+        warning_text = "[ACHTUNG] Unbekanntes Download-Format "
+        if download_field != None and article != None:
+            warning_text += "von "
             warning_text += download_field
             warning_text += " in "
             warning_text += article
-            warning_text += ". Der Download wird übersprungen."
-            Logger().log(warning_text)
+        else:
+            warning_text += "({})".format(download_content)
+        warning_text += ". Der Download wird übersprungen."
+        Logger().log(warning_text)
         return None
 
     return {
