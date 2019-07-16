@@ -1,14 +1,20 @@
+import json
 import os
 from modules.logger import Logger
+from modules.constants import GENERAL_CONFIG_FILE
 
 def build_download_path(path):
-    old_download_prefix = "media/Links"
-    download_prefix = "media/Links" # TODO: get from config
+    old_download_prefix = "media/Links/"
+    with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
+        config = json.load(config_file)
+        download_prefix = config["downloads-path"]
 
+    # Der Download Pfad beginnt entweder mit dem alten Download Pfad oder mit
+    # gar keinem
     if path.startswith(old_download_prefix):
-        return path.replace(old_download_prefix, download_prefix)
-    else:
-        return os.path.join(download_prefix, path)
+        path = path.replace(old_download_prefix, "")
+
+    return os.path.join(download_prefix, path)
 
 def parse_download(download_content, download_field = None, article = None):
     download_parts = download_content.split("][")
