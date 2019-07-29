@@ -13,6 +13,8 @@ class BaseExporter:
             self.shop_csv_separator = self.config["shop-csv-separator"]
             self.configurator_csv_separator = self.config["konfigurator-csv-separator"]
             self.csv_encoding = self.config["csv-encoding"]
+            self.csv_quote_char = self.config["csv-quote-char"]
+            self.csv_escpape_char = self.config["csv-escape-char"]
             self.configs_base_directory = CONFIGS_DIRECTORY
             self.bsvp_directory = DATA_DIRECTORY
             self.tooltip_path = TOOLTIP_PATH
@@ -83,7 +85,7 @@ class BaseExporter:
 
     def write_csv_row(self, path, row, file_mode="a"):
         with open(path, file_mode, encoding=self.csv_encoding, newline="") as file:
-            csv_writer = csv.writer(file, delimiter=self.csv_separator)
+            csv_writer = csv.writer(file, delimiter=self.csv_separator, quotechar=self.csv_quote_char, escapechar=self.csv_escpape_char, quoting=csv.QUOTE_NONE)
 
             # Remove knwon characters that cause UnicodeEncodeError
             toxic_characters = {
