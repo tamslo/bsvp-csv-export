@@ -2,20 +2,44 @@
 import os, json
 from collections import OrderedDict
 
-def format_decimal_separator(value):
+def format_decimal_separator(value, format_option):
     return value.replace('.',',')
 
-def range_from_zero(value):
+def range_from_zero(value, format_option):
     try:
         float(value)
     except:
         pass
     return "0|" + value
 
+def replacement(value, format_option):
+    before_values = format_option["before"]
+    afterwards_value = format_option["afterwards"]
+    option = format_option["option"]
+    if option == "startswith":
+        for before_value in before_values:
+            if value.startswith(before_value):
+                value = value.replace(before_value, afterwards_value)
+                break
+    elif option == "endswith":
+        for before_value in before_values:
+            if value.endswith(before_value):
+                value = value.replace(before_value, afterwards_value)
+                break
+    else:
+        lower_before_values = list(map(
+            lambda value: value.lower(),
+            before_values
+        ))
+        if value.lower() in lower_before_values:
+            value = afterwards_value
+    return value
+
+
 formatters = {
     "punkt_zu_komma": format_decimal_separator,
     "bereich_von_null": range_from_zero,
-    "ersetzungen": None # für die Validierung der Export-Konfigurationen
+    "ersetzungen": replacement
 }
 
 def format_rules():
@@ -24,13 +48,5 @@ def format_rules():
 def format_field(format_options, value, field_name):
     if field_name in format_options:
         for format_option in format_options[field_name]:
-            if format_option["type"] == "ersetzung":
-                before_values = list(map(
-                    lambda value: value.lower(),
-                    format_option["before"]
-                ))
-                if value.lower() in before_values:
-                    value = format_option["afterwards"]
-            else:
-                value = formatters[format_option["type"]](value)
+            value = formatters[format_option["type"]](value, format_option)
     return value

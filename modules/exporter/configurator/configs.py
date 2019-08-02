@@ -55,9 +55,10 @@ def transform_configs(configs_directory, output_directory):
                         for ersetzung in export_config["formatierungen"][option]:
                             for field in ersetzung["felder"]:
                                 option = {
-                                    "type": "ersetzung",
+                                    "type": "ersetzungen",
                                     "before": ersetzung["vorher"],
-                                    "afterwards": ersetzung["nachher"]
+                                    "afterwards": ersetzung["nachher"],
+                                    "option": "option" in ersetzung and ersetzung["option"] or None
                                 }
                                 add_format_option(format_options, field, option)
                     else:

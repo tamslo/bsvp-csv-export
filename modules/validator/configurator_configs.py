@@ -41,6 +41,14 @@ def validate_formatters(config, export_config_path):
                         export_config_path,
                         "in der {}. Ersetzung in 'formatierungen' ".format(index + 1)
                     )
+                if "option" in replacement:
+                    allowed_options = ["startswith", "endswith"]
+                    option = replacement["option"]
+                    if not option in allowed_options:
+                        sys.exit(
+                            "[FEHLER] Ungültige Option '{}' in der {}. Ersetzung in 'formatierungen' der {}"
+                            .format(option, index + 1, export_config_path)
+                        )
 
 def validate_combinations(config, export_config_path):
     if "kombinationen" in config:
