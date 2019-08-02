@@ -45,10 +45,12 @@ class ConfiguratorExporter(BaseExporter):
         product_type = fields[PRODUCT_TYPE_ID]
         if product_type in self.export_configs:
             config = self.export_configs[product_type]
+            error_code = None
             for output in config["outputs"]:
                 if output["base"] or output["manufacturer"] == manufacturer:
                     product_information = extract_product_information(config, fields)
-                    return self.write_csv_row(output["path"], product_information)
+                    error_code = self.write_csv_row(output["path"], product_information)
+            return error_code
 
 def validate_fields(fields):
     if not "TECHDATA" in fields:
