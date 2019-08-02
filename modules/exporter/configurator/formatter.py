@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import os, json
 from collections import OrderedDict
+from modules.logger import Logger
+
+logger = Logger()
 
 def format_decimal_separator(value, format_option):
     return value.replace('.',',')
@@ -35,11 +38,33 @@ def replacement(value, format_option):
             value = afterwards_value
     return value
 
+def grouping(value, format_option):
+    try:
+        numeric_value = float(value.replace(",", "."))
+        matching_threshold = None
+        for threshold in format_option["thresholds"]:
+            if numeric_value <= threshold:
+                matching_threshold = threshold
+                break
+
+        if matching_threshold != None:
+             indicator = "bis"
+        else:
+            indicator = ">"
+            last_threshold = format_option["thresholds"][-1]
+            matching_threshold = last_threshold
+
+        unit = format_option["unit"]
+        return "{} {}{}".format(indicator, str(matching_threshold), unit)
+    except:
+        logger.log("Der Wert '{}' kann nicht gruppiert werden, da er nicht numerisch ist.".format(value))
+        return value
 
 formatters = {
     "punkt_zu_komma": format_decimal_separator,
     "bereich_von_null": range_from_zero,
-    "ersetzungen": replacement
+    "ersetzungen": replacement,
+    "gruppierungen": grouping
 }
 
 def format_rules():

@@ -51,20 +51,27 @@ def transform_configs(configs_directory, output_directory):
             if "formatierungen" in export_config:
                 format_options = {}
                 for option in export_config["formatierungen"]:
-                    if option == "ersetzungen":
-                        for ersetzung in export_config["formatierungen"][option]:
-                            for field in ersetzung["felder"]:
-                                option = {
-                                    "type": "ersetzungen",
-                                    "before": ersetzung["vorher"],
-                                    "afterwards": ersetzung["nachher"],
-                                    "option": "option" in ersetzung and ersetzung["option"] or None
-                                }
-                                add_format_option(format_options, field, option)
+                    if option == "ersetzungen" or option == "gruppierungen":
+                        for parameters in export_config["formatierungen"][option]:
+                            for field in parameters["felder"]:
+                                if option == "ersetzungen":
+                                    format_option = {
+                                        "type": option,
+                                        "before": parameters["vorher"],
+                                        "afterwards": parameters["nachher"],
+                                        "option": "option" in parameters and parameters["option"] or None
+                                    }
+                                else: # option == "gruppierungen":
+                                    format_option = {
+                                        "type": option,
+                                        "thresholds": parameters["grenzwerte"],
+                                        "unit": parameters["einheit"]
+                                    }
+                                add_format_option(format_options, field, format_option)
                     else:
                         for field in export_config["formatierungen"][option]:
-                            option = { "type": option }
-                            add_format_option(format_options, field, option)
+                            format_option = { "type": option }
+                            add_format_option(format_options, field, format_option)
                 export_config["formatierungen"] = format_options
 
             product_type = export_config["produkttyp"]
