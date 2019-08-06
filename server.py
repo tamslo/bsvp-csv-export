@@ -15,6 +15,14 @@ CORS(app)
 validate_setup(GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, SHOP_NAME)
 runner = Runner()
 
+@app.route("/reload", methods=["GET"])
+def reload():
+    if runner.is_running():
+        return json.dumps({ "success": False })
+    else:
+        runner.reload()
+        return json.dumps({ "success": True })
+
 @app.route("/manufacturers", methods=["GET"])
 def manufacturers():
     return json.dumps(runner.get_manufacturers())

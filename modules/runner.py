@@ -67,7 +67,7 @@ def get_time():
     return time.strftime("%H:%M:%S", time.localtime())
 
 class Runner:
-    def __init__(self):
+    def setup(self):
         self.manufacturers = parse_manufacturers()
         self.exporters = {
             "configurator": {
@@ -107,10 +107,18 @@ class Runner:
             seconds=8,
             timezone="Europe/Berlin"
         )
-        self.running = False
         self.tasks = []
         self.scheduler.start()
         logging.getLogger('apscheduler').setLevel("ERROR")
+
+        self.reloading = False
+
+    def reload(self):
+        self.reloading = True
+        self.setup()
+
+    def __init__(self):
+        self.setup()
 
     def get_manufacturers(self):
         return list(self.manufacturers.keys())
@@ -131,11 +139,19 @@ class Runner:
             }
         return sendable_exporters
 
+    def is_running(self):
+        is_running = False
+        for exporter_name, exporter_values in self.exporters.items():
+            is_running = is_running or exporter_values["running"]
+        return is_running
+
     def check_tasks(self):
-        if not self.running and len(self.tasks) > 0:
+        if not self.is_running() and len(self.tasks) > 0:
             self.run(self.tasks.pop(0))
 
     def add_task(self, exporter, selected_manufacturers):
+        if self.reloading:
+            return "RELOADING"
         if self.exporters[exporter]["scheduled"]:
             return "SCHEDULED"
         if self.exporters[exporter]["running"]:

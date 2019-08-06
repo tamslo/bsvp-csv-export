@@ -2,14 +2,10 @@ import React, { Component } from "react";
 import styled from "styled-components";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import List from "@material-ui/core/List";
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Button from "@material-ui/core/Button";
 import Exporter from "./Exporter";
 import { get } from "./api";
+import Dialog from "./Dialog";
+import LoadingDialog from "./LoadingDialog";
 
 const INTERVAL = 3000;
 let refreshInterval = null;
@@ -43,39 +39,30 @@ export default class Exporters extends Component {
       );
     } else {
       this.getExporters();
-      return (
-        <Dialog open={true}>
-          <StyledDialogContent>
-            Lade Daten...
-            <StyledCircularProgress />
-          </StyledDialogContent>
-        </Dialog>
-      );
+      return <LoadingDialog text="Lade Daten..." />;
     }
   }
 
   renderWarningDialog() {
     const { error } = this.state;
     const messages = {
+      RELOADING:
+        "Der Server wird gerade aktualisiert. Bitte später neu laden und erneut versuchen.",
       RUNNING: "Der Exporter wird bereits ausgeführt",
       SCHEDULED: "Der Exporter wurde bereits zur Warteschlange hinzugefügt"
     };
-    const message = `${
-      messages[error]
-    }. Sie können den Exporter erneut starten, wenn der aktuelle Durchlauf beendet ist.`;
+    const message = `${messages[error]}. Sie können den Exporter erneut starten, wenn der aktuelle Durchlauf beendet ist.`;
+    const actions = [
+      {
+        name: "Schließen",
+        onClick: () => {
+          this.setState({ error: null });
+        }
+      }
+    ];
     return (
-      <Dialog open={true}>
-        <DialogTitle>Exporter läuft bereits</DialogTitle>
-        <DialogContent>{message}</DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              this.setState({ error: null });
-            }}
-          >
-            Schließen
-          </Button>
-        </DialogActions>
+      <Dialog title="Exporter läuft bereits" actions={actions}>
+        {message}
       </Dialog>
     );
   }
@@ -127,16 +114,4 @@ export default class Exporters extends Component {
 
 const Container = styled.div`
   margin: 24px;
-`;
-
-const StyledDialogContent = styled(DialogContent)`
-  display: flex;
-  align-items: center;
-  font-size: large;
-`;
-
-const StyledCircularProgress = styled(CircularProgress)`
-  height: 24px !important;
-  width: 24px !important;
-  margin: 12px;
 `;
