@@ -2,7 +2,7 @@ CONFIGS_DIRECTORY = "configs/"
 DATA_DIRECTORY = "data/"
 EXPORT_DIRECTORY = "export/"
 TOOLTIP_PATH = "mappings/tags.da"
-ATTRIBUTES_PATH = "mappings/attributes.da"
+ATTRIBUTES_PATH = "mappings/MasterRecordMask.da"
 
 KEEP_LOGS = 2
 
