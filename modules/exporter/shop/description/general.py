@@ -1,4 +1,5 @@
 from modules.logger import Logger
+from ..utils.include_tooltips import include_tooltips
 
 max_placeholders = 5
 def placeholder(index):
@@ -7,7 +8,11 @@ def placeholder(index):
 def replacement(ilugg_fields, index):
     return ilugg_fields["P{}Value".format(index)]
 
-def export_general_description(prod_fields, ilugg_fields):
+def export_general_description(parameters):
+    prod_fields = parameters["prod_fields"]
+    ilugg_fields = parameters["ilugg_fields"]
+    tooltips = parameters["tooltips"]
+
     welcome_text = ""
     if "WELCOMETEXT" in prod_fields and prod_fields["WELCOMETEXT"] != "":
         welcome_text = prod_fields["WELCOMETEXT"]
@@ -26,4 +31,5 @@ def export_general_description(prod_fields, ilugg_fields):
         )
         index += 1
 
-    return welcome_text + prod_fields["DESC"]
+    text = welcome_text + prod_fields["DESC"]
+    return include_tooltips(tooltips, text)

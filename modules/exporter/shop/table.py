@@ -1,5 +1,5 @@
-import re
 from .utils.html_escape import html_escape
+from .utils.include_tooltips import include_tooltips
 
 class Table():
     def __init__(self, tooltips):
@@ -7,34 +7,10 @@ class Table():
         self.rows = []
         self.content_rows = 0
 
-    def __include_tooltip(self, text):
-        # Erstetze Begriffe im Text die durch Tooltips ergänzt werden sollen
-        # erst durch Platzhalter, damit Begriffe in Tooltips nicht ersetzt
-        # werden
-        tooltip_placeholders = {}
-
-        for tooltip_key, tooltip_value in self.tooltips.items():
-            tooltip_key = html_escape(tooltip_key)
-            if re.search(r'\b' + re.escape(tooltip_key) + r'\b', text):
-                tooltip = '<span class="kb-tooltip" title="'
-                tooltip += html_escape(tooltip_value)
-                tooltip += '">'
-                tooltip += tooltip_key
-                tooltip += "</span>"
-
-                tooltip_placeholder = "$${}$$".format(tooltip_key)
-                tooltip_placeholders[tooltip_placeholder] = tooltip
-                text = text.replace(tooltip_key, tooltip_placeholder)
-
-        for placeholder, tooltip in tooltip_placeholders.items():
-            text = text.replace(placeholder, tooltip)
-
-        return text
-
     def __cell(self, class_string, text="", trailing_space=False):
         appendix = "&nbsp;" if trailing_space else ""
         text = html_escape(text)
-        text = self.__include_tooltip(text)
+        text = include_tooltips(self.tooltips, text)
         return '<td class="{}">{}{}</td>'.format(
             class_string,
             text,
