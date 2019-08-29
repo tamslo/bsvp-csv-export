@@ -16,6 +16,7 @@ def unescape(text, replacement):
         other_bsvp_escape_code = html_escape_code.replace(";", "&SM")
         text = text.replace(bsvp_escape_code, replacement(character, html_escape_code))
         text = text.replace(other_bsvp_escape_code, replacement(character, html_escape_code))
+    text = text.replace("color&SEM", "color:")
     text = text.replace("&EOL", "")
     text = text.replace("&SM", "")
     return text
