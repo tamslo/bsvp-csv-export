@@ -27,8 +27,9 @@ def parse_product(product_path):
 
         field_name = field_parts[0]
         field_value = html.unescape(field_parts[1]).strip()
-        field_attributes = field_value.split(ATTRIBUTE_SEPARATOR)
 
+        # Wenn es das TECHDATA Feld ist, einzelne Attribute parsen
+        field_attributes = field_value.split(ATTRIBUTE_SEPARATOR)
         if len(field_attributes) > 1:
             attributes = {}
             for attribute in field_attributes:
@@ -46,7 +47,7 @@ def parse_product(product_path):
                     attribute_name = html.unescape(attribute_parts[1]).strip()
                     attribute_names[attribute_id] = attribute_name
                     attribute_value = html.unescape(attribute_parts[2]).strip()
-                    if attribute_value.strip() == "":
+                    if attribute_value == "":
                         continue
                 except IndexError:
                     continue
