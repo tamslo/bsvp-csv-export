@@ -124,16 +124,20 @@ class ShopExporter(BaseExporter):
         return row
 
     def __get_value(self, specification, prod_fields, ilugg_fields):
+        value = None
         if "wert" in specification:
             value = specification["wert"]
         elif "prod" in specification:
-            value = None
-            if specification["prod"] in prod_fields:
-                value = prod_fields[specification["prod"]]
+            prod_field = specification["prod"]
+            if prod_field in prod_fields:
+                value = prod_fields[prod_field]
+                # Wenn das Feld ein Preisfeld ist, den Separator entfernen, damit der Shop das Komma
+                # nicht beim Separator setzt
+                if "PRICE" in prod_field and "," in value:
+                    value = value.replace(".", "")
+                    value = value.replace(",", ".")
         elif "ilugg" in specification:
-            value = None
-            if specification["ilugg"] in ilugg_fields:
-                value = ilugg_fields[specification["ilugg"]]
-        else:
-            value = None
+            ilugg_field = specification["ilugg"]
+            if ilugg_field in ilugg_fields:
+                value = ilugg_fields[ilugg_field]
         return value
