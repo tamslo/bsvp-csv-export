@@ -15,6 +15,7 @@ PRODUCT_TYPE_ID = "0000191"
 ARCHIVE_DIRECTORY = "Archiv"
 
 CONFIGURATOR_NAME = "Konfigurator"
+PRESTA_NAME = "Presta"
 SHOP_NAME = "Shop"
 PRICE_NAME = "Listenpreise"
 COMPLETE_NAME = "Komplett"

@@ -10,11 +10,13 @@ from collections import OrderedDict
 from apscheduler.schedulers.background import BackgroundScheduler
 from modules.constants import GENERAL_CONFIG_FILE, MANUFACTURER_ENDING, \
     MANUFACTURER_INFO_ENDING, PRODUCT_ENDING, PRODUCT_TYPE_ID, \
-    CONFIGURATOR_NAME, SHOP_NAME, PRICE_NAME, COMPLETE_NAME, DATA_DIRECTORY
+    CONFIGURATOR_NAME, PRESTA_NAME, SHOP_NAME, PRICE_NAME, COMPLETE_NAME, \
+    DATA_DIRECTORY
 
 from modules.parser.prod import parse_product
 from modules.parser.ilugg import parse_manufacturer_information
 from modules.exporter.configurator import ConfiguratorExporter
+from modules.exporter.presta import PrestaExporter
 from modules.exporter.complete import CompleteExporter
 from modules.exporter.shop import ShopExporter
 from modules.exporter.price import PriceExporter
@@ -76,6 +78,13 @@ class Runner:
                 "running": False,
                 "log": [],
                 "name": CONFIGURATOR_NAME
+            },
+            "presta": {
+                "module": PrestaExporter(self.manufacturers),
+                "scheduled": False,
+                "running": False,
+                "log": [],
+                "name": PRESTA_NAME
             },
             "shop": {
                 "module": ShopExporter(self.manufacturers),
