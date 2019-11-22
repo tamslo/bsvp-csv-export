@@ -56,24 +56,38 @@ class ConfiguratorExporter(BaseExporter):
                     error_code = self.write_csv_row(output["path"], product_information)
             return error_code
 
-    def extract_product_information(self, config, fields):
+    def export_fields(self, config, fields):
         product_information = []
-
         # Spezifizierte Felder in product_information schreiben
         for field_name, field_value in config["felder"].items():
             product_information.append(self.get_field(config, fields, field_name))
+        return product_information
 
+    def export_kombination(self, config, fields, combination):
+        combination_fields = list(map(
+            lambda field_name: self.get_field(config, fields, field_name) or "",
+            combination["felder"]
+        ))
+        if all(field == "" for field in combination_fields):
+            return None
+        else:
+            return combination["separator"].join(combination_fields)
+
+    def export_kombinations(self, config, fields):
+        product_information = []
         # Spezifizierte Kominationen bilden und in product_information schreiben
         for name, combination in config["kombinationen"].items():
-            fields = list(map(
-                lambda field_name: self.get_field(config, fields, field_name) or "",
-                combination["felder"]
-            ))
-            if all(field == "" for field in fields):
-                product_information.append(None)
-            else:
-                product_information.append(combination["separator"].join(fields))
+            product_information.append(self.export_kombination(config, fields, combination))
+        return product_information
 
+    def combine_product_information(self, information, other_information):
+        return information + other_information
+
+    def extract_product_information(self, config, fields):
+        product_information = self.combine_product_information(
+            self.export_fields(config, fields),
+            self.export_kombinations(config, fields)
+        )
         return product_information
 
     def validate_fields(self, fields):

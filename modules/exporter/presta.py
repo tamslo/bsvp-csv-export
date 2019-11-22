@@ -1,42 +1,56 @@
+import math
+import re
 from .configurator import ConfiguratorExporter
-from modules.constants import PRESTA_NAME
+from modules.constants import PRESTA_NAME, ARTICLE_NUMBER, WIDTH, DEPTH, HEIGHT
 
 class PrestaExporter(ConfiguratorExporter):
     def name(self):
         return PRESTA_NAME
 
     def header_fields(self, config):
-        # TODO: Adapt for Presta shop
-        header_fields = []
-        fields = config["felder"]
-        for field in list(fields.keys()):
-            field_value = fields[field]
-            if isinstance(field_value, str):
-                header_fields.append(field_value)
-            else:
-                header_fields += list(field_value.values())
-        header_fields += list(config["kombinationen"].keys())
+        header_fields = ["Artikelnummer", "Eigenschaften", "Breite", "Tiefe", "Höhe"]
         return header_fields
 
-    def extract_product_information(self, config, fields):
-        # TODO: Adapt for Presta shop
-        # TODO: ART_NR, Eigenschaften, Breite, Höhe, Tiefe
-        # TODO: Breite, Höhe, Tiefe aufrunden
-        product_information = []
-
-        # Spezifizierte Felder in product_information schreiben
+    def export_fields(self, config, fields):
+        product_information = {}
+        outside_fields = [ARTICLE_NUMBER, WIDTH, DEPTH, HEIGHT]
         for field_name, field_value in config["felder"].items():
-            product_information.append(self.get_field(config, fields, field_name))
+            if not field_name in outside_fields:
+                product_information[field_value] = self.get_field(config, fields, field_name)
+        return product_information
 
-        # Spezifizierte Kominationen bilden und in product_information schreiben
+    def export_kombinations(self, config, fields):
+        product_information = {}
         for name, combination in config["kombinationen"].items():
-            fields = list(map(
-                lambda field_name: self.get_field(config, fields, field_name) or "",
-                combination["felder"]
-            ))
-            if all(field == "" for field in fields):
-                product_information.append(None)
-            else:
-                product_information.append(combination["separator"].join(fields))
+            product_information[name] = self.export_kombination(config, fields, combination)
+        return product_information
 
+    def combine_product_information(self, information, other_information):
+        return {**information, **other_information}
+
+    def build_properties(self, config, fields):
+        property_separator = ", "
+        value_separator = ":"
+        properties = []
+        product_information = super().extract_product_information(config, fields)
+        for field_name, field_value in product_information.items():
+            if field_value == None:
+                field_value = ""
+            properties.append(field_name + value_separator + field_value)
+        return property_separator.join(properties)
+
+    def clean_measure(self, config, fields, measure_name):
+        field  = self.get_field(config, fields, measure_name)
+        if field == None:
+            return field
+        else:
+            number = re.findall(r'[\d]+', field)[0]
+            return str(int(number))
+
+    def extract_product_information(self, config, fields):
+        product_information = []
+        product_information.append(self.get_field(config, fields, ARTICLE_NUMBER))
+        product_information.append(self.build_properties(config, fields))
+        for measure in [WIDTH, DEPTH, HEIGHT]:
+            product_information.append(self.clean_measure(config, fields, measure))
         return product_information
