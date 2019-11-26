@@ -2,6 +2,7 @@ import math
 import re
 from .configurator import ConfiguratorExporter
 from modules.constants import PRESTA_NAME, ARTICLE_NUMBER, WIDTH, DEPTH, HEIGHT
+from modules.logger import Logger
 
 class PrestaExporter(ConfiguratorExporter):
     def name(self):
@@ -33,24 +34,19 @@ class PrestaExporter(ConfiguratorExporter):
         value_separator = ":"
         properties = []
         product_information = super().extract_product_information(config, fields)
+        logger = Logger()
         for field_name, field_value in product_information.items():
             if field_value == None:
                 field_value = ""
+                log_message = "Fehlender Wert für {} in {}".format(field_name, fields[ARTICLE_NUMBER])
+                logger.log(log_message)
             properties.append(field_name + value_separator + field_value)
         return property_separator.join(properties)
-
-    def clean_measure(self, config, fields, measure_name):
-        field  = self.get_field(config, fields, measure_name)
-        if field == None:
-            return field
-        else:
-            number = re.findall(r'[\d]+', field)[0]
-            return str(int(number))
 
     def extract_product_information(self, config, fields):
         product_information = []
         product_information.append(self.get_field(config, fields, ARTICLE_NUMBER))
         product_information.append(self.build_properties(config, fields))
         for measure in [WIDTH, DEPTH, HEIGHT]:
-            product_information.append(self.clean_measure(config, fields, measure))
+            product_information.append(self.get_field(config, fields, measure))
         return product_information
