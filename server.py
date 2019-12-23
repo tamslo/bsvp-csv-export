@@ -9,6 +9,7 @@ from modules.validator import validate_setup
 from modules.logger import Logger
 from modules.constants import GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, \
     SHOP_NAME
+from modules.download import zip_result
 
 import os
 
@@ -60,7 +61,9 @@ def get_log():
 @app.route("/result", methods=["GET"])
 def get_result():
     exporter = request.args.get("exporter")
-    return json.dumps({"test": True, "exporter": exporter})
+    exporter_path = runner.exporters[exporter]["module"].output_directory()
+    zip_path = zip_result(exporter, exporter_path)
+    return send_attachement(zip_path)
 
 # Routes for client built with `npm run build`
 
