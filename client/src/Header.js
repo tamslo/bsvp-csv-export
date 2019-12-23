@@ -3,7 +3,7 @@ import styled from "styled-components";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
-import SettingsIcon from "@material-ui/icons/Settings";
+import SettingsIcon from "@material-ui/icons/SettingsOutlined";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import Dialog from "./Dialog";
 import LoadingDialog from "./LoadingDialog";

@@ -5,7 +5,9 @@ import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import IconButton from "@material-ui/core/IconButton";
-import PlayIcon from "@material-ui/icons/PlayArrow";
+import PlayIcon from "@material-ui/icons/PlayArrowOutlined";
+import LogIcon from "@material-ui/icons/DescriptionOutlined";
+import ResultIcon from "@material-ui/icons/GetAppOutlined";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styled from "styled-components";
 
@@ -34,6 +36,7 @@ export default class Exporter extends Component {
         >
           <ListItemText primary={name} secondary={last} />
           <Actions>
+            {this.renderDownloadButtons()}
             {this.renderRunButton()}
             {this.renderExpandButton()}
           </Actions>
@@ -77,6 +80,34 @@ export default class Exporter extends Component {
     this.setState({ open: true }, runExporter);
   }
 
+  renderDownloadButtons() {
+    const { last, scheduled, running } = this.props;
+    const disabled = last === null || scheduled || running;
+    return (
+      <Fragment>
+        <IconButton
+          onClick={this.downloadResult.bind(this)}
+          disabled={disabled}
+        >
+          <ResultIcon />
+        </IconButton>
+        <IconButton onClick={this.downloadLog.bind(this)} disabled={disabled}>
+          <LogIcon />
+        </IconButton>
+      </Fragment>
+    );
+  }
+
+  downloadResult(event) {
+    event.stopPropagation();
+    console.log("To be downloaded");
+  }
+
+  downloadLog(event) {
+    event.stopPropagation();
+    console.log("To be downloaded");
+  }
+
   hasLog() {
     const { log } = this.props;
     return log.length !== 0;
@@ -106,7 +137,9 @@ const LogEntry = styled.div`
   line-height: 18px;
 `;
 
-const Actions = styled.div``;
+const Actions = styled.div`
+  display: flex;
+`;
 
 const StyledCircularProgress = styled(CircularProgress)`
   height: 24px !important;
