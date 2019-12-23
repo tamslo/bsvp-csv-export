@@ -13,14 +13,14 @@ import styled from "styled-components";
 import { backendUrl } from "./api";
 
 const unixTimestamp = () => {
-  return new Date().getTime() / 1000;
+  return new Date().getTime();
 };
 
 export default class Exporter extends Component {
   constructor(props) {
     super(props);
     const { scheduled, running } = props;
-    this.state = { open: scheduled || running, downloadTime: unixTimestamp() };
+    this.state = { open: scheduled || running, downloadId: unixTimestamp() };
   }
 
   toggleLog() {
@@ -85,28 +85,41 @@ export default class Exporter extends Component {
     this.setState({ open: true }, runExporter);
   }
 
+  downloadDisabled() {
+    const { last, scheduled, running } = this.props;
+    return last === null || scheduled || running;
+  }
+
+  downloadPath(downloadType) {
+    // Use downloadId to avoid caching
+    const { downloadId } = this.state;
+    const { id } = this.props;
+    const disabled = this.downloadDisabled();
+    return (
+      (disabled && "") ||
+      `${backendUrl}/${downloadType}?exporter=${id}&id=${downloadId}`
+    );
+  }
+
   renderDownloadButtons() {
-    const { downloadTime } = this.state;
-    const { last, scheduled, running, id } = this.props;
-    const disabled = last === null || scheduled || running;
+    const disabled = this.downloadDisabled();
+    const handleDownload = event => {
+      event.stopPropagation();
+      this.setState({ downloadId: unixTimestamp() });
+    };
+
     return (
       <Fragment>
         <IconButton
-          href={
-            (disabled && "") ||
-            `${backendUrl}/result?exporter=${id}&id=${downloadTime}`
-          }
-          onClick={() => this.setState({ downloadTime: unixTimestamp() })}
+          href={this.downloadPath("result")}
+          onClick={event => handleDownload(event)}
           disabled={disabled}
         >
           <ResultIcon />
         </IconButton>
         <IconButton
-          href={
-            (disabled && "") ||
-            `${backendUrl}/log?exporter=${id}&id=${downloadTime}`
-          }
-          onClick={() => this.setState({ downloadTime: unixTimestamp() })}
+          href={this.downloadPath("log")}
+          onClick={event => handleDownload(event)}
           disabled={disabled}
         >
           <LogIcon />
