@@ -13,9 +13,11 @@ class Logger():
         return getattr(self.logger, name)
 
     class __Logger():
+        log_ending = ".log"
+
         def __log_path(self, exporter_id):
             timestamp = time.strftime("%Y%m%dT%H%M%S", time.localtime())
-            return "{}/{}_{}.log".format(LOG_DIRECTORY, timestamp, exporter_id)
+            return "{}/{}_{}{}".format(LOG_DIRECTORY, timestamp, exporter_id, self.log_ending)
 
         def __delete_old(self, exporter_id):
             exporter_logs = []
@@ -26,6 +28,14 @@ class Logger():
             for log in delete_logs:
                 os.remove(log)
             return None
+
+        def last_log_path(self, exporter_id):
+            log_path = None
+            for log_file in os.listdir(LOG_DIRECTORY):
+                if log_file.endswith("{}{}".format(exporter_id, self.log_ending)):
+                    log_path = os.path.join(LOG_DIRECTORY, log_file)
+            print(log_path, flush=True)
+            return log_path
 
         def set_path(self, exporter_id):
             self.log_path = self.__log_path(exporter_id)

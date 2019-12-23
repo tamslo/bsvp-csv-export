@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 
 from flask import Flask, render_template, json, request, redirect, url_for, \
-    send_from_directory
+    send_from_directory, send_file, abort
 from flask_cors import CORS
 
 from modules.runner import Runner
 from modules.validator import validate_setup
+from modules.logger import Logger
 from modules.constants import GENERAL_CONFIG_FILE, CONFIGURATOR_NAME, \
     SHOP_NAME
+
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -40,6 +43,24 @@ def run():
         return json.dumps({ "error": True, "code": error_code, "exporters": runner.get_exporters() })
     else:
         return json.dumps(runner.get_exporters());
+
+def send_attachement(path):
+    try:
+        return send_file(path, as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
+
+@app.route("/log", methods=["GET"])
+def get_log():
+    exporter = request.args.get("exporter")
+    logger = Logger()
+    log_path = logger.last_log_path(exporter)
+    return send_attachement(log_path)
+
+@app.route("/result", methods=["GET"])
+def get_result():
+    exporter = request.args.get("exporter")
+    return json.dumps({"test": True, "exporter": exporter})
 
 # Routes for client built with `npm run build`
 

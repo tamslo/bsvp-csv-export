@@ -31,6 +31,7 @@ export default class Exporters extends Component {
               <Exporter
                 key={exporterId}
                 runExporter={() => this.runExporter(exporterId)}
+                id={exporterId}
                 {...exporters[exporterId]}
               />
             ))}

@@ -10,12 +10,17 @@ import LogIcon from "@material-ui/icons/DescriptionOutlined";
 import ResultIcon from "@material-ui/icons/GetAppOutlined";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styled from "styled-components";
+import { backendUrl } from "./api";
+
+const unixTimestamp = () => {
+  return new Date().getTime() / 1000;
+};
 
 export default class Exporter extends Component {
   constructor(props) {
     super(props);
     const { scheduled, running } = props;
-    this.state = { open: scheduled || running };
+    this.state = { open: scheduled || running, downloadTime: unixTimestamp() };
   }
 
   toggleLog() {
@@ -81,31 +86,33 @@ export default class Exporter extends Component {
   }
 
   renderDownloadButtons() {
-    const { last, scheduled, running } = this.props;
+    const { downloadTime } = this.state;
+    const { last, scheduled, running, id } = this.props;
     const disabled = last === null || scheduled || running;
     return (
       <Fragment>
         <IconButton
-          onClick={this.downloadResult.bind(this)}
+          href={
+            (disabled && "") ||
+            `${backendUrl}/result?exporter=${id}&id=${downloadTime}`
+          }
+          onClick={() => this.setState({ downloadTime: unixTimestamp() })}
           disabled={disabled}
         >
           <ResultIcon />
         </IconButton>
-        <IconButton onClick={this.downloadLog.bind(this)} disabled={disabled}>
+        <IconButton
+          href={
+            (disabled && "") ||
+            `${backendUrl}/log?exporter=${id}&id=${downloadTime}`
+          }
+          onClick={() => this.setState({ downloadTime: unixTimestamp() })}
+          disabled={disabled}
+        >
           <LogIcon />
         </IconButton>
       </Fragment>
     );
-  }
-
-  downloadResult(event) {
-    event.stopPropagation();
-    console.log("To be downloaded");
-  }
-
-  downloadLog(event) {
-    event.stopPropagation();
-    console.log("To be downloaded");
   }
 
   hasLog() {
