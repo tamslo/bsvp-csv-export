@@ -5,15 +5,22 @@ import Collapse from "@material-ui/core/Collapse";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import IconButton from "@material-ui/core/IconButton";
-import PlayIcon from "@material-ui/icons/PlayArrow";
+import PlayIcon from "@material-ui/icons/PlayArrowOutlined";
+import LogIcon from "@material-ui/icons/DescriptionOutlined";
+import ResultIcon from "@material-ui/icons/GetAppOutlined";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import styled from "styled-components";
+import { backendUrl } from "./api";
+
+const unixTimestamp = () => {
+  return new Date().getTime();
+};
 
 export default class Exporter extends Component {
   constructor(props) {
     super(props);
     const { scheduled, running } = props;
-    this.state = { open: scheduled || running };
+    this.state = { open: scheduled || running, downloadId: unixTimestamp() };
   }
 
   toggleLog() {
@@ -34,6 +41,7 @@ export default class Exporter extends Component {
         >
           <ListItemText primary={name} secondary={last} />
           <Actions>
+            {this.renderDownloadButtons()}
             {this.renderRunButton()}
             {this.renderExpandButton()}
           </Actions>
@@ -77,6 +85,49 @@ export default class Exporter extends Component {
     this.setState({ open: true }, runExporter);
   }
 
+  downloadDisabled() {
+    const { last, scheduled, running } = this.props;
+    return last === null || scheduled || running;
+  }
+
+  downloadPath(downloadType) {
+    // Use downloadId to avoid caching
+    const { downloadId } = this.state;
+    const { id } = this.props;
+    const disabled = this.downloadDisabled();
+    return (
+      (disabled && "") ||
+      `${backendUrl}/${downloadType}?exporter=${id}&id=${downloadId}`
+    );
+  }
+
+  renderDownloadButtons() {
+    const disabled = this.downloadDisabled();
+    const handleDownload = event => {
+      event.stopPropagation();
+      this.setState({ downloadId: unixTimestamp() });
+    };
+
+    return (
+      <Fragment>
+        <IconButton
+          href={this.downloadPath("result")}
+          onClick={event => handleDownload(event)}
+          disabled={disabled}
+        >
+          <ResultIcon />
+        </IconButton>
+        <IconButton
+          href={this.downloadPath("log")}
+          onClick={event => handleDownload(event)}
+          disabled={disabled}
+        >
+          <LogIcon />
+        </IconButton>
+      </Fragment>
+    );
+  }
+
   hasLog() {
     const { log } = this.props;
     return log.length !== 0;
@@ -106,7 +157,9 @@ const LogEntry = styled.div`
   line-height: 18px;
 `;
 
-const Actions = styled.div``;
+const Actions = styled.div`
+  display: flex;
+`;
 
 const StyledCircularProgress = styled(CircularProgress)`
   height: 24px !important;

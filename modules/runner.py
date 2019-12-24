@@ -196,7 +196,7 @@ class Runner:
 
             start_text = "Export gestartet um {}".format(get_time())
             exporter["log"].append(start_text)
-            logger.log(start_text)
+            logger.log("\n".join(exporter["log"]))
             exporter_module.setup()
 
             # Variablen für Log
@@ -264,13 +264,14 @@ class Runner:
                         current_product_skips += 1
                         write_skip_log(logger, product_name, error_code)
 
-                exporter["log"][-1] = "{} ({} gesamt, {} Fehler)".format(
-                    current_manufacturer,
+                manufacturer_summary = "{} gesamt, {} Fehler".format(
                     current_product_number,
                     current_product_skips
                 )
+                exporter["log"][-1] = "{} ({})".format(current_manufacturer, manufacturer_summary)
+                logger.log(manufacturer_summary)
 
             end_text = "Export beended um {}".format(get_time())
-            logger.log("\n" + end_text)
             exporter["log"].append(end_text)
+            logger.log("\n" + end_text)
             exporter["running"] = False
