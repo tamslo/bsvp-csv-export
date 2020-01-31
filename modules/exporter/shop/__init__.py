@@ -6,13 +6,15 @@ from modules.parser.tooltips import parse_tooltips
 from .description import export_description
 from .energy_efficiency_text import export_energy_efficiency_text
 from .video import export_video
+from .shipping import export_shipping
 from modules.exporter.utils.unescape_bsvp import unescape_bsvp_to_html
 from collections import OrderedDict
 
 special_cases = {
     "p_desc.de": export_description,
     "products_energy_efficiency_text": export_energy_efficiency_text,
-    "p_movies.de": export_video
+    "p_movies.de": export_video,
+    "p_shipping": export_shipping
 }
 
 def special_case_names():
