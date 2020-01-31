@@ -11,7 +11,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from modules.constants import GENERAL_CONFIG_FILE, MANUFACTURER_ENDING, \
     MANUFACTURER_INFO_ENDING, PRODUCT_ENDING, PRODUCT_TYPE_ID, \
     CONFIGURATOR_NAME, PRESTA_NAME, SHOP_NAME, PRICE_NAME, COMPLETE_NAME, \
-    DATA_DIRECTORY
+    DATA_DIRECTORY, CUSTOM_NAME
 
 from modules.parser.prod import parse_product
 from modules.parser.ilugg import parse_manufacturer_information
@@ -20,6 +20,7 @@ from modules.exporter.presta import PrestaExporter
 from modules.exporter.complete import CompleteExporter
 from modules.exporter.shop import ShopExporter
 from modules.exporter.price import PriceExporter
+from modules.exporter.custom import CustomExporter
 from modules.logger import Logger
 
 def write_skip_log(logger, file, error):
@@ -106,6 +107,13 @@ class Runner:
                 "running": False,
                 "log": [],
                 "name": COMPLETE_NAME
+            },
+            "custom": {
+                "module": CustomExporter(self.manufacturers),
+                "scheduled": False,
+                "running": False,
+                "log": [],
+                "name": CUSTOM_NAME
             }
         }
 

@@ -3,6 +3,7 @@ from ..base_exporter import BaseExporter
 from .configs import transform_configs
 from .formatter import format_field
 from modules.constants import CONFIGURATOR_NAME, PRODUCT_TYPE_ID
+from modules.exporter.utils.flatten_fields import flatten_fields
 
 class ConfiguratorExporter(BaseExporter):
     def __init__(self, manufacturers):
@@ -44,7 +45,7 @@ class ConfiguratorExporter(BaseExporter):
         if error_code != None:
             return error_code
 
-        fields = self.flatten_fields(fields)
+        fields = flatten_fields(fields)
         manufacturer = fields["MANUFACTURER"]
         product_type = fields[PRODUCT_TYPE_ID]
         if product_type in self.export_configs:
@@ -98,17 +99,6 @@ class ConfiguratorExporter(BaseExporter):
         if not PRODUCT_TYPE_ID in fields["TECHDATA"]:
             return "KEIN_PRODUKTTYP"
         return None
-
-    # Hilfsmethode, entpackt verschachtelte Felder wie TECHDATA
-    def flatten_fields(self, fields):
-        flattened_fields = {}
-        for field_name, field_value in fields.items():
-            if isinstance(field_value, str):
-                flattened_fields[field_name] = field_value
-            else:
-                for attribute_name, attribute_value in field_value.items():
-                    flattened_fields[attribute_name] = attribute_value
-        return flattened_fields
 
     def get_field(self, config, fields, field_name):
         if field_name in fields:
