@@ -12,9 +12,6 @@ class CustomExporter(BaseExporter):
         with open(export_config_path, "r", encoding="utf-8") as export_config_file:
             self.export_config = json.load(export_config_file, object_pairs_hook=OrderedDict)
 
-        self.skipping_policy["manufacturers"] = False
-        self.skipping_policy["delivery_status"] = False
-
     def name(self):
         return CUSTOM_NAME
 
