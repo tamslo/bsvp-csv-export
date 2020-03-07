@@ -62,8 +62,11 @@ def get_log():
 def get_result():
     exporter = request.args.get("exporter")
     exporter_path = runner.exporters[exporter]["module"].output_directory()
-    zip_path = zip_result(exporter, exporter_path)
-    return send_attachement(zip_path)
+    if len(os.listdir(exporter_path)) == 1:
+        file_path = os.path.join(exporter_path, os.listdir(exporter_path)[0])
+    else:
+        file_path = zip_result(exporter, exporter_path)
+    return send_attachement(file_path)
 
 # Routes for client built with `npm run build`
 
