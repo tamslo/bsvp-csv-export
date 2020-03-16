@@ -37,6 +37,7 @@ class ShopExporter(BaseExporter):
 
         # Konfiguration des Exporters
         self.uses_manufacturer_information = True
+        self.skipping_policy["delivery_status"] = False
 
     def name(self):
         return SHOP_NAME
