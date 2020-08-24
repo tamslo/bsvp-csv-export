@@ -28,7 +28,7 @@ def get_welcome_text(prod_fields, ilugg_fields):
     if welcome_state == "1":
         index = 1
         while index <= max_placeholders:
-            welcome_text = welcome_text + placeholder(ilugg_fields, index)
+            welcome_text = welcome_text + placeholder(index)
             index += 1
 
     if welcome_state == "2":
