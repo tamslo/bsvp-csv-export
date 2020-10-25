@@ -20,7 +20,7 @@ DEPTH = "0000060"
 HEIGHT = "0000059"
 
 CONFIGURATOR_NAME = "Konfigurator"
-PRESTA_NAME = "Presta"
+GAMBIO_NAME = "Gambio"
 SHOP_NAME = "Shop"
 PRICE_NAME = "Listenpreise"
 COMPLETE_NAME = "Komplett"

@@ -26,12 +26,13 @@ def escape(value):
     return unescape_bsvp_to_html(value)
 
 class ShopExporter(BaseExporter):
-    def __init__(self, manufacturers):
+    def __init__(self, manufacturers, config_name = None):
         super().__init__(manufacturers)
         self.manufacturer_ending = MANUFACTURER_ENDING
         self.tooltips = parse_tooltips(self.tooltip_path)
         self.csv_separator = self.shop_csv_separator
-        export_config_path = self.configs_base_directory + self.name() + ".json"
+        config_name = self.name() if config_name == None else config_name
+        export_config_path = self.configs_base_directory + config_name + ".json"
         with open(export_config_path, "r", encoding="utf-8") as export_config_file:
             self.export_config = json.load(export_config_file, object_pairs_hook=OrderedDict)
 
@@ -45,7 +46,7 @@ class ShopExporter(BaseExporter):
     def __csv_path(self, manufacturer_name):
         return self.output_directory() + manufacturer_name + ".csv"
 
-    def __header_fields(self, prod_fields, ilugg_fields):
+    def header_fields(self, prod_fields, ilugg_fields):
         header_fields = []
         for field_name, value_specification in self.export_config.items():
             if "iterierbar" in value_specification:
@@ -84,9 +85,8 @@ class ShopExporter(BaseExporter):
                 return "EXPORTFLAG = {}".format(export_flag)
 
         csv_path = self.__csv_path(manufacturer_name)
-        self.maybe_create_csv(csv_path, self.__header_fields(prod_fields, ilugg_fields))
+        self.maybe_create_csv(csv_path, self.header_fields(prod_fields, ilugg_fields))
         row = self.extract_information(prod_fields, ilugg_fields, attribute_names, attribute_types)
-        row = map(escape, row)
         write_error_code =  self.write_csv_row(csv_path, row)
         if write_error_code == None and not has_exportflag:
             return "KEIN EXPORTFLAG (trotzdem in Export enthalten)"
@@ -124,7 +124,7 @@ class ShopExporter(BaseExporter):
 
                 row.append(value)
 
-        return row
+        return list(map(escape, row))
 
     def __get_value(self, specification, prod_fields, ilugg_fields):
         value = None
