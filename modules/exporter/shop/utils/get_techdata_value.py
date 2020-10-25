@@ -9,6 +9,6 @@ def get_value(fields, field_id, warn=False, prod_fields=None):
             warning_text = prod_fields["ARTNR"]
             warning_text += ": Kein Wert für das Feld '"
             warning_text += field_id
-            warning_text += ". Das Feld in der Tabelle bleibt leer."
+            warning_text += "'. Das Feld in der Tabelle bleibt leer."
             Logger().log(warning_text)
         return ""
