@@ -17,7 +17,7 @@ def finalize(field_name, field_value):
     field_value = treat_special_cases(field_name, field_value)
     return unescape_bsvp_to_html(field_value)
 
-def get_complete_header_fields(manufacturers, export_config):
+def get_complete_header_fields(manufacturers, export_config = { "exclude": [] }):
     general_fields = set()
     techdata_fields = set()
 
