@@ -1,6 +1,7 @@
 from .general import export_general_description
 from .details import export_details
 from .downloads import export_downloads
+from modules.constants import TECHDATA
 
 def unescape_bsvp(text, prod_fields):
     text = text.replace("$Artikelname$", prod_fields["NAME"])
@@ -16,7 +17,7 @@ def export_description(parameters):
     description += export_general_description(parameters)
     description += "<!--/description-->"
     description += "<!--details-->"
-    if ("TECHDATA" in prod_fields and prod_fields["TECHDATA"]):
+    if (TECHDATA in prod_fields and prod_fields[TECHDATA]):
         description += export_details(parameters)
     description += "<!--/details-->"
     description += "<!--downloads-->"

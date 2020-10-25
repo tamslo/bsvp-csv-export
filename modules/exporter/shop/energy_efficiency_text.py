@@ -1,8 +1,9 @@
 from .table import Table
 from .utils.get_techdata_value import get_value
+from modules.constants import TECHDATA
 
 def should_build_table(prod_fields):
-    if "ENERGYCLASS" in prod_fields and "TECHDATA" in prod_fields and prod_fields["TECHDATA"]:
+    if "ENERGYCLASS" in prod_fields and TECHDATA in prod_fields and prod_fields[TECHDATA]:
         return prod_fields["ENERGYCLASS"] != ""
 
 def export_energy_efficiency_text(parameters):
@@ -13,7 +14,7 @@ def export_energy_efficiency_text(parameters):
     table = Table(tooltips)
 
     if should_build_table(prod_fields):
-        techdata = prod_fields["TECHDATA"]
+        techdata = prod_fields[TECHDATA]
         table.make_header(get_value(attribute_names, "0000012", warn=True, prod_fields=prod_fields))
         for field_id in rows:
             field_name = get_value(attribute_names, field_id, warn=True, prod_fields=prod_fields)

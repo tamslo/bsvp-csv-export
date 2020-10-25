@@ -2,7 +2,7 @@
 from ..base_exporter import BaseExporter
 from .configs import transform_configs
 from .formatter import format_field
-from modules.constants import CONFIGURATOR_NAME, PRODUCT_TYPE_ID
+from modules.constants import CONFIGURATOR_NAME, PRODUCT_TYPE_ID, TECHDATA
 from modules.exporter.utils.flatten_fields import flatten_fields
 
 class ConfiguratorExporter(BaseExporter):
@@ -92,11 +92,11 @@ class ConfiguratorExporter(BaseExporter):
         return product_information
 
     def validate_fields(self, fields):
-        if not "TECHDATA" in fields:
+        if not TECHDATA in fields:
             return "KEIN_TECHDATA"
-        if not fields["TECHDATA"]:
+        if not fields[TECHDATA]:
             return "TECHDATA_LEER"
-        if not PRODUCT_TYPE_ID in fields["TECHDATA"]:
+        if not PRODUCT_TYPE_ID in fields[TECHDATA]:
             return "KEIN_PRODUKTTYP"
         return None
 

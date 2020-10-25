@@ -3,7 +3,7 @@ import json
 from modules.parser.prod import parse_product
 from modules.parser.attributes import parse_attributes
 from modules.parser.download import parse_download
-from modules.constants import COMPLETE_NAME
+from modules.constants import COMPLETE_NAME, TECHDATA
 from modules.logger import Logger
 from modules.exporter.utils.unescape_bsvp import unescape_bsvp_to_html
 
@@ -29,7 +29,7 @@ def get_complete_header_fields(manufacturers, export_config):
                     continue
                 for field_name, field_value in fields.items():
                     if not field_name in export_config["exclude"]:
-                        if field_name != "TECHDATA":
+                        if field_name != TECHDATA:
                             general_fields.add(field_name)
                         else:
                             for field_id in field_value.keys():
@@ -97,7 +97,7 @@ class CompleteExporter(BaseExporter):
             self.general_fields
         ))
         csv_row += list(map(
-            lambda field: "TECHDATA" in prod_fields and field in prod_fields["TECHDATA"] and finalize(field, prod_fields["TECHDATA"][field]) or None,
+            lambda field: TECHDATA in prod_fields and field in prod_fields[TECHDATA] and finalize(field, prod_fields[TECHDATA][field]) or None,
             self.techdata_fields
         ))
         return self.write_csv_row(csv_path, csv_row)
