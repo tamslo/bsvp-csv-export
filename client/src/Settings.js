@@ -13,8 +13,7 @@ export default class Settings extends Component {
         <Container>
           <h3>Hersteller Auswahl</h3>
           <Text>
-            Hersteller werden nicht auf den Konfigurator und Presta Export
-            angewendet.
+            Hersteller werden nicht auf den Konfigurator Export angewendet.
           </Text>
           <StyledButton
             variant="contained"
