@@ -261,13 +261,16 @@ class Runner:
                     if skip_product:
                         continue
 
-                    error_code = exporter_module.write_to_csv({
-                        "fields": fields,
-                        "attribute_names": attribute_names,
-                        "attribute_types": attribute_types,
-                        "manufacturer_name": manufacturer_name,
-                        "manufacturer_information": manufacturer_information
-                    })
+                    try:
+                        error_code = exporter_module.write_to_csv({
+                            "fields": fields,
+                            "attribute_names": attribute_names,
+                            "attribute_types": attribute_types,
+                            "manufacturer_name": manufacturer_name,
+                            "manufacturer_information": manufacturer_information
+                        })
+                    except Exception as exception:
+                        error_code = str(exception)
                     if error_code != None:
                         current_product_skips += 1
                         write_skip_log(logger, product_name, error_code)
