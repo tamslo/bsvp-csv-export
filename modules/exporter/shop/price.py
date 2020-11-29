@@ -5,15 +5,17 @@ from modules.constants import ARTICLE_NUMBER
 def finalize_price(price):
     return str(math.floor(price))
 
-def get_catalog_price(prod_fields):
-    price = prod_fields["PRICE"]
-    if ("," in price):
-        if ("." in price):
-            price = price.replace(",", "")
+def get_number(string):
+    if ("," in string):
+        if ("." in string):
+            string = string.replace(",", "")
         else:
-            price = price.replace(",", ".")
-    price = float(price)
-    return price
+            string = string.replace(",", ".")
+    return float(string)
+
+
+def get_catalog_price(prod_fields):
+    return get_number(prod_fields["PRICE"])
 
 def get_factor(prod_fields, prod_field, ilugg_fields, ilugg_field):
     prod_definition = prod_fields[prod_field]
@@ -28,13 +30,15 @@ def get_factor(prod_fields, prod_field, ilugg_fields, ilugg_field):
     if factor == None:
         logger = Logger()
         factor = prod_definition
+        if ":" in factor:
+            factor = factor.split(":")[1]
         log_text = "{}: Faktor zur Preisberechnung".format(prod_fields[ARTICLE_NUMBER])
         log_text += " konnte nicht bestimmt werden."
-        log_text += " {} in PROD ist {},".format(prod_field, prod_definition)
-        log_text += " {} in ILUGG ist {};".format(ilugg_field, ilugg_definition)
-        log_text += " {} wird als Faktor angenommen.".format(prod_definition)
+        log_text += " {} in PROD ist '{}',".format(prod_field, prod_definition)
+        log_text += " {} in ILUGG ist '{}'.".format(ilugg_field, ilugg_definition)
+        log_text += " {} wird als Faktor angenommen.".format(factor)
         logger.log(log_text)
-    return float(factor)
+    return get_number(factor)
 
 def get_purchasing_price(prod_fields, ilugg_fields):
     def get_discount(prod_fields, ilugg_fields):
@@ -59,8 +63,7 @@ def export_price(parameters):
     elif price_base == "ListPrice":
         base_price = get_catalog_price(prod_fields)
     else:
-        logger = Logger()
-        logger.log("{}: Unerwartete PRICEBASE '{}'".format(prod_fields[ARTICLE_NUMBER], price_base))
+        raise Exception("{}: Unerwartete PRICEBASE '{}'".format(prod_fields[ARTICLE_NUMBER], price_base))
     price = finalize_price(base_price * user_factor)
     return price
 
@@ -74,9 +77,9 @@ def export_min_price(parameters):
         factor_definition_parts = factor_definition_parts.replace(") ELSE ($EK*", split_character)
         factor_definition_parts = factor_definition_parts.replace(")", "")
         values = factor_definition_parts.split(split_character)
-        threshold = float(values[0])
-        greater_factor = float(values[1])
-        smaller_factor = float(values[2])
+        threshold = get_number(values[0])
+        greater_factor = get_number(values[1])
+        smaller_factor = get_number(values[2])
         if (purchasing_price < threshold):
             min_price_factor = greater_factor
         else:
