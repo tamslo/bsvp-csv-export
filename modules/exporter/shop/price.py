@@ -10,7 +10,7 @@ def get_catalog_price(prod_fields):
             price = price.replace(",", "")
         else:
             price = price.replace(",", ".")
-    price = int(price)
+    price = float(price)
     return price
 
 def get_purchasing_price(prod_fields):
