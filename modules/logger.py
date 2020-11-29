@@ -34,7 +34,6 @@ class Logger():
             for log_file in os.listdir(LOG_DIRECTORY):
                 if log_file.endswith("{}{}".format(exporter_id, self.log_ending)):
                     log_path = os.path.join(LOG_DIRECTORY, log_file)
-            print(log_path, flush=True)
             return log_path
 
         def set_path(self, exporter_id):
