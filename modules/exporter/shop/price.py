@@ -25,7 +25,8 @@ def get_factor(prod_fields, prod_field, ilugg_fields, ilugg_field):
     factor = None
     for factor_definition in factor_definitions:
         if factor_definition.startswith(factor_category):
-            factor = factor_definition.split(":")[1]
+            if ":" in factor_definition:
+                factor = factor_definition.split(":")[1]
             break
     if factor == None:
         logger = Logger()

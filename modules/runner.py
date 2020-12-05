@@ -6,6 +6,7 @@ from datetime import datetime
 import shutil
 from pytz import utc
 from collections import OrderedDict
+import traceback
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from modules.constants import GENERAL_CONFIG_FILE, MANUFACTURER_ENDING, \
@@ -270,7 +271,9 @@ class Runner:
                             "manufacturer_information": manufacturer_information
                         })
                     except Exception as exception:
+                        print(traceback.format_exc(), flush=True)
                         error_code = str(exception)
+
                     if error_code != None:
                         current_product_skips += 1
                         write_skip_log(logger, product_name, error_code)
