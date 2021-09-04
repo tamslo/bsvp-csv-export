@@ -2,6 +2,10 @@ from .shop import ShopExporter
 from .complete import get_complete_header_fields as get_complete_techdata_fields
 from modules.constants import GAMBIO_NAME, SHOP_NAME, TECHDATA
 
+category_prefix = "p_cat"
+category_postfix = ".de"
+main_category = category_prefix + category_postfix
+
 class GambioExporter(ShopExporter):
     def __init__(self, manufacturers):
         super().__init__(manufacturers, SHOP_NAME)
@@ -15,7 +19,16 @@ class GambioExporter(ShopExporter):
         return GAMBIO_NAME
 
     def header_fields(self, prod_fields, ilugg_fields):
-        header_fields = super().header_fields(prod_fields, ilugg_fields)
+        shop_header_fields = super().header_fields(prod_fields, ilugg_fields)
+        header_fields = []
+        for header_field in shop_header_fields:
+            if header_field == "p_cat.0":
+                header_fields.append(main_category)
+            elif header_field.startswith(category_prefix):
+                header_fields.append(header_field.replace(".", "") + category_postfix)
+            else:
+                header_fields.append(header_field)
+
         header_fields = header_fields + self.techdata_fields
         return header_fields
 
@@ -24,8 +37,6 @@ class GambioExporter(ShopExporter):
         # Fasse Werte von p_cat.x in p_cat.0 zusammen
         # Lasse die übrigen p_cat Felder leer
         header_fields = self.header_fields(prod_fields, ilugg_fields)
-        category_prefix = "p_cat."
-        main_category = "{}0".format(category_prefix)
         main_category_index = None
         other_category_indices = []
         category_values = []
