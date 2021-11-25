@@ -1,0 +1,15 @@
+{
+  "produkttyp": "Abfallkühler",
+  "felder": {
+    "ARTNR": "PRODUCT_ID",
+    "0000215": "steckerfertig",
+    "0000022": "anzahl_muelltonnen",
+    "0000058": "breite",
+    "0000060": "tiefe",
+    "0000059": "hoehe",
+    "0000158": "aussenmaterial",
+    "0000003": "schloss_vorhanden",
+    "0000139": "kaeltemittel",
+    "0000153": "lieferung_erfolgt"
+  }
+}

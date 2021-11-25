@@ -1,0 +1,42 @@
+{
+  "produkttyp": "Eisvitrinen",
+  "felder": {
+    "ARTNR": "PRODUCT_ID",
+    "0000145": "kuehlart",
+    "0000215": "steckerfertig",
+    "0000202": "rueckschiebescheiben",
+    "0000058": "breite",
+    "0000060": "tiefe",
+    "0000059": "hoehe",
+    "0000139": "kaeltemittel",
+    "0000142": "klimaklasse",
+    "0000177": "anzahl_4_75l_schalen",
+    "0000178": "anzahl_5l_schalen",
+    "0000213": "spannung"
+  },
+  "kombinationen": {
+    "temperaturbereich": {
+      "separator": "|",
+      "felder": ["0000226", "0000225"]
+    }
+  },
+  "formatierungen": {
+    "ersetzungen": [
+      {
+        "vorher": ["ja"],
+        "nachher": "steckerfertig",
+        "felder": ["0000215"]
+      },
+      {
+        "vorher": ["220 - 240 Volt"],
+        "nachher": "230 Volt",
+        "felder": ["0000213"]
+      },
+      {
+        "vorher": ["stille Kühlung"],
+        "nachher": "statische Kühlung",
+        "felder": ["0000145"]
+      }
+    ]
+  }
+}

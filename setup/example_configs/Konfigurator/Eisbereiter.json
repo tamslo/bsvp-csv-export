@@ -1,0 +1,35 @@
+{
+  "produkttyp": "Eisbereiter",
+  "felder": {
+    "ARTNR": "PRODUCT_ID",
+    "0000036": "eisart",
+    "0000081": "einbaufaehig",
+    "0000058": "breite_aussen",
+    "0000059": "hoehe_aussen",
+    "0000060": "tiefe_aussen",
+    "0000326": "tagesleistung",
+    "0000249": "fassungsvermoegen_speicher",
+    "0000327": "interner_speicher",
+    "0000139": "kaeltemittel",
+    "0000254": "wassergekuehlt_erhaeltlich"
+  },
+  "formatierungen": {
+    "ersetzungen": [
+      {
+        "vorher": ["vorhanden"],
+        "nachher": "integriert",
+        "felder": ["0000327"]
+      },
+      {
+        "vorher": ["ja"],
+        "nachher": "yes",
+        "felder": ["0000081", "0000254"]
+      },
+      {
+        "vorher": ["nein"],
+        "nachher": "no",
+        "felder": ["0000081", "0000254"]
+      }
+    ]
+  }
+}
