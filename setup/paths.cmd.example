@@ -1,8 +1,7 @@
+set absolute_path=C:\BSVP\exporter\
 set export_directory=export\
 set logs_directory=logs\
-set mappings_directory=mappings\
 
-set absolute_path=C:\BSVP\exporter\
 set config_directory=C:\BSVP\exporter\configs\
 set data_directory=C:\BSVP\library\
 set mappings_directory=C:\BSVP\exres\data\
