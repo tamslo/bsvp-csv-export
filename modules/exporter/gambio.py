@@ -1,6 +1,7 @@
 from .shop import ShopExporter
 from .complete import get_complete_header_fields as get_complete_techdata_fields
 from modules.constants import GAMBIO_NAME, SHOP_NAME, TECHDATA
+from modules.formatter import format_field
 
 category_prefix = "p_cat"
 category_postfix = ".de"
@@ -61,6 +62,6 @@ class GambioExporter(ShopExporter):
             if TECHDATA in prod_fields:
                 techdata = prod_fields[TECHDATA]
                 if techdata_field in techdata:
-                    value = techdata[techdata_field]
+                    value = format_field(techdata[techdata_field], techdata_field)
             row.append(value)
         return row
