@@ -7,6 +7,7 @@ ATTRIBUTES_PATH = "mappings/MasterRecordMask.da"
 KEEP_LOGS = 2
 
 GENERAL_CONFIG_FILE = "config.json"
+FORMATTING_CONFIG_FILE = "Formatierungen.yaml"
 LOG_DIRECTORY = "logs"
 MANUFACTURER_ENDING = ".lugg"
 MANUFACTURER_INFO_ENDING = ".ilugg"

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from ..base_exporter import BaseExporter
 from .configs import transform_configs
-from .formatter import format_field
+from modules.formatter import format_field
 from modules.constants import CONFIGURATOR_NAME, PRODUCT_TYPE_ID, TECHDATA
 from modules.exporter.utils.flatten_fields import flatten_fields
 
@@ -102,6 +102,6 @@ class ConfiguratorExporter(BaseExporter):
 
     def get_field(self, config, fields, field_name):
         if field_name in fields:
-            return format_field(config["formatierungen"], fields[field_name], field_name)
+            return format_field(fields[field_name], field_name)
         else:
             return None
