@@ -1,0 +1,25 @@
+{
+  "produkttyp": "Kühlaggregat",
+  "felder": {
+    "ARTNR": "PRODUCT_ID",
+    "0000246": "art",
+    "0000040": "ausfuehrung",
+    "0000215": "steckerfertig",
+    "0000058": "breite",
+    "0000060": "tiefe",
+    "0000059": "hoehe",
+    "0000139": "kaeltemittel",
+    "0000053": "raumvolumen",
+    "0000213": "spannung",
+    "0000152": "lieferant"
+  },
+  "kombinationen": {
+    "temperaturbereich": {
+      "separator": "|",
+      "felder": ["0000226", "0000225"]
+    }
+  },
+  "formatierungen": {
+    "bereich_von_null": ["0000053"]
+  }
+}

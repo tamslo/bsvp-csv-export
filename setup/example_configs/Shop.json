@@ -1,0 +1,61 @@
+{
+  "XTSOL": { "wert": "XTSOL" },
+  "action": { "prod": "ACTION" },
+  "p_model": { "prod": "ARTNR" },
+  "p_stock": { "wert": "10" },
+  "p_sorting": { "wert": "0" },
+  "p_shipping": { "prod": "DELSTAT" },
+  "p_tpl": { "wert": "product_info_v1.html" },
+  "p_manufacturer": { "prod": "MANUFACTURER" },
+  "p_fsk18": { "wert": "0" },
+  "p_priceNoTax": {},
+  "p_priceNoTax.1": {},
+  "p_priceNoTax.2": {},
+  "p_minPrice.de": {},
+  "p_tax": { "wert": "1" },
+  "p_status": { "wert": "1" },
+  "p_weight": { "wert": "0.00" },
+  "p_ean": { "prod": "EAN" },
+  "p_disc": { "ilugg": "DISCOUNT" },
+  "p_opttpl": { "wert": "product_options_dropdown.html" },
+  "p_vpe": { "wert": "0" },
+  "p_vpe_status": { "wert": "0" },
+  "p_vpe_value": { "wert": "0.000" },
+  "p_name.de": { "prod": "NAME" },
+  "p_desc.de": {},
+  "p_shortdesc.de": { "prod": "SHORTDESC" },
+  "p_meta_title.de": { "prod": "METATITLE" },
+  "p_meta_desc.de": { "prod": "METADESC" },
+  "p_meta_key.de": { "prod": "METAKEYS" },
+  "p_keywords.de": { "prod": "SEARCHKEYS" },
+  "p_url.de": { "prod": "MANLINK" },
+  "p_cat.": { "iterierbar": { "praefix": "CAT", "max": { "wert": "5" } } },
+  "p_google.de": { "prod": "P_GOOGLE" },
+  "products_energy_efficiency": { "prod": "ENERGYCLASS" },
+  "products_energy_efficiency_pict": { "prod": "ENERGYCLASSPICT" },
+  "products_energy_efficiency_text": {
+    "fields": [
+      "0000015",
+      "0000089",
+      "0000264",
+      "0000265",
+      "0000339",
+      "0000337",
+      "0000338",
+      "0000139",
+      "0000142",
+      "0000109",
+      "0000099",
+      "0000213"
+    ]
+  },
+  "p_movies.de": {},
+  "p_image": { "prod": "PIC.0" },
+  "p_image.": {
+    "iterierbar": {
+      "start": "1",
+      "praefix": "PIC.",
+      "max": { "ilugg": "PicCount" }
+    }
+  }
+}

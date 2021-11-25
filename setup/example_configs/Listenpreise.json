@@ -1,0 +1,5 @@
+{
+  "artikelnummer": { "prod": "ARTNR" },
+  "artikelname": { "prod": "NAME" },
+  "listenpreis": { "prod": "PRICE" }
+}

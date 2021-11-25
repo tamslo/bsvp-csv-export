@@ -1,0 +1,61 @@
+{
+  "produkttyp": "Kühlschrank",
+  "hersteller_export": ["Nordcap", "KBS"],
+  "felder": {
+    "ARTNR": "PRODUCT_ID",
+    "0000246": "art",
+    "0000226": "temperaturbereich_von_grad_celsius",
+    "0000225": "temperaturbereich_bis_grad_celsius",
+    "0000058": "breite",
+    "0000060": "tiefe",
+    "0000059": "hoehe",
+    "0000125": "breite_innen",
+    "0000127": "tiefe_innen",
+    "0000126": "hoehe_innen",
+    "0000089": "energieverbrauch",
+    "0000160": "max-ut",
+    "0000129": "isolierstarke",
+    "0000109": "lautstaerke",
+    "0000158": "aussenmaterial",
+    "0000159": "innenmaterial",
+    "0000074": "volumen",
+    "0000241": "unterbaufaehig",
+    "0000044": "ausfuehrung_tuer",
+    "0000145": "kuehlart",
+    "0000261": "leuchtdisplay",
+    "0000003": "schloss_vorhanden",
+    "0000201": "rostmass",
+    "0000091": "ex_geschuetzt",
+    "0000265": "energieklasse",
+    "0000142": "klimaklasse",
+    "0000139": "kaeltemittel",
+    "0000128": "innenbeleuchtung",
+    "0000152": "lieferant"
+  },
+  "kombinationen": {
+    "temperaturbereich": {
+      "separator": "|",
+      "felder": ["0000226", "0000225"]
+    }
+  },
+  "formatierungen": {
+    "punkt_zu_komma": ["0000089"],
+    "ersetzungen": [
+      {
+        "vorher": ["ja"],
+        "nachher": "yes",
+        "felder": ["0000241", "0000261", "0000003", "0000091"]
+      },
+      {
+        "vorher": ["nein"],
+        "nachher": "no",
+        "felder": ["0000241", "0000261", "0000003", "0000091"]
+      },
+      {
+        "vorher": ["CNS 1.4301", "CNS 1.4301 (AISI304)", "CNS 18/10"],
+        "nachher": "CNS",
+        "felder": ["0000158", "0000159"]
+      }
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "produkttyp": "Kühltruhe",
+  "felder": {
+    "ARTNR": "PRODUCT_ID",
+    "0000246": "art",
+    "0000226": "temperaturbereich_von_grad_celsius",
+    "0000225": "temperaturbereich_bis_grad_celsius",
+    "0000058": "breite",
+    "0000059": "hoehe",
+    "0000060": "tiefe",
+    "0000074": "volumen_brutto",
+    "0000145": "kuehlart",
+    "0000003": "abschliessbar",
+    "0000006": "automatische_abtauung",
+    "0000199": "rollen",
+    "0000306": "umschaltbar",
+    "0000042": "ausfuehrung_deckel"
+  },
+  "kombinationen": {
+    "temperaturbereich": {
+      "separator": "|",
+      "felder": ["0000226", "0000225"]
+    }
+  },
+  "formatierungen": {
+    "ersetzungen": [
+      {
+        "vorher": ["ja"],
+        "nachher": "yes",
+        "felder": ["0000003", "0000006", "0000306"]
+      },
+      {
+        "vorher": ["nein"],
+        "nachher": "no",
+        "felder": ["0000003", "0000006", "0000306"]
+      }
+    ]
+  }
+}

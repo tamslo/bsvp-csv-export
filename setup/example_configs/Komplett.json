@@ -1,0 +1,14 @@
+{
+  "exclude": [
+    "ARTLISTING",
+    "CAT0M",
+    "CAT1M",
+    "CAT2M",
+    "CAT3M",
+    "CAT4M",
+    "CREATOR",
+    "EDITPROTOCOLL",
+    "FLAGS",
+    "IMPTECHDATA"
+  ]
+}

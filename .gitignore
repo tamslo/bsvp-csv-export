@@ -1,6 +1,7 @@
 # Project-specific files and directories
 
 config.json
+paths.cmd
 configs/
 data/
 export/

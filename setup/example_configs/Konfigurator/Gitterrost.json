@@ -1,0 +1,10 @@
+{
+  "produkttyp": "Gitterrost",
+  "felder": {
+    "ARTNR": "PRODUCT_ID",
+    "0000090": "entspricht_normmass",
+    "0000070": "beschichtung",
+    "0000058": "breite",
+    "0000060": "tiefe"
+  }
+}
