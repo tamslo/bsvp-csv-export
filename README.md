@@ -12,12 +12,15 @@ Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamarasl
 2.  [Installation](#installation)
 3.  [Export-Konfigurationen](#export-konfigurationen)
 4.  [Fehlerbehebung](#fehlerbehebung)
+5.  [Entwicklung](#entwicklung)
 
 <a name="ausfuehrung" />
 
 ## Ausführung
 
 Um die Webapp zu starten, muss das `start.bat` Skript ausgeführt werden (über die Kommandozeile oder per Doppelklick), das automatisch auf die aktuellste Version updated. Die App ist dann unter `https://localhost:3000` (bzw. anstatt `localhost` die IP-Adresse des Rechners im Netzwerk) erreicht werden. Zum Neustart oder Stoppen können die `restart.bat` und `stop.bat` Skripte ausgeführt werden (Achtung: Alle laufenden Docker Container werden gestoppt).
+
+Beim Start lädt das Backend die Informationen aus Dateien, um schneller darauf zugreifen zu können; wenn sich BSVP Dateien oder Export-Konfigurationen ändern sollte der Server über das Web-Interface neu geladen werden. Ein Neustart ist nur nötig, wenn eine neue Version verfügbar ist oder wenn die `config.json` angepasst wurde.
 
 <a name="installation" />
 
@@ -37,7 +40,7 @@ Der Ordnername von `configs` kann in der `paths.txt` Datei geändert werden.
 
 ## Export-Konfigurationen
 
-Die Kofigurations-Dateien sind im JSON Format hinterlegt. Es empfiehlt sich, mit einem Editor mit JSON-Erweiterung zu arbeiten, der auf Fehler aufmerksam machen kann (z.B. Notepad++) oder die JSON-Dateien mit einem Online-Validierer (z.B. [JSONLint](https://jsonlint.com/)) zu überprüfen. Es gibt muss eine Datei `Shop.json` für den allgemeinen BSVP Daten-Export nach Herstellern geben und einen Ordner `Konfigurator`, der die Konfigurationen für den Konfigurator-Export beinhaltet.
+Die Kofigurations-Dateien sind im JSON oder YAML Format hinterlegt. Es empfiehlt sich, mit einem Editor mit JSON-Erweiterung zu arbeiten, der auf Fehler aufmerksam machen kann (z.B. Notepad++) oder die JSON-Dateien mit einem Online-Validierer (z.B. [JSONLint](https://jsonlint.com/)) zu überprüfen; gleiches gilt für das YAML Format.
 
 ### Komplett
 
@@ -54,6 +57,10 @@ In der `Komplett.json` können verschiedene Einstellungen für den kompletten Ex
   ]
 }
 ```
+
+### Gambio
+
+Der Gambio Export hat keine eigene Konfiguration und übernimmt die Konfiguration des Shop Exports, sowie die `Formatierungen.yaml`, die auch vom Konfigurator Export genutzt wird (siehe weiter unten).
 
 ### Shop
 
@@ -91,7 +98,7 @@ Für Werte, die gesondert zusammengebaut werden müssen, wird ein leeres Objekt 
 
 ### Konfigurator
 
-Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, die erstellt wird (Bsp. `Kühlschränke.json` wird zu `Kühlschränke.csv`). Es werden der Produkttyp und Felder angegeben, die exportiert werden sollen. Das Format sieht wie folgt aus:
+Für den Konfigurator Export gibt es eine JSON Datei pro zu erstellender CSV Datei. Außerdem wird für Formatierungen die `Formatierungen.yaml` genutzt (siehe unten). Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, die erstellt wird (Bsp. `Kühlschränke.json` wird zu `Kühlschränke.csv`). Es werden der Produkttyp und Felder angegeben, die exportiert werden sollen. Das Format sieht wie folgt aus:
 
 ```json
 {
@@ -107,62 +114,6 @@ Der Dateiname der jeweiligen JSON Datei bestimmt den Dateinamen der CSV Datei, d
       "separator": "|",
       "felder": ["0000226", "0000225"]
     }
-  },
-  "reihenfolgen": [{
-    "felder": ["0000226", "0000225"],
-    "reihenfolge": ["temperatur_numerisch", "temperaturen_gruppieren"]
-  }],
-  "formatierungen": {
-    "punkt_zu_komma": ["0000089"],
-    "ersetzungen": [
-      {
-        "vorher": ["ja"],
-        "nachher": "yes",
-        "felder": ["0000241", "0000261", "0000003", "0000091"]
-      },
-      {
-        "vorher": ["nein"],
-        "nachher": "no",
-        "felder": ["0000241", "0000261", "0000003", "0000091"]
-      },
-      {
-        "vorher": ["CNS 1.4301", "CNS 1.4301 (AISI304)", "CNS 18/10"],
-        "nachher": "CNS",
-        "felder": ["0000158"]
-      },
-      {
-        "vorher": ["Klimaklasse"],
-        "nachher": "Kl.",
-        "felder": ["0000142"],
-        "option": "startswith"
-      },
-      {
-        "vorher": ["RH"],
-        "nachher": "RH (relative Feuchte)",
-        "felder": ["0000142"],
-        "option": "endswith"
-      },
-      {
-        "id": "temperatur_numerisch",
-        "vorher": ["°C"],
-        "nachher": "",
-        "felder": ["0000226", "0000225"],
-        "option": "endswith"
-      }
-    ],
-    "gruppierungen": [
-      {
-        "grenzwerte": [700, 1000],
-        "einheit": "mm",
-        "felder": ["0000058"]
-      },
-      {
-        "id": "temperaturen_gruppieren",
-        "grenzwerte": [0],
-        "einheit": "°C",
-        "felder": ["0000226", "0000225"]
-      }
-    ]
   }
 }
 ```
@@ -179,9 +130,76 @@ Neben der globalen CSV Datei können CSV Dateien pro Lieferant erstellt werden. 
 
 Kombinationen von Werten können angegeben werden, sie müssen es aber nicht. Der Bezeichner einer Kombination entspricht der Bezeichung der Spalte in der CSV Datei. Als Wert werden ein Separator (Bsp. `"|"`) und Feldnamen bzw. Attribut-IDs in einer Liste (eckige Klammern) angegeben.
 
-#### Formatierung von Werten
+### Preis
 
-Formatierungen können in dem Feld `"formatierungen"` angegeben werden.
+Der Preis Exporter besitzt keine weiteren Einstellungen, er exportiert legiglich Artikelnummer, -name und Preis.
+
+### Custom
+
+Der Custom Exporter ist eine schnelle Möglichkeit, nur über das Anpassen der `Custom.json` bestimmte Felder zu exportieren.
+Bitte beachten: Die Exporter müssen über das Web-Interface neu geladen werden, wenn die `Custom.json` bei laufendem Server geändert wurde (ein Neustart ist nicht nötig).
+
+Die einfache Konfiguration enthält lediglich den CSV-Header-Namen (z.B. `"artikelnummer"` oder `"kaeltemittel"`) und das Feld im Produkt (z.B. `"ARTNR"` oder `"0000139"`).
+
+Zusätzlich kann geprüft werden, ob bestimmte Werte in einem Feld vorhanden sind.
+Nur solche Produkte werden exportiert, die den angegebenen Text enthalten.
+Das kann wie folgt definiert werden: `"kaeltemittel": {"field": "0000139", "contains": "404"}`.
+
+Wenn solche Überprüfungen für mehrere Werte angegeben werden, werden nur solche Produkte exportiert, die alle Bedingungen erfüllen. Wenn zum Beispiel zusätzlich zum Kältemittel noch `"artikelnummer": {"field": "ARTNR", "contains": "AHT"}` angegeben wird, werden nur Artikel exportiert deren Artikelnummer sowohl `AHT` UND deren Kältemittel `404` beinhaltet.
+
+### Formatierungen
+
+Formatierungen können in der Datei `Formatierungen.yaml` definiert werden. Ein Beispiel sieht wie folgt aus:
+
+```yaml
+# Reihenfolgen
+
+reihenfolgen:
+  -
+    felder: ["0000138"]
+    reihenfolge: ["kaelteleistung-daten-entfernen", "kaelteleistung-daten-sortieren"]
+
+# Punkt zu Komma
+
+punkt_zu_komma: 
+-
+  felder: ["0000089"]
+
+# Gruppierungen
+
+gruppierungen:
+-
+  grenzwerte: [4, 8, 12, 16, 20, 30, 40, 50, 60, 70]
+  einheit: " qbm"
+  felder: ["0000053"]
+-
+  id: "kaelteleistung-daten-sortieren"
+  grenzwerte: [500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000, 3500, 4000, 4500, 5000]
+  einheit: " Watt"
+  felder: ["0000138"]
+
+# Ersetzungen
+
+ersetzungen:
+  -
+    vorher: ["vorhanden"]
+    nachher: "integriert"
+    felder: ["0000327"]
+  -
+    vorher: ["keine Angabe", "kein Angabe"]
+    nachher: "nicht vorhanden"
+    felder: ["0000177", "0000178", "0000425"]
+  -
+    id: "kaelteleistung-daten-entfernen"
+    vorher:
+      - " bei Verdampfungstemperatur To = -10°C"
+      - " bei Verdampfungstemperatur To = -30°C"
+      - "  bei Verdampfungstemperatur To = -30°C"
+      - " bei Verdampfung To = -30°C und Kondensation Tc = +40°C"
+    nachher: ""
+    felder: ["0000138"]
+    option: "endswith"
+```
 
 Einfache Ersetzungen von Werten (Bsp. die Werte `["CNS 1.4301", "CNS 1.4301 (AISI304)", "CNS 18/10"]` sollen immer zu `"CNS"` geändert werden) können im untergeordneten Feld `"ersetzungen"` angegeben werden.
 
@@ -207,19 +225,6 @@ Die Reihenfolge der Bearbeitung für die Felder `["0000225", "0000226"]` ist dan
 
 <a name="fehlerbehebung" />
 
-### Custom
-
-Der Custom Exporter ist eine schnelle Möglichkeit, nur über das Anpassen der `Custom.json` bestimmte Felder zu exportieren.
-Bitte beachten: Die Exporter müssen über das Web-Interface neu geladen werden, wenn die `Custom.json` bei laufendem Server geändert wurde.
-
-Die einfache Konfiguration enthält lediglich den CSV-Header-Namen (z.B. `"artikelnummer"` oder `"kaeltemittel"`) und das Feld im Produkt (z.B. `"ARTNR"` oder `"0000139"`).
-
-Zusätzlich kann geprüft werden, ob bestimmte Werte in einem Feld vorhanden sind.
-Nur solche Produkte werden exportiert, die den angegebenen Text enthalten.
-Das kann wie folgt definiert werden: `"kaeltemittel": {"field": "0000139", "contains": "404"}`.
-
-Wenn solche Überprüfungen für mehrere Werte angegeben werden, werden nur solche Produkte exportiert, die alle Bedingungen erfüllen. Wenn zum Beispiel zusätzlich zum Kältemittel noch `"artikelnummer": {"field": "ARTNR", "contains": "AHT"}` angegeben wird, werden nur Artikel exportiert deren Artikelnummer sowohl `AHT` UND deren Kältemittel `404` beinhaltet.
-
 ## Fehlerbehebung
 
 Hier sind Lösungen zu häufigen Fehlern aufgeführt, geordnet nach den Fehlerarten, die in der Kommandozeile ausgegeben werden.
@@ -237,3 +242,15 @@ Beim JSON Format empfiehlt es sich allgemein, mit einem Editor zu arbeiten, der 
     json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 19 column 5 (char 566)
 
 Eine der JSON Konfigurationen enthält ein Komma in der letzten Zeile, das bitte entfernen.
+
+<a name="entwicklung" />
+
+## Entwicklung
+
+Für einen Entwicklungs-Setup müssen grundsätzlich die Bedingungen erfüllt sein, die durch das `setup/start.bat` Skript hergestellt werden:
+  * Es wird ein Docker Container gestartet, in dem Python 3, Node und benötigte Pakete installiert sind (siehe `setup/Dockerfile`); solche können natürlich auch manuell installiert werden
+  * Es wird davon ausgegangen, dass bestimmte Dateien vorhanden sind; siehe dazu die Pfade und Dateien in `modules/constants.py`
+
+Der Frontend Server kann mit `cd client && npm start` gestartet werden, dabei wird auch das Backend gestartet. Der Backend Server kann einzeln mit `python server.py` gestartet werden.
+
+Das Frontend ist unter `localhost:3000` erreichbar, die REST API des Backends unter `localhost:5000`.

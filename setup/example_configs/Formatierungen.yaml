@@ -1,0 +1,583 @@
+# Reihenfolgen
+
+reihenfolgen:
+  -
+    felder: ["0000138"]
+    reihenfolge: ["kaelteleistung-daten-entfernen", "kaelteleistung-daten-sortieren"]
+
+# Punkt zu Komma
+
+punkt_zu_komma: 
+-
+  felder: ["0000089"]
+
+# Gruppierungen
+
+gruppierungen:
+-
+  grenzwerte: [4, 8, 12, 16, 20, 30, 40, 50, 60, 70]
+  einheit: " qbm"
+  felder: ["0000053"]
+-
+  id: "kaelteleistung-daten-sortieren"
+  grenzwerte: [500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000, 3500, 4000, 4500, 5000]
+  einheit: " Watt"
+  felder: ["0000138"]
+
+# Ersetzungen
+
+ersetzungen:
+  -
+    vorher: ["vorhanden"]
+    nachher: "integriert"
+    felder: ["0000327"]
+  -
+    vorher: ["keine Angabe", "kein Angabe"]
+    nachher: "nicht vorhanden"
+    felder: ["0000177", "0000178", "0000425"]
+
+  ## Klimaklassen
+
+  -
+    vorher: ["SN +10°C bis +32°C" ]
+    nachher: "Klimaklasse SN +10°C bis +32°C"
+    felder: ["0000142"]
+  -
+    vorher: ["T +16°C bis +43°C" ]
+    nachher: "Klimaklasse T +16°C bis +43°C"
+    felder: ["0000142"]
+  -
+    vorher: ["ST +16°C bis +38°C" ]
+    nachher: "Klimaklasse ST +16°C bis +38°C"
+    felder: ["0000142"]
+  -
+    vorher: ["Klimaklasse 7 bis max. +35°C UT und 70% RH"]
+    nachher: "Klimaklasse 7 bis max. +35°C und 70% RH"
+    felder: ["0000142"]
+
+  ## Steckerfertig
+
+  -
+    vorher: ["ja", "Anschlußfertig, Netzstecker fehlt"]
+    nachher: "Ja, mit Kälteaggregat"
+    felder: ["0000215"]
+  -
+    vorher: ["Unter dem Gerät (daher keine Füße)" ]
+    nachher: "Unter dem Gerät"
+    felder: ["0000011"]
+  -
+    vorher: ["Nein, zentralgekühlt", "nicht vorhanden", "nein"]
+    nachher: "nein, ohne Kälteaggregat"
+    felder: ["0000215"]
+
+  ## Spannung
+
+  -
+    vorher: ["220 - 240 Volt"]
+    nachher: "230 Volt"
+    felder: ["0000213"]
+  -
+    vorher: ["100-240V 50/60Hz"]
+    nachher: "230 Volt"
+    felder: ["0000213"]
+  -
+    vorher: ["115-230V 50/60Hz"]
+    nachher: "230 Volt"
+    felder: ["0000213"]
+  -
+    vorher: ["12 AC - DC"]
+    nachher: "12 Volt"
+    felder: ["0000213"]
+  -
+    vorher: ["12-24 AC/DC"]
+    nachher: "12 Volt"
+    felder: ["0000213"]
+  -
+    vorher: ["12-24 AC/DC"]
+    nachher: "12 Volt"
+    felder: ["0000213"]
+  -
+    vorher: ["12Vac 50/60Hz"]
+    nachher: "12 Volt"
+    felder: ["0000213"]
+  -
+    vorher: ["230 AC"]
+    nachher: "230 Volt"
+    felder: ["0000213"]
+
+  ## Statische oder Umluftkühlung
+
+  -  
+    vorher: ["stille Kühlung"]
+    nachher: "statische Kühlung"
+    felder: ["0000145"]
+  -
+    vorher: ["statische Kühlung mit Ventilation"]
+    nachher: "Umluftkühlung"
+    felder: ["0000145"]
+
+  ## Ausführung Frontscheibe
+
+  -
+    vorher: ["gebogen, mit belüfteter Frontscheibe", "gebogen, aus Sicherheitsglas"]
+    nachher: "gebogen"
+    felder: ["0000112"]
+  -
+    vorher: ["gerade, aus Sicherheitsglas" ]
+    nachher: "gerade"
+    felder: ["0000112"]
+
+  ## Arbeitsplatte
+
+  -
+    vorher:
+      - "hinten 50mm"
+      - "Ja aus CNS"
+      - "Ja, aus Granit"
+      - "Ja, aus Marmor"
+      - "Ja, aus CNS"
+      - "Ja"
+      - "Ja aus Granit"
+      - "Schneidbrett aus Polyethylen"
+    nachher: "mit Arbeitsplatte"
+    felder: ["0000029"]
+  -
+    vorher: ["nicht vorhanden", "keine Angabe", "ohne Aufkantung", "ohne", "Nein" ]
+    nachher: "ohne Arbeitsplatte"
+    felder: ["0000029"]
+  -
+    vorher: ["ohne Aufkantung", "keine Angabe", "nicht vorhanden", "ohne", "Nein"]
+    nachher: "ohne Aufkantung"
+    felder: ["0000032"]
+  -
+    vorher:
+      - "Ja, 50mm"
+      - "Ja, hinten aufgekantet 50mm"
+      - "3-seitige Aufkantung"
+      - "ja, 100mm"
+      - "Ja, hinten aufgekantet 100mm"
+      - "hinten aufgekantet"
+    nachher: "mit Aufkantung"
+    felder: ["0000032"]   
+
+  ## Kältemittel    
+
+  -
+    vorher: ["R 134 A", "R 134a (Tetrafluorethan)  / 1430", "R 134a (Tetrafluorethan) / 1430", "R 134a (Tetrafluorethan)  / 1430"]
+    nachher: "R 134a"
+    felder: ["0000139"]
+  -
+    vorher: ["R 134a vorinstalliert", "R134a E-Ventil vorbereitet", "R134a Expansionsventil vorinstalliert"]
+    nachher: "E-Ventil R134a vorinstalliert"
+    felder: ["0000139"]
+  -
+    vorher: ["R 290a (Propan)  / 3", "R290 (Propan)", "R 290a (Propan)  / 3", "R 290a (Propan)  / 3", "R 290"]
+    nachher: "R 290a"
+    felder: ["0000139"]
+  -
+    vorher: ["R 404a (HFKW Gemisch) / 3922"]
+    nachher: "R 404a"
+    felder: ["0000139"]
+  -
+    vorher: ["R 404 A E-Ventil vorbereitet"]
+    nachher: "E-Ventil R404 A vorinstalliert"
+    felder: ["0000139"]
+  -
+    vorher: ["R 407 (HFKW Gemisch)  / 1774", "R 407 (HFKW Gemisch)  / 1774"]
+    nachher: "R 407"
+    felder: ["0000139"]
+  -
+    vorher: ["R 449a Expansionsventil vorinstalliert"]
+    nachher: "E-Ventil R449a vorinstalliert"
+    felder: ["0000139"]
+  -
+    vorher: ["R 449A / 1397"]
+    nachher: "R 449A"
+    felder: ["0000139"]
+  -
+    vorher: ["R 452a / 1945", "R 452a (Opteon™ XP-44 )/ 2141"]
+    nachher: "R 452a"
+    felder: ["0000139"]
+  -
+    vorher: ["R452A vorinstalliert", "R 452a Expansionsventil vorinstalliert"]
+    nachher: "E-Ventil R452A vorinstalliert"
+    felder: ["0000139"]
+  -
+    vorher: ["R 507 (HFKW Gemisch)  / 3985"]
+    nachher: "R 507A"
+    felder: ["0000139"]
+  -
+    vorher: ["R 600a (Isobutan) / 3"]
+    nachher: "R 600a"
+    felder: ["0000139"]   
+
+  ## Anzahl Schubladen wandeln    
+
+  -
+    vorher: ["1 ungekühlt über Maschinenfach" ]
+    nachher: "01 ungekühlt über Maschinenfach"
+    felder: ["0000024"]
+  -
+    vorher: ["3 ungekühlt über Maschinenfach" ]
+    nachher: "03 ungekühlt über Maschinenfach"
+    felder: ["0000024"]
+  -
+    vorher: ["7 ungekühlt" ]
+    nachher: "07 ungekühlt"
+    felder: ["0000024"]
+  -
+    vorher: ["9" ]
+    nachher: "09"
+    felder: ["0000024"]   
+
+  ## Zahlen umwandeln   
+
+  -
+    vorher: ["1" ]
+    nachher: "01"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["2" ]
+    nachher: "02"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["3" ]
+    nachher: "03"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["4" ]
+    nachher: "04"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["5" ]
+    nachher: "05"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["6" ]
+    nachher: "06"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["7" ]
+    nachher: "07"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["8" ]
+    nachher: "08"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["9" ]
+    nachher: "09"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["1" ]
+    nachher: "01"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["2" ]
+    nachher: "02"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["3" ]
+    nachher: "03"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["4" ]
+    nachher: "04"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["5" ]
+    nachher: "05"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["6" ]
+    nachher: "06"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["7" ]
+    nachher: "07"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["8" ]
+    nachher: "08"
+    felder: ["0000177", "0000024"]
+  -
+    vorher: ["9" ]
+    nachher: "09"
+    felder: ["0000178"]
+  -
+    vorher: ["4+4" ]
+    nachher: "04"
+    felder: ["0000178"]
+  -
+    vorher: ["6+6" ]
+    nachher: "06"
+    felder: ["0000178"]
+  -
+    vorher: ["7+7" ]
+    nachher: "07"
+    felder: ["0000178"]
+  -
+    vorher: ["8+8" ]
+    nachher: "08"
+    felder: ["0000178"]
+  -
+    vorher: ["9+9" ]
+    nachher: "09"
+    felder: ["0000178"]
+  -
+    vorher: ["10+10" ]
+    nachher: "10"
+    felder: ["0000178"]
+  -
+    vorher: ["12+12" ]
+    nachher: "12"
+    felder: ["0000178"]
+  -
+    vorher: ["13+13" ]
+    nachher: "13"
+    felder: ["0000178"]
+  -
+    vorher: ["16+16" ]
+    nachher: "16"
+    felder: ["0000178"]
+  -
+    vorher: ["18+18" ]
+    nachher: "18"
+    felder: ["0000178"]
+  -
+    vorher: ["20+20" ]
+    nachher: "20"
+    felder: ["0000178"]
+  -
+    vorher: ["24+24" ]
+    nachher: "24"
+    felder: ["0000178"]
+  -
+    vorher: ["1" ]
+    nachher: "01"
+    felder: ["0000425"]
+  -
+    vorher: ["2" ]
+    nachher: "02"
+    felder: ["0000425"]
+  -
+    vorher: ["3" ]
+    nachher: "03"
+    felder: ["0000425"]
+  -
+    vorher: ["4" ]
+    nachher: "04"
+    felder: ["0000425"]
+  -
+    vorher: ["5" ]
+    nachher: "05"
+    felder: ["0000425"]
+  -
+    vorher: ["6" ]
+    nachher: "06"
+    felder: ["0000425"]
+  -
+    vorher: ["7" ]
+    nachher: "07"
+    felder: ["0000425"]
+  -
+    vorher: ["8" ]
+    nachher: "08"
+    felder: ["0000425"]
+  -
+    vorher: ["9" ]
+    nachher: "09"
+    felder: ["0000425"]
+  -
+    vorher: ["60"]
+    nachher: "060"
+    felder: ["0000250"]
+  -
+    vorher: ["90"]
+    nachher: "090"
+    felder: ["0000250"]   
+
+  ## Aussenmaterial und Innenmaterial 
+
+  -
+    vorher:
+      - "Stahlblech, Seitenteile ABS-Kunststoff grau"
+      - "Stahlblech, Seitenteile Kunststoff weiß"
+      - "Stahlblech, Seitenteile Kunststoff weiß"
+      - "Stahlblech, Seitenteile ABS-Kunststoff schwarz"
+      - "Stahlblech / Glas"
+      - "Stahlblech / Kunststoff"
+      - "PVC beschichteter Stahl"
+      - "Glas / Stahlblech Edelstahleffektlack, ähnlich RAL 9006"
+      - "Glas / Stahlblech verzinkt mit Epoxydlackierung in grau RAL 9006"
+      - "Stahlblech mit Aluseitenprofile"
+      - "Stahlblech silber lackiert"
+      - "Türrahmen Aluminium, Seitenflächen Stahlblech"
+      - "Stahlblech silber lackiert"
+      - "Stahlblech mit Aluseitenprofile"
+      - "Stahl"
+    nachher: "Stahlblech"
+    felder: ["0000158"]
+  -
+    vorher:
+      - "Edelstahl"
+      - "Edelstahl dreiseitig"
+      - "Edelstahl, dreiseitig"
+      - "Edelstahl mit Aluseitenprofile"
+      - "Vorderseite Edelstahl, Seiten Aluminium"
+      - "Sichtseiten aus Edelstahl"
+      - "Rückwand aus Stahlblech"
+      - "Sichtseiten aus Edelstahl, Rückwand aus Stahlblech"
+      - "Glas / Edelstahl"
+      - "Glas/CHR"
+      - "Chromnickelstahl"
+      - "Chrom-Nickel-Stahl"
+      - "Chromnickelstahl 1.4301"
+      - "CNS"
+      - "CNS 1.4301"
+      - "CNS 1.4301 (AISI304)"
+      - "CNS 1.4301 / Edelstahl 1.4509"
+      - "CNS 1.4372"
+      - "CNS 18/10"
+      - "CNS 18/10 dreiseitig"
+      - "CHR"
+      - "CHR 1.4016"
+      - "CHR 1.4016 Edelstahl AISI 430"
+    nachher: "Edelstahl"
+    felder: ["0000158", "0000159"]
+
+  ## Beleuchtung    
+
+  -
+    vorher:
+      - "LED"
+      - "Glühlampe"
+      - "Halogen"
+      - "Leuchtstofflampe"
+      - "ja Kühlabteil, Tiefkühlabteil: nein"
+      - "ja Kühlabteil LED, Tiefkühlabteil: nein"
+    nachher: "vorhanden"
+    felder: ["0000128"]   
+
+  ## Anzahl Türen   
+
+  -
+    vorher:
+      - "2 Glasdrehtüren"
+      - "3 Glasdrehtüren"
+      - "2 halbe Glasdrehtüren"
+      - "Glasdrehtür getönt"
+      - "2 Glasdrehtüren getönt"
+      - "Isolierglastür"
+      - "Glastür"
+    nachher: "Glasdrehtür"
+    felder: ["0000044"]
+  -
+    vorher: ["2 Glasschiebetüren", "3 Glasschiebetüren", "4 Glasschiebetüren"]
+    nachher: "Glasschiebetür"
+    felder: ["0000044"]
+  -
+    vorher: ["2 halbe Volltüren", "4 halbe Volltüren", "1 Volltür + 2 halbe Volltüren", "2 Volltüren", "3 Volltüren", "4 Volltüren"]
+    nachher: "Volltür"
+    felder: ["0000044"]   
+
+  ## Weinkühlschrank ersetzen   
+
+  -
+    vorher: ["Weintemperierschrank", "Weinklimaschrank"]
+    nachher: "Weinkühlschrank"
+    felder: ["0000246"]   
+
+  ## Nachtrollo   
+
+  -
+    vorher: ["Nein", "nein, aber optional", "nicht vorhanden"]
+    nachher: "ohne Nachtrollo"
+    felder: ["0000181"]   
+
+  ## Kälteleistung vereinheitlichen   
+
+  -
+    id: "kaelteleistung-daten-entfernen"
+    vorher:
+      - " bei Verdampfungstemperatur To = -10°C"
+      - " bei Verdampfungstemperatur To = -30°C"
+      - "  bei Verdampfungstemperatur To = -30°C"
+      - " bei Verdampfung To = -30°C und Kondensation Tc = +40°C"
+      - "  bei Ta=32°C Tc=0°C"
+      - "   bei Ta=32°C Tc=0°C"
+      - " bei  Ta=32°C und Tc=0°C"
+      - "   bei Ta= 32°C und Tc=-20°C"
+      - " bei  Ta=32°C und Tc=0°C"
+      - "   bei Ta=32°C und Tc=0°C"
+      - "  bei Ta=32°C und Tc=-20°C"
+      - " bei Verdampfungstemperatur To = -30°C"
+      - " bei Verdampfung To = -10°C °C"
+      - " bei Verdampfung To = -10°C und Kondensation Tc = +40°C"
+      - " bei Ta=35°C und Tc=-15°C"
+      - " bei Ta= 32°C und Tc=-20°C"
+      - " bei Ta=32°C Tc=0°C"
+      - "  bei Tc=32°C und Ta=0°C"
+      - "  bei Ta=32°C und Tc=0°C"
+      - " bei Ta = 35°C Tc=-20°C"
+      - " bei UT 35°C und Zellentemperatur -20°C"
+      - " bei Verdampfung To = -23°C"
+      - " bei Verdampfung To = -23C"
+      - " bei Verdampfung To = -10°C"
+      - " bei Ta = 35°C Tc=5°C"
+      - " bei Ta=35°C Tc=5°C"
+      - " bei Ta=32°C Tc=-20°C"
+      - "bei Verdampfung To = -30°C und Kondensation Tc = +40°C"
+      - " bei Ta=32°C und Tc=-20°C"
+      - " bei  Ta=32°C und Tc=0°C"
+      - " bei Ta = 35°C Tc=+5°C"
+      - "   bei Ta=32°C und Tc=-0°C"
+      - "   bei  Ta= 32°C und Tc=-20°C"
+      - "  bei Ta= 32°C und Tc = -20°C"
+      - " bei Ta=35°C und Tc=5°C"
+      - " Ta=35°C Tc=-20°C"
+      - " bei Verdampfung Ta=32°C und Tc = +0°C"
+      - "  bei Ta=32°C Tc0°C"
+      - " bei Ta=35°C Tc=-15°C"
+      - " bei Ta=32°C und Tc=0°C"
+      - " bei Ta = 32°C und Tc=-20°C"
+      - " bei Tc=32°C und Ta=00°C"
+      - " bei Ta = 35°C Tc=-15°C"
+      - " bei Verdampfung Ta=32°C und Tc=0°C"
+      - " bei Verdampfung Ta = 32°C und Tc=-20°C"
+      - " bei Tc=32°C Ta=0°C"
+      - " bei Verdampfung Ta= 32°C und Tc=-20°C"
+      - " bei Ta = 32°C und Tc = 0°C"
+      - " bei Ta= 32°C und Ta = 0°C"
+      - "  bei Ta= 32°C und Tc = 0°C"
+      - " bei Tc = 32°C und Ta=-20°C"
+      - " Ta=32°C und Tc=-20°C"
+      - " bei Verdampfung To -10°C"
+      - "   Tc=32°C und Ta=-20°C"
+      - " bei UT 35°C und Zellentemperatur -20°"
+      - " bei UT 35°C und Zellentemperatur +5°C"
+      - " bei UT 32°C und Zellentemperatur -20°C"
+      - " bei UT 32°C und Zellentemperatur +5°C"
+      - "  Ta=32°C und Tc=0°C"
+      - " bei Tc  = -15°C und Ta = +32°C"
+      - " bei Tc  = +5°C und Ta = +32°C"
+      - " bei Raumtemp.  = -20°C und Umgebungstemp.  = +32°C"
+      - " bei Raumtemp.  = 0°C und Umgebungstemp.  = +32°C"
+    nachher: ""
+    felder: ["0000138"]
+    option: "endswith"    
+
+  ## GN-Behälter    
+
+  -
+    vorher: ["4 x GN 1/1 bis 150 mm", "4 x GN 1/1 bis 100 mm", "4 x GN 1/1 bis 200 mm"]
+    nachher: "4 x GN 1/1"
+    felder: ["0000113"]
+  -
+    vorher: ["12 x GN 1/1 bis 150 mm"]
+    nachher: "12 x GN 1/1"
+    felder: ["0000113"]
+  -
+    vorher: ["3 x GN 1/1 bis 150 mm", "3 x GN 1/1 bis 200 mm"]
+    nachher: "3 x GN 1/1"
+    felder: ["0000113"]

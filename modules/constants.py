@@ -1,13 +1,18 @@
+# Benötigte Pfade und Dateien
+
 CONFIGS_DIRECTORY = "configs/"
 DATA_DIRECTORY = "data/"
 EXPORT_DIRECTORY = "export/"
 TOOLTIP_PATH = "mappings/tags.da"
 ATTRIBUTES_PATH = "mappings/MasterRecordMask.da"
+GENERAL_CONFIG_FILE = "config.json"
+FORMATTING_CONFIG_FILE = "Formatierungen.yaml"
+LOG_DIRECTORY = "logs"
+
+# Weitere Konstanten und Einstellungen
 
 KEEP_LOGS = 2
 
-GENERAL_CONFIG_FILE = "config.json"
-LOG_DIRECTORY = "logs"
 MANUFACTURER_ENDING = ".lugg"
 MANUFACTURER_INFO_ENDING = ".ilugg"
 PRODUCT_ENDING = ".prod"

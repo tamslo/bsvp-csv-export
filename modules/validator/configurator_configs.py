@@ -1,54 +1,11 @@
 import os
 import sys
 import json
-from modules.exporter.configurator.formatter import format_rules
 from .helpers import validate_required_fields, validate_list
 
 export_config_fields = ["produkttyp" ,"felder"]
 combination_fields = ["separator", "felder"]
 combination_lists = ["felder"]
-replacement_fields = ["vorher", "nachher", "felder"]
-replacement_lists = ["vorher", "felder"]
-
-def validate_formatters(config, export_config_path):
-    if "formatierungen" in config:
-        rules = format_rules()
-        for format_rule in config["formatierungen"]:
-            if not format_rule in rules:
-                sys.exit(
-                    "[FEHLER] Ungültige Formatierungsregel {} in {}"
-                    .format(format_rule, export_config_path)
-                )
-            validate_list(
-                config["formatierungen"],
-                format_rule,
-                export_config_path,
-                "in 'formatierungen' "
-            )
-
-        if "ersetzungen" in config["formatierungen"]:
-            for index, replacement in enumerate(config["formatierungen"]["ersetzungen"]):
-                validate_required_fields(
-                    replacement,
-                    export_config_path,
-                    replacement_fields,
-                    "Die {}. Ersetzung in 'formatierungen' ".format(index + 1)
-                )
-                for field in replacement_lists:
-                    validate_list(
-                        replacement,
-                        field,
-                        export_config_path,
-                        "in der {}. Ersetzung in 'formatierungen' ".format(index + 1)
-                    )
-                if "option" in replacement:
-                    allowed_options = ["startswith", "endswith"]
-                    option = replacement["option"]
-                    if not option in allowed_options:
-                        sys.exit(
-                            "[FEHLER] Ungültige Option '{}' in der {}. Ersetzung in 'formatierungen' der {}"
-                            .format(option, index + 1, export_config_path)
-                        )
 
 def validate_combinations(config, export_config_path):
     if "kombinationen" in config:
@@ -72,7 +29,6 @@ def validate_export_config(config, export_config_path):
     if "hersteller_export" in config:
         validate_list(config, "hersteller_export", export_config_path)
     validate_combinations(config, export_config_path)
-    validate_formatters(config, export_config_path)
 
 def validate_configurator_configs(export_configs_directory, configurator_name):
     configurator_configs_directory = export_configs_directory + configurator_name + "/"
