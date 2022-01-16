@@ -1,5 +1,6 @@
+import json
+from collections import OrderedDict
 from .shop import ShopExporter
-from .complete import get_complete_header_fields as get_complete_techdata_fields
 from modules.constants import GAMBIO_NAME, SHOP_NAME, TECHDATA
 from modules.formatter import format_field
 
@@ -10,8 +11,9 @@ main_category = category_prefix + category_postfix
 class GambioExporter(ShopExporter):
     def __init__(self, manufacturers):
         super().__init__(manufacturers, SHOP_NAME)
-        general_fields, techdata_fields = get_complete_techdata_fields(self.manufacturers)
-        self.techdata_fields = techdata_fields
+        gambio_config = self.configs_base_directory + self.name() + ".json"
+        with open(gambio_config, "r", encoding="utf-8") as gambio_config_file:
+            self.techdata_fields = json.load(gambio_config_file, object_pairs_hook=OrderedDict)
 
         # Konfiguration des Exporters
         self.skipping_policy["delivery_status"] = False
