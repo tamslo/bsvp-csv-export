@@ -18,7 +18,7 @@ class CustomExporter(BaseExporter):
     def write_to_csv(self, parameters):
         prod_fields = flatten_fields(parameters["fields"])
         manufacturer_name = parameters["manufacturer_name"]
-        csv_path = self.output_directory() + "complete.csv"
+        csv_path = self.output_directory() + self.name() + ".csv"
         header_fields = list(self.export_config.keys())
         self.maybe_create_csv(csv_path, header_fields)
         include_product = True
