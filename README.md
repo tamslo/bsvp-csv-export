@@ -60,7 +60,7 @@ In der `Komplett.json` können verschiedene Einstellungen für den kompletten Ex
 
 ### Gambio
 
-Der Gambio Export hat keine eigene Konfiguration und übernimmt die Konfiguration des Shop Exports, sowie die `Formatierungen.yaml`, die auch vom Konfigurator Export genutzt wird (siehe weiter unten).
+Der Gambio Export übernimmt die Konfiguration des Shop Exports, sowie die `Formatierungen.yaml`, die auch vom Konfigurator Export genutzt wird (siehe weiter unten). Außerdem können die IDs der zu exportieren technischen Daten in der `Gambio.json` als Liste festgelegt werden.
 
 ### Shop
 
