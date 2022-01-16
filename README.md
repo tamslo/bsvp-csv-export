@@ -8,19 +8,11 @@ Diese README sieht komisch aus? Dann öffne sie mit einem Editor mit Markdown-Er
 
 Bei Fragen und Problemen mit dem Export meldet euch gerne bei mir unter tamaraslosarek@gmail.com.
 
-1.  [Ausführung](#ausfuehrung)
-2.  [Installation](#installation)
+1.  [Installation](#installation)
+2.  [Ausführung](#ausfuehrung)
 3.  [Export-Konfigurationen](#export-konfigurationen)
 4.  [Fehlerbehebung](#fehlerbehebung)
 5.  [Entwicklung](#entwicklung)
-
-<a name="ausfuehrung" />
-
-## Ausführung
-
-Um die Webapp zu starten, muss das `start.bat` Skript ausgeführt werden (über die Kommandozeile oder per Doppelklick), das automatisch auf die aktuellste Version updated. Die App ist dann unter `https://localhost:3000` (bzw. anstatt `localhost` die IP-Adresse des Rechners im Netzwerk) erreicht werden. Zum Neustart oder Stoppen können die `restart.bat` und `stop.bat` Skripte ausgeführt werden (Achtung: Alle laufenden Docker Container werden gestoppt).
-
-Beim Start lädt das Backend die Informationen aus Dateien, um schneller darauf zugreifen zu können; wenn sich BSVP Dateien oder Export-Konfigurationen ändern sollte der Server über das Web-Interface neu geladen werden. Ein Neustart ist nur nötig, wenn eine neue Version verfügbar ist oder wenn die `config.json` angepasst wurde.
 
 <a name="installation" />
 
@@ -35,6 +27,14 @@ Konfigurationsdateien (`config.json`, `paths.txt` und `configs`) werden automati
 -   `configs` aus [`example_configs`](example_configs) (siehe auch [Export-Konfigurationen](#export-konfigurationen))
 
 Der Ordnername von `configs` kann in der `paths.txt` Datei geändert werden.
+
+<a name="ausfuehrung" />
+
+## Ausführung
+
+Um die Webapp zu starten, muss das `start.bat` Skript ausgeführt werden (über die Kommandozeile oder per Doppelklick), das automatisch auf die aktuellste Version updated. Die App ist dann unter `https://localhost:5000` (bzw. anstatt `localhost` die IP-Adresse des Rechners im Netzwerk) erreicht werden. Zum Neustart oder Stoppen können die `restart.bat` und `stop.bat` Skripte ausgeführt werden (Achtung: Alle laufenden Docker Container werden gestoppt).
+
+Beim Start lädt das Backend die Informationen aus Dateien, um schneller darauf zugreifen zu können; wenn sich BSVP Dateien oder Export-Konfigurationen ändern sollte der Server über das Web-Interface neu geladen werden. Ein Neustart ist nur nötig, wenn eine neue Version verfügbar ist oder wenn die `config.json` angepasst wurde.
 
 <a name="export-konfigurationen" />
 
@@ -253,4 +253,4 @@ Für einen Entwicklungs-Setup müssen grundsätzlich die Bedingungen erfüllt se
 
 Der Frontend Server kann mit `cd client && npm start` gestartet werden, dabei wird auch das Backend gestartet. Der Backend Server kann einzeln mit `python server.py` gestartet werden.
 
-Das Frontend ist unter `localhost:3000` erreichbar, die REST API des Backends unter `localhost:5000`.
+Das Frontend ist unter `5` erreichbar, die REST API des Backends unter `localhost:5000`.
