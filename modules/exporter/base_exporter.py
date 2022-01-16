@@ -83,9 +83,16 @@ class BaseExporter:
         if not os.path.exists(path):
             self.write_csv_row(path, header_fields, file_mode="w")
 
+    def open_file(self, path, file_mode = "r"):
+        return(open(path, file_mode, encoding=self.csv_encoding, newline=""))
+
+    def get_csv_handler(self, file, csv_module):
+        return(csv_module(file, delimiter=self.csv_separator, quotechar=self.csv_quote_char,
+                                     escapechar=self.csv_escpape_char, quoting=csv.QUOTE_NONE))
+
     def write_csv_row(self, path, row, file_mode="a"):
-        with open(path, file_mode, encoding=self.csv_encoding, newline="") as file:
-            csv_writer = csv.writer(file, delimiter=self.csv_separator, quotechar=self.csv_quote_char, escapechar=self.csv_escpape_char, quoting=csv.QUOTE_NONE)
+        with self.open_file(path, file_mode) as file:
+            csv_writer = self.get_csv_handler(file, csv.writer)
 
             # Remove knwon characters that cause UnicodeEncodeError
             toxic_characters = {

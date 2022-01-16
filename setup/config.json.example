@@ -4,5 +4,6 @@
   "shop-csv-separator": "§",
   "csv-quote-char": "@",
   "csv-escape-char": "@",
-  "downloads-path": "media/Links"
+  "downloads-path": "media/Links",
+  "max-articles-per-file": 500
 }

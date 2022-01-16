@@ -1,16 +1,17 @@
 import os
+import csv
 import json
 import logging
+import math
 import time
 from datetime import datetime
-import shutil
 from pytz import utc
 from collections import OrderedDict
 import traceback
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from modules.constants import GENERAL_CONFIG_FILE, MANUFACTURER_ENDING, \
-    MANUFACTURER_INFO_ENDING, PRODUCT_ENDING, PRODUCT_TYPE_ID, \
+    MANUFACTURER_INFO_ENDING, PRODUCT_ENDING, \
     CONFIGURATOR_NAME, GAMBIO_NAME, SHOP_NAME, PRICE_NAME, COMPLETE_NAME, \
     DATA_DIRECTORY, CUSTOM_NAME
 
@@ -29,9 +30,7 @@ def write_skip_log(logger, file, error):
 
 
 def parse_manufacturers():
-    with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
-        config = json.load(config_file)
-        bsvp_directory = DATA_DIRECTORY
+    bsvp_directory = DATA_DIRECTORY
 
     manufacturers = OrderedDict()
     for manufacturer_directory in os.listdir(bsvp_directory):
@@ -73,6 +72,9 @@ def get_time():
 class Runner:
     def setup(self):
         self.manufacturers = parse_manufacturers()
+        with open(GENERAL_CONFIG_FILE, "r", encoding="utf-8") as config_file:
+            config = json.load(config_file)
+            self.max_products_per_file = config["max-articles-per-file"]
         self.exporters = {
             "configurator": {
                 "module": ConfiguratorExporter(self.manufacturers),
@@ -192,6 +194,34 @@ class Runner:
             )
         return None
 
+    def split_large_result(self, exporter_module):
+        output_directory = exporter_module.output_directory()
+        for file_name in os.listdir(output_directory):
+            with exporter_module.open_file(os.path.join(output_directory, file_name)) as file:
+                csv_reader = exporter_module.get_csv_handler(
+                    file, csv.DictReader)
+                products = list(csv_reader)
+                product_count = len(products)
+                if product_count > self.max_products_per_file:
+                    current_product_index = 0
+                    while current_product_index < product_count:
+                        current_product = products[current_product_index]
+                        current_file_number = math.ceil(
+                            (current_product_index + 1) / self.max_products_per_file)
+                        current_file_name = file_name.replace(
+                             ".csv", "_{}.csv".format(current_file_number))
+                        current_file_path = os.path.join(
+                            output_directory, current_file_name)
+                        opening_mode = "a" if os.path.exists(
+                            current_file_path) else "w"
+                        with exporter_module.open_file(current_file_path, opening_mode) as current_file:
+                            csv_writer = exporter_module.get_csv_handler(
+                                current_file, csv.writer)
+                            if opening_mode == "w":
+                                csv_writer.writerow(current_product.keys())
+                            csv_writer.writerow(current_product.values())
+                        current_product_index += 1
+
     def run(self, task):
         exporter_id = task["exporter"]
         selected_manufacturers = task["selected_manufacturers"]
@@ -285,6 +315,8 @@ class Runner:
                 exporter["log"][-1] = "{} ({})".format(current_manufacturer, manufacturer_summary)
                 logger.log(manufacturer_summary)
 
+            # Export abschließen
+            self.split_large_result(exporter_module)
             end_text = "Export beended um {}".format(get_time())
             exporter["log"].append(end_text)
             logger.log("\n" + end_text)
