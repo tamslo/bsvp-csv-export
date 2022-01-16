@@ -74,9 +74,9 @@ def get_format_options():
 
     return(format_options)
 
+format_options = get_format_options()
 
 def format_field(value, field_name):
-    format_options = get_format_options()
     if field_name in format_options:
         for format_option in format_options[field_name]:
             value = formatters[format_option["type"]](value, format_option)
