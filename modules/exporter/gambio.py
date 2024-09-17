@@ -32,7 +32,7 @@ class GambioExporter(ShopExporter):
             else:
                 header_fields.append(header_field)
 
-        header_fields = header_fields + self.techdata_fields
+        header_fields = header_fields + list(self.techdata_fields.values())
         return header_fields
 
     def extract_information(self, prod_fields, ilugg_fields, attribute_names, attribute_types):
@@ -59,7 +59,7 @@ class GambioExporter(ShopExporter):
             row[other_category_index] = None
 
         # Füge TECHDATA Felder hinter Shop Feldern an
-        for techdata_field in self.techdata_fields:
+        for techdata_field in self.techdata_fields.keys():
             value = None
             if TECHDATA in prod_fields:
                 techdata = prod_fields[TECHDATA]

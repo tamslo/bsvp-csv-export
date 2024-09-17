@@ -60,7 +60,14 @@ In der `Komplett.json` können verschiedene Einstellungen für den kompletten Ex
 
 ### Gambio
 
-Der Gambio Export übernimmt die Konfiguration des Shop Exports, sowie die `Formatierungen.yaml`, die auch vom Konfigurator Export genutzt wird (siehe weiter unten). Außerdem können die IDs der zu exportieren technischen Daten in der `Gambio.json` als Liste festgelegt werden.
+Der Gambio Export übernimmt die Konfiguration des Shop Exports, sowie die `Formatierungen.yaml`, die auch vom Konfigurator Export genutzt wird (siehe weiter unten). Außerdem können die zu exportieren technischen Daten in der `Gambio.json` als Objekt festgelegt werden, mit der ID als Bezeichner und dem Namen in der CSV als Wert:
+
+```json
+{
+  "0000003": "Gerät ist abschließbar",
+  "0000011": "Anordnung Kälteaggregat"
+}
+```
 
 ### Shop
 
@@ -253,4 +260,4 @@ Für einen Entwicklungs-Setup müssen grundsätzlich die Bedingungen erfüllt se
 
 Der Frontend Server kann mit `cd client && npm start` gestartet werden, dabei wird auch das Backend gestartet. Der Backend Server kann einzeln mit `python server.py` gestartet werden.
 
-Das Frontend ist unter `5` erreichbar, die REST API des Backends unter `localhost:5000`.
+Das Frontend ist unter `localhost:3000` erreichbar (öffnet sich automatisch), die REST API des Backends unter `localhost:5000`.
